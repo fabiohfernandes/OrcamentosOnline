@@ -18,10 +18,23 @@ import { cn } from '@/utils';
 
 // Brazilian phone validation function
 const validatePhone = (phone: string): boolean => {
+  if (!phone || phone.trim() === '') return false;
+
   const cleaned = phone.replace(/[^\d]/g, '');
   // Brazilian mobile format: 11 digits (including area code)
   // Format: (XX) 9XXXX-XXXX
-  return cleaned.length === 11 && cleaned[2] === '9';
+  // Area codes: 11-99, Mobile numbers start with 9
+
+  if (cleaned.length !== 11) return false;
+
+  // Check if third digit is 9 (mobile indicator)
+  if (cleaned[2] !== '9') return false;
+
+  // Check if area code is valid (11-99)
+  const areaCode = parseInt(cleaned.substring(0, 2));
+  if (areaCode < 11 || areaCode > 99) return false;
+
+  return true;
 };
 
 // Validation schema
@@ -39,7 +52,7 @@ const registerSchema = z.object({
   phone: z
     .string()
     .min(1, 'Telefone é obrigatório')
-    .refine((phone) => validatePhone(phone), 'Telefone celular inválido. Use o formato (XX) 9XXXX-XXXX'),
+    .refine((phone) => validatePhone(phone), 'Telefone celular inválido. Use o formato (XX) 9XXXX-XXXX ou (XX) 99XXX-XXXX'),
   password: z
     .string()
     .min(1, 'Senha é obrigatória')
@@ -122,11 +135,24 @@ export default function RegisterPage() {
   };
 
   const formatPhone = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{2})(\d)/, '($1) $2')
-      .replace(/(\d{5})(\d)/, '$1-$2')
-      .replace(/(-\d{4})\d+?$/, '$1');
+    if (!value) return value;
+
+    // Remove all non-digits
+    const numbers = value.replace(/\D/g, '');
+
+    // Limit to 11 digits (Brazilian mobile)
+    const limitedNumbers = numbers.slice(0, 11);
+
+    // Apply formatting
+    if (limitedNumbers.length <= 2) {
+      return limitedNumbers;
+    } else if (limitedNumbers.length <= 7) {
+      return limitedNumbers.replace(/(\d{2})(\d+)/, '($1) $2');
+    } else if (limitedNumbers.length <= 11) {
+      return limitedNumbers.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+    }
+
+    return limitedNumbers;
   };
 
   return (
@@ -193,7 +219,12 @@ export default function RegisterPage() {
             Telefone Celular
           </label>
           <input
-            {...register('phone')}
+            {...register('phone', {
+              onChange: (e) => {
+                const formatted = formatPhone(e.target.value);
+                e.target.value = formatted;
+              }
+            })}
             type="tel"
             autoComplete="tel"
             maxLength={15}
@@ -203,9 +234,6 @@ export default function RegisterPage() {
             )}
             placeholder="(11) 99999-9999"
             disabled={isSubmitting || isLoading}
-            onChange={(e) => {
-              e.target.value = formatPhone(e.target.value);
-            }}
           />
           {errors.phone && (
             <p className="mt-1 text-sm text-error-600" role="alert">

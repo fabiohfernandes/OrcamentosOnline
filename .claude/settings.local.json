@@ -19,7 +19,8 @@
       "Bash(python:*)",
       "Bash(docker logs:*)",
       "Bash(cp:*)",
-      "Bash(docker cp:*)"
+      "Bash(docker cp:*)",
+      "Bash(docker:*)"
     ],
     "deny": [],
     "ask": []

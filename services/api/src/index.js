@@ -317,8 +317,8 @@ app.post('/api/v1/auth/register', async (req, res) => {
       });
     }
 
-    // Phone validation (Brazilian format)
-    const phoneRegex = /^\(\d{2}\)\s9\d{4}-\d{4}$/;
+    // Phone validation (Brazilian format) - Updated to support both patterns
+    const phoneRegex = /^\(\d{2}\)\s9\d{4,5}-\d{4}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({
         success: false,
