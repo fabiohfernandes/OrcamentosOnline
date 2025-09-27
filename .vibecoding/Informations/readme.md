@@ -176,8 +176,8 @@ Security: LGPD Compliant + SOC 2 Framework
 
 ### For Development Teams
 1. **Read** [CLAUDE.md](./CLAUDE.md) for critical operating guidelines and technical requirements
-2. **Study** multi-agent best practices in `1_Vibe_Coding/Procedures/best_practices.md`
-3. **Review** complete PRD in `1_Vibe_Coding/Informations/product.md`
+2. **Study** multi-agent best practices in `.vibecoding/Procedures/best_practices.md`
+3. **Review** complete PRD in `.vibecoding/Informations/product.md`
 4. **Follow** the "Vibe Coding" methodology with human-in-the-loop approval gates
 
 ### For Business Users

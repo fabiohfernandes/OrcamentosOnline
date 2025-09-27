@@ -60,6 +60,25 @@
 ### Audit Tag Requirement
 - **Add a final line**: "✓ guardrails-ok" if all checks passed
 
+### GENERAL COMMANDS (From guardrails.md)
+## UPDATE-ALL:
+- **UPDATE DEVELOPMENT.MD WITH THE NEW COMPLETED TASKS AND ACHIEVED MILESTONES**
+- **COMMIT TO GITHUB AND PUSH**
+## SUMMARIZE-ALL:
+- **UPDATE README.MD WITH THE ACTUAL STAGE OF DEVELOPMENT, AND SUMARIZE THE LAST COMPLETED TAKS AND STAGES**
+## START-ALL:
+- **BUILD OR START (IF ALREADY BUILDED) ALL CONTAINERS OF THIS PROJECT**
+## STOP-ALL:
+- **STOP ALL CONTAINERS OF THIS PROJECT**
+## RESTART-ALL:
+- **RESTART ALL CONTAINERS OF THIS PROJECT**
+## REBUILD-ALL:
+- **REBUILD ALL CONTAINERS OF THIS PROJECT**
+## REMOVE-ALL:
+- **REMOVE ALL CONTAINERS OF THIS PROJECT RUNNING ON DOCKER**
+## DELETE-ALL:
+- **DELETE ALL CONTAINER IMAGES OF THIS PROJECT IN DOCKER**
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -91,14 +110,20 @@ The project follows a hierarchical multi-agent orchestration model:
 ## Repository Structure
 
 ```
-1_Vibe_Coding/
+.vibecoding/
 ├── Informations/
 │   ├── product.md           # Complete project requirements (PRD)
-│   └── product_comp.md      # Product comparison data
+│   ├── product_comp.md      # Product comparison data
+│   ├── development.md       # Development progress tracking
+│   ├── planning.md          # Strategic planning documentation
+│   ├── proposal-platform-plan.md  # Platform vision and implementation plan
+│   ├── readme.md            # Project overview and quick start
+│   └── roadmap.md           # Implementation roadmap and timeline
 ├── Procedures/
 │   └── best_practices.md    # Coding standards and multi-agent best practices
 ├── Prompt/
-│   └── Prompt.md           # Main system prompt and guidelines
+│   ├── Prompt.md           # Main system prompt and guidelines
+│   └── guardrails.md       # Security protocols and validation framework
 ├── References/
 │   ├── brazil_awarded_websites.md      # Brazilian market design references
 │   ├── photos_refs.md                   # Free media resources
@@ -157,11 +182,12 @@ This project uses "Vibe Coding" methodology - rapid, taste-driven iteration that
 
 ## Important Files to Reference
 
-- `1_Vibe_Coding/Informations/product.md`: Complete PRD with technical specifications
-- `1_Vibe_Coding/Procedures/best_practices.md`: Multi-agent coordination best practices
-- `1_Vibe_Coding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`: System orchestration guidelines
-- `1_Vibe_Coding/Team/Design and Implementation/AERO - Glassmorphism UI Specialist.md`: Glassmorphism design system and Windows Aero-style UI components
-- `1_Vibe_Coding/Prompt/Prompt.md`: Core system prompt and operational guidelines
+- `.vibecoding/Informations/product.md`: Complete PRD with technical specifications
+- `.vibecoding/Procedures/best_practices.md`: Multi-agent coordination best practices
+- `.vibecoding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`: System orchestration guidelines
+- `.vibecoding/Team/Design and Implementation/AERO - Glassmorphism UI Specialist.md`: Glassmorphism design system and Windows Aero-style UI components
+- `.vibecoding/Prompt/Prompt.md`: Core system prompt and operational guidelines
+- `.vibecoding/Prompt/guardrails.md`: Security protocols and validation framework
 
 ## CRITICAL OPERATING GUIDELINES
 
@@ -206,9 +232,9 @@ This project uses "Vibe Coding" methodology - rapid, taste-driven iteration that
 
 This is primarily a documentation repository containing specifications and agent configurations for the OrçamentosOnline platform. When implementing features:
 
-1. Always reference the product.md for requirements and technical specifications
-2. Follow the multi-agent coordination patterns defined in best_practices.md
-3. Use the MAESTRO orchestration model for complex tasks
+1. Always reference the `.vibecoding/Informations/product.md` for requirements and technical specifications
+2. Follow the multi-agent coordination patterns defined in `.vibecoding/Procedures/best_practices.md`
+3. Use the MAESTRO orchestration model for complex tasks (`.vibecoding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`)
 4. Maintain evidence-based decision making with proper citations
 5. Ensure all implementations follow the containerized services approach
-6. Brazilian market considerations should reference the brazil_awarded_websites.md file
+6. Brazilian market considerations should reference the `.vibecoding/References/brazil_awarded_websites.md` file

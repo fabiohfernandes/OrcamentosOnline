@@ -153,10 +153,10 @@ This project uses "Vibe Coding" methodology - rapid, taste-driven iteration that
 - **BE PATIENT AND EXPLANATORY** in all interactions
 
 #### Important Files to Reference
-- `1_Vibe_Coding/Informations/product.md`: Complete PRD with technical specifications
-- `1_Vibe_Coding/Procedures/best_practices.md`: Multi-agent coordination best practices
-- `1_Vibe_Coding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`: System orchestration guidelines
-- `1_Vibe_Coding/Prompt/Prompt.md`: Core system prompt and operational guidelines
+- `.vibecoding/Informations/product.md`: Complete PRD with technical specifications
+- `.vibecoding/Procedures/best_practices.md`: Multi-agent coordination best practices
+- `.vibecoding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`: System orchestration guidelines
+- `.vibecoding/Prompt/Prompt.md`: Core system prompt and operational guidelines
 
 ### 2.1 Operating Model
 
