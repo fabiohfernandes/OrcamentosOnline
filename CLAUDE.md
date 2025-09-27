@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-**⚠️ BEFORE EVERY STEP OF DEVELOPMENT I WILL READ GUARDRAILS.MD BEFORE ACTING ⚠️**
+**⚠️ BEFORE EVERY STEP OF DEVELOPMENT I WILL READ .vibecoding/Prompt/guardrails.md BEFORE ACTING ⚠️**
 
-## CORE ABSOLUTE RULES - NO EXCEPTIONS (From guardrails.md)
+## CORE ABSOLUTE RULES - NO EXCEPTIONS (From .vibecoding/Prompt/guardrails.md)
 
 ### MANDATORY SAFETY PROTOCOLS
 - **NEVER INSTALL ANY SERVICE TO RUN LOCALLY**
@@ -60,7 +60,7 @@
 ### Audit Tag Requirement
 - **Add a final line**: "✓ guardrails-ok" if all checks passed
 
-### GENERAL COMMANDS (From guardrails.md)
+### GENERAL COMMANDS (From .vibecoding/Prompt/guardrails.md)
 ## UPDATE-ALL:
 - **UPDATE DEVELOPMENT.MD WITH THE NEW COMPLETED TASKS AND ACHIEVED MILESTONES**
 - **COMMIT TO GITHUB AND PUSH**
