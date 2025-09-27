@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(paste:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(winget install:*)",
+      "Bash(gh:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(docker network inspect:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker-compose:*)",
+      "Bash(./start-all.sh)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(docker logs:*)",
+      "Bash(cp:*)",
+      "Bash(docker cp:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
