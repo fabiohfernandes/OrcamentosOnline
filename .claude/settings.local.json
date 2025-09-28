@@ -32,7 +32,8 @@
       "Bash(npm run build:*)",
       "Bash(timeout:*)",
       "Bash(./stress_test_functional.sh:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Read(//d/**)"
     ],
     "deny": [],
     "ask": []
