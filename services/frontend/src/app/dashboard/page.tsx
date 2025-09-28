@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import {
   PlusIcon,
@@ -109,6 +110,7 @@ const getStatusIcon = (status: string) => {
 
 export default function DashboardPage() {
   const { user, tokens } = useAuthStore();
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -412,7 +414,11 @@ export default function DashboardPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {proposals.map((proposal) => (
-                    <tr key={proposal.id} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={proposal.id}
+                      className="hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => router.push(`/proposals/${proposal.id}/edit`)}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {getStatusIcon(proposal.status)}
@@ -448,7 +454,7 @@ export default function DashboardPage() {
                         {new Date(proposal.created_at).toLocaleDateString('pt-BR')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
                           <button
                             onClick={() => copyProposalLink(proposal.public_token)}
                             className="text-blue-600 hover:text-blue-900 transition-colors"

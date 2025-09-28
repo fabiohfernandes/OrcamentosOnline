@@ -1361,9 +1361,11 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
       `SELECT
         COUNT(CASE WHEN status = 'closed' THEN 1 END) as closed_count,
         COUNT(*) as total_count,
+        SUM(CASE WHEN status = 'closed' THEN proposal_value ELSE 0 END) as closed_revenue,
+        SUM(proposal_value) as total_revenue,
         ROUND(
-          COUNT(CASE WHEN status = 'closed' THEN 1 END) * 100.0 /
-          NULLIF(COUNT(*), 0), 2
+          SUM(CASE WHEN status = 'closed' THEN proposal_value ELSE 0 END) * 100.0 /
+          NULLIF(SUM(proposal_value), 0), 2
         ) as conversion_rate
       FROM proposals
       WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '30 days'`,

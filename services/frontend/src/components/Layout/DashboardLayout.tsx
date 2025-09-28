@@ -182,25 +182,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             ))}
           </nav>
 
-          {/* User Profile */}
-          <div className="border-t border-secondary-200 p-4">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                <UserCircleIcon className="h-6 w-6 text-primary-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">João Silva</p>
-                <p className="text-xs text-secondary-500 truncate">joao@empresa.com</p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center w-full text-left px-3 py-2 text-sm text-danger-600 hover:bg-danger-50 rounded-lg transition-colors"
-            >
-              <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3" />
-              Sair
-            </button>
-          </div>
         </div>
       </div>
 

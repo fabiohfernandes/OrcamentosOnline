@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { SimpleAPI, requireAuth, AuthToken } from '@/lib/simple-auth';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const { user, logout, tokens } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({
     companyName: '',
@@ -20,16 +23,15 @@ export default function SettingsPage() {
         setLoading(true);
 
         // Check auth first
-        if (!AuthToken.get() || !AuthToken.isValid()) {
-          AuthToken.clear();
-          window.location.href = '/auth/login';
+        if (!tokens?.accessToken) {
+          router.push('/auth/login');
           return;
         }
 
         // Load user settings
         setSettings({
-          companyName: 'Minha Empresa',
-          email: 'usuario@empresa.com',
+          companyName: user?.name || 'Minha Empresa',
+          email: user?.email || 'usuario@empresa.com',
           phone: '(11) 99999-9999',
           address: 'Rua Example, 123',
           notifications: true,
@@ -162,8 +164,8 @@ export default function SettingsPage() {
             </button>
             <button
               onClick={() => {
-                AuthToken.clear();
-                window.location.href = '/auth/login';
+                logout();
+                router.push('/auth/login');
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
             >

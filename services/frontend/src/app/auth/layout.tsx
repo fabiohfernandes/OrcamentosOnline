@@ -5,6 +5,7 @@
 
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { appConfig } from '@/config';
 
 export const metadata: Metadata = {
@@ -24,7 +25,13 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <div className="max-w-md mx-auto">
           <div className="flex items-center space-x-3 mb-8">
             <div className="h-12 w-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <span className="text-white font-bold text-lg">O</span>
+              <Image
+                src="/favicon-16x16.png"
+                alt="OrçamentosOnline Logo"
+                width={48}
+                height={48}
+                className="rounded-sm"
+              />
             </div>
             <span className="text-2xl font-bold text-white">
               {appConfig.appName}
@@ -67,8 +74,14 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           {/* Mobile logo */}
           <div className="lg:hidden text-center mb-8">
             <Link href="/" className="inline-flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">O</span>
+              <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
+                <Image
+                  src="/favicon-16x16.png"
+                  alt="OrçamentosOnline Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-sm"
+                />
               </div>
               <span className="text-xl font-bold text-gray-900">
                 {appConfig.appName}

@@ -236,14 +236,17 @@ export default function EditProposal() {
             </div>
             <div className="flex items-center space-x-3">
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                proposal.status === 'draft' ? 'bg-gray-100 text-gray-800' :
-                proposal.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                proposal.status === 'approved' ? 'bg-green-100 text-green-800' :
-                'bg-red-100 text-red-800'
+                proposal.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                proposal.status === 'closed' ? 'bg-green-100 text-green-800' :
+                proposal.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                proposal.status === 'pending_changes' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-gray-100 text-gray-800'
               }`}>
-                {proposal.status === 'draft' ? 'Rascunho' :
-                 proposal.status === 'pending' ? 'Pendente' :
-                 proposal.status === 'approved' ? 'Aprovada' : 'Rejeitada'}
+                {proposal.status === 'open' ? 'Aberta' :
+                 proposal.status === 'closed' ? 'Fechada' :
+                 proposal.status === 'rejected' ? 'Rejeitada' :
+                 proposal.status === 'pending_changes' ? 'Alterações Solicitadas' :
+                 'Arquivada'}
               </span>
             </div>
           </div>

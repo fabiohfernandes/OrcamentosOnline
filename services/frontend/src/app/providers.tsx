@@ -7,11 +7,9 @@
 
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from '@/store/auth';
 import { useTokenRefresh } from '@/hooks/useTokenRefresh';
-import { isDevelopment } from '@/config';
 
 // Create query client with optimized configuration
 const queryClient = new QueryClient({
@@ -47,7 +45,6 @@ export function Providers({ children }: ProvidersProps) {
           {children}
         </ToastProvider>
       </AuthInitializer>
-      {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
