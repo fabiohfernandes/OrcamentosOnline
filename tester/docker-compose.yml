@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # TESTER main service
+  tester:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "src/index.js"]
+    environment:
+      - TARGET_URL=${TARGET_URL:-http://host.docker.internal:3001}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - TEST_USER_EMAIL=${TEST_USER_EMAIL:-test@example.com}
+      - TEST_USER_PASSWORD=${TEST_USER_PASSWORD:-testpassword123}
+      - HEADLESS=${HEADLESS:-true}
+      - NODE_ENV=production
+      - POSTGRES_URL=postgresql://testeruser:testerpass@postgres:5432/testerdb
+      - REDIS_URL=redis://redis:6379
+      - PROJECT_NAME=${PROJECT_NAME:-OrçamentosOnline}
+    volumes:
+      - ./reports:/app/reports
+      - ./screenshots:/app/screenshots
+      - ./videos:/app/videos
+      - ./traces:/app/traces
+      - ./logs:/app/logs  # Mount logs directory for Claude access
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ../:/workspace:ro  # Mount project workspace as read-only
+    ports:
+      - "8888:8888"  # TESTER Dashboard UI
+      - "8000:8000"  # Metrics endpoint
+    depends_on:
+      - postgres
+      - redis
+      - prometheus
+    networks:
+      - tester-network
+    restart: unless-stopped
+
+  # PostgreSQL for test results persistence
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=testerdb
+      - POSTGRES_USER=testeruser
+      - POSTGRES_PASSWORD=testerpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - tester-network
+
+  # Redis for test coordination and caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6381:6379"
+    networks:
+      - tester-network
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - tester-network
+
+  # Grafana for monitoring dashboard
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=tester123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - tester-network
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  tester-network:
+    driver: bridge

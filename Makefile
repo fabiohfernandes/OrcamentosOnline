@@ -1,44 +1,59 @@
-# OrçamentosOnline - Development Makefile
-# CRONOS Agent - Development Workflow Automation
-# Version: 1.0
-# Date: September 25, 2025
+# AI Testing and Monitoring Stack - Makefile
+# From docker_monitoring_setup.txt specification
 
-.PHONY: help setup build start stop restart clean logs shell test lint format security
-.DEFAULT_GOAL := help
+.PHONY: setup build up down logs test monitor report clean
 
-# ============================================================================
-# ENVIRONMENT VARIABLES
-# ============================================================================
-PROJECT_NAME = orcamentos-online
-COMPOSE_FILE = docker-compose.yml
-COMPOSE_FILE_DEV = docker-compose.dev.yml
-COMPOSE_FILE_PROD = docker-compose.prod.yml
-ENV_FILE = .env
+# Setup the environment
+setup:
+	cp .env.testing .env
+	mkdir -p reports screenshots videos
+	cd tester-dashboard && npm install
 
-# Docker Compose command with environment file
-DOCKER_COMPOSE = docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE)
-DOCKER_COMPOSE_DEV = $(DOCKER_COMPOSE) -f $(COMPOSE_FILE_DEV)
-DOCKER_COMPOSE_PROD = $(DOCKER_COMPOSE) -f $(COMPOSE_FILE_PROD)
+# Build Docker images
+build:
+	docker-compose -f docker-compose.test.yml build
 
-# ============================================================================
-# HELP DOCUMENTATION
-# ============================================================================
-help: ## Show this help message
-	@echo "OrçamentosOnline - Development Commands"
-	@echo "======================================"
-	@echo ""
-	@echo "Available commands:"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-	@echo ""
-	@echo "Examples:"
-	@echo "  make setup     # Initial project setup"
-	@echo "  make start     # Start development environment"
-	@echo "  make logs      # View all container logs"
-	@echo "  make test      # Run all tests"
+# Start all services
+up:
+	docker-compose -f docker-compose.test.yml up -d
 
-# ============================================================================
-# SETUP AND INITIALIZATION
-# ============================================================================
+# Stop all services
+down:
+	docker-compose -f docker-compose.test.yml down
+
+# View logs
+logs:
+	docker-compose -f docker-compose.test.yml logs -f
+
+# Run tests
+test:
+	docker-compose -f docker-compose.test.yml exec ai-test-runner npm test
+
+# Start monitoring
+monitor:
+	docker-compose -f docker-compose.test.yml exec ai-test-runner npm run monitor
+
+# Generate report
+report:
+	docker-compose -f docker-compose.test.yml exec ai-test-runner npm run report
+
+# Clean up
+clean:
+	docker-compose -f docker-compose.test.yml down -v
+	docker system prune -f
+	rm -rf reports/* screenshots/* videos/*
+
+# Quick start (build, up, and monitor)
+start: build up
+	sleep 10
+	make logs
+
+# Health check
+health:
+	@echo "Checking service health..."
+	@curl -f http://localhost:9090/-/healthy && echo "✅ Prometheus OK" || echo "❌ Prometheus failed"
+	@curl -f http://localhost:3001/api/health && echo "✅ Grafana OK" || echo "❌ Grafana failed"
+	@docker-compose -f docker-compose.test.yml ps
 setup: ## Initial project setup with dependencies and environment
 	@echo "🔧 Setting up OrçamentosOnline development environment..."
 	@if [ ! -f $(ENV_FILE) ]; then \

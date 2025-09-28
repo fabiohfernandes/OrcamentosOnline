@@ -31,7 +31,8 @@
       "Bash(./stress_test_real_ui.sh:*)",
       "Bash(npm run build:*)",
       "Bash(timeout:*)",
-      "Bash(./stress_test_functional.sh:*)"
+      "Bash(./stress_test_functional.sh:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
