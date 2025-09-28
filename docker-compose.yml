@@ -281,40 +281,6 @@ services:
     profiles:
       - dashboard
 
-  # ============================================================================
-  # AUTOMATED TESTING SERVICE
-  # ============================================================================
-  automated-testing:
-    build:
-      context: ./automated-testing
-      dockerfile: Dockerfile
-    container_name: orcamentos-automated-testing
-    restart: "no"  # Only run when explicitly started
-    environment:
-      - NODE_ENV=testing
-      - BASE_URL=http://host.docker.internal:3001
-      - API_URL=http://host.docker.internal:3000/api/v1
-      - TARGET_SUCCESS_RATE=100
-      - MAX_ITERATIONS=1000
-      - TEST_CYCLES=10
-    volumes:
-      - ./automated-testing:/app
-      - /app/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock:ro  # For Docker log monitoring
-    depends_on:
-      api:
-        condition: service_healthy
-      frontend:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      orcamentos-network:
-        ipv4_address: 172.20.0.55
-    profiles:
-      - testing
 
   # ============================================================================
   # MONITORING & OBSERVABILITY (Optional)
