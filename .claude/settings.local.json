@@ -20,7 +20,18 @@
       "Bash(docker logs:*)",
       "Bash(cp:*)",
       "Bash(docker cp:*)",
-      "Bash(docker:*)"
+      "Bash(docker:*)",
+      "Bash(for i in {1..10})",
+      "Bash(do echo \"Test $i:\")",
+      "Bash(done)",
+      "Bash(for i in {1..20})",
+      "Bash(do echo -n \"Test $i: \")",
+      "Bash(./stress_test_complete.sh:*)",
+      "Bash(chmod:*)",
+      "Bash(./stress_test_real_ui.sh:*)",
+      "Bash(npm run build:*)",
+      "Bash(timeout:*)",
+      "Bash(./stress_test_functional.sh:*)"
     ],
     "deny": [],
     "ask": []

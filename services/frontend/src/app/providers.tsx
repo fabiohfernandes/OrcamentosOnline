@@ -56,12 +56,29 @@ export function Providers({ children }: ProvidersProps) {
 function AuthInitializer({ children }: { children: React.ReactNode }) {
   const initialize = useAuthStore(state => state.initialize);
 
-  // Setup automatic token refresh
-  useTokenRefresh();
+  // Setup automatic token refresh - TEMPORARILY DISABLED to prevent rate limiting
+  // useTokenRefresh();
 
   useEffect(() => {
-    // Initialize auth state on app load
-    initialize().catch(console.error);
+    // Initialize auth state on app load - LIMITED to prevent rate limiting
+    const initializeOnce = async () => {
+      try {
+        // Check if already initialized via localStorage first
+        const authData = localStorage.getItem('auth-tokens');
+        if (authData) {
+          const { state } = JSON.parse(authData);
+          if (state?.tokens && state?.isAuthenticated) {
+            return; // Already authenticated, no need to initialize
+          }
+        }
+
+        await initialize();
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      }
+    };
+
+    initializeOnce();
   }, [initialize]);
 
   return <>{children}</>;

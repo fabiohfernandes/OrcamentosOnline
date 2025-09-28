@@ -6,3 +6,6 @@
 
 // Layout Components
 export { default as DashboardLayout } from './Layout/DashboardLayout';
+
+// Auth Components
+export { AuthGuard } from './Auth/AuthGuard';

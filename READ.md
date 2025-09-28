@@ -1,0 +1,2 @@
+I WILL NEVER RUN npm install && npm start
+I WILL NEVER TRY TO RUN NOTHING LOCALLY

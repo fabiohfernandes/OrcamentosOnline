@@ -9,18 +9,16 @@ export default function SimpleClientsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load clients with auth check
+    // Check auth first
+    if (!requireAuth()) {
+      return;
+    }
+
+    // Load clients
     const loadClients = async () => {
       try {
         setLoading(true);
         setError(null);
-
-        // Check if we have a token first
-        if (!AuthToken.get() || !AuthToken.isValid()) {
-          AuthToken.clear();
-          window.location.href = '/auth/login';
-          return;
-        }
 
         const response = await SimpleAPI.getClients();
 
@@ -39,7 +37,7 @@ export default function SimpleClientsPage() {
           return;
         }
 
-        setError('Failed to load clients. Please try again.');
+        setError('Failed to load clients');
         setClients([]);
       } finally {
         setLoading(false);
@@ -55,7 +53,6 @@ export default function SimpleClientsPage() {
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-secondary-600">Loading clients...</p>
-          <p className="text-xs text-secondary-400 mt-2">If this takes too long, please refresh the page</p>
         </div>
       </div>
     );

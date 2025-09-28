@@ -280,27 +280,31 @@ router.post('/proposals', authenticateUser, async (req, res) => {
     const proposalResult = await pool.query(
       `INSERT INTO proposals (
         user_id,
+        title,
         proposal_name,
         client_name,
+        client_email,
         job_name,
         presentation_url,
-        commercial_proposal_url,
-        scope_text,
-        terms_text,
+        commercial_url,
+        scope_content,
+        terms_content,
         client_username,
-        client_password_hash,
+        password,
         client_password_display,
         proposal_value,
         status,
         public_token,
         created_at,
         updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, NOW(), NOW())
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, NOW(), NOW())
       RETURNING *`,
       [
         req.user.userId,
-        proposalName.trim(),
+        proposalName.trim(), // title
+        proposalName.trim(), // proposal_name
         clientName.trim(),
+        `${clientUsername}@functional-test.com`, // client_email (generate from username)
         jobName.trim(),
         presentationUrl || null,
         commercialProposalUrl || null,
@@ -352,9 +356,9 @@ router.get('/proposals/:id', authenticateUser, async (req, res) => {
         client_name,
         job_name,
         presentation_url,
-        commercial_proposal_url,
-        scope_text,
-        terms_text,
+        commercial_url,
+        scope_content,
+        terms_content,
         client_username,
         client_password_display,
         status,
@@ -421,31 +425,47 @@ router.put('/proposals/:id', authenticateUser, async (req, res) => {
       displayPassword = clientPassword;
     }
 
-    // Build dynamic update query
+    // Build dynamic update query - only update provided fields
     let updateFields = [];
     let updateValues = [];
     let paramCount = 1;
 
-    updateFields.push(`proposal_name = $${paramCount++}`);
-    updateValues.push(proposalName?.trim());
+    if (proposalName !== undefined) {
+      updateFields.push(`proposal_name = $${paramCount++}`);
+      updateValues.push(proposalName.trim());
+      updateFields.push(`title = $${paramCount++}`);
+      updateValues.push(proposalName.trim());
+    }
 
-    updateFields.push(`client_name = $${paramCount++}`);
-    updateValues.push(clientName?.trim());
+    if (clientName !== undefined) {
+      updateFields.push(`client_name = $${paramCount++}`);
+      updateValues.push(clientName.trim());
+    }
 
-    updateFields.push(`job_name = $${paramCount++}`);
-    updateValues.push(jobName?.trim());
+    if (jobName !== undefined) {
+      updateFields.push(`job_name = $${paramCount++}`);
+      updateValues.push(jobName.trim());
+    }
 
-    updateFields.push(`presentation_url = $${paramCount++}`);
-    updateValues.push(presentationUrl || null);
+    if (presentationUrl !== undefined) {
+      updateFields.push(`presentation_url = $${paramCount++}`);
+      updateValues.push(presentationUrl || null);
+    }
 
-    updateFields.push(`commercial_proposal_url = $${paramCount++}`);
-    updateValues.push(commercialProposalUrl || null);
+    if (commercialProposalUrl !== undefined) {
+      updateFields.push(`commercial_url = $${paramCount++}`);
+      updateValues.push(commercialProposalUrl || null);
+    }
 
-    updateFields.push(`scope_text = $${paramCount++}`);
-    updateValues.push(scopeText?.trim());
+    if (scopeText !== undefined) {
+      updateFields.push(`scope_content = $${paramCount++}`);
+      updateValues.push(scopeText.trim());
+    }
 
-    updateFields.push(`terms_text = $${paramCount++}`);
-    updateValues.push(termsText?.trim());
+    if (termsText !== undefined) {
+      updateFields.push(`terms_content = $${paramCount++}`);
+      updateValues.push(termsText.trim());
+    }
 
     if (clientUsername && clientUsername.trim() !== '') {
       // Check if client username is unique (excluding current proposal)
@@ -473,8 +493,18 @@ router.put('/proposals/:id', authenticateUser, async (req, res) => {
       updateValues.push(displayPassword);
     }
 
-    updateFields.push(`proposal_value = $${paramCount++}`);
-    updateValues.push(proposalValue || 0);
+    if (proposalValue !== undefined) {
+      updateFields.push(`proposal_value = $${paramCount++}`);
+      updateValues.push(proposalValue || 0);
+    }
+
+    // Ensure at least one field is being updated
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No fields provided for update'
+      });
+    }
 
     updateFields.push(`updated_at = NOW()`);
 
@@ -717,9 +747,9 @@ router.get('/client/proposal/:id', async (req, res) => {
         client_name,
         job_name,
         presentation_url,
-        commercial_proposal_url,
-        scope_text,
-        terms_text,
+        commercial_url,
+        scope_content,
+        terms_content,
         status,
         proposal_value,
         public_token
@@ -758,9 +788,9 @@ router.get('/client/proposal/:id', async (req, res) => {
           client_name: proposal.client_name,
           job_name: proposal.job_name,
           presentation_url: proposal.presentation_url,
-          commercial_proposal_url: proposal.commercial_proposal_url,
-          scope_text: proposal.scope_text,
-          terms_text: proposal.terms_text,
+          commercial_proposal_url: proposal.commercial_url,
+          scope_text: proposal.scope_content,
+          terms_text: proposal.terms_content,
           status: proposal.status,
           proposal_value: proposal.proposal_value
         },

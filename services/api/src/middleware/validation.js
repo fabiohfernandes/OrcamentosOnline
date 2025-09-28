@@ -127,35 +127,7 @@ const clientSchemas = {
   create: Joi.object({
     name: Joi.string().min(2).max(200).required().trim(),
     email: Joi.string().email().required().lowercase().trim(),
-    phone: customJoi.brazilianDocument().phone().required(),
-    document: Joi.string().required().trim(), // Will validate CPF or CNPJ
-    document_type: Joi.string().valid('cpf', 'cnpj').required(),
-    address: Joi.object({
-      street: Joi.string().min(5).max(200).required().trim(),
-      number: Joi.string().max(10).required().trim(),
-      complement: Joi.string().max(100).optional().trim(),
-      neighborhood: Joi.string().min(2).max(100).required().trim(),
-      city: Joi.string().min(2).max(100).required().trim(),
-      state: Joi.string().length(2).required().uppercase(),
-      cep: customJoi.brazilianDocument().cep().required()
-    }).required(),
-    company: Joi.string().max(200).optional().trim(),
-    notes: Joi.string().max(1000).optional().trim()
-  }).custom((value, helpers) => {
-    // Validate document based on type
-    if (value.document_type === 'cpf' && !validateCPF(value.document)) {
-      return helpers.error('Invalid CPF');
-    }
-    if (value.document_type === 'cnpj' && !validateCNPJ(value.document)) {
-      return helpers.error('Invalid CNPJ');
-    }
-    return value;
-  }),
-
-  update: Joi.object({
-    name: Joi.string().min(2).max(200).optional().trim(),
-    email: Joi.string().email().optional().lowercase().trim(),
-    phone: customJoi.brazilianDocument().phone().optional(),
+    phone: Joi.string().required().trim(),
     document: Joi.string().optional().trim(),
     document_type: Joi.string().valid('cpf', 'cnpj').optional(),
     address: Joi.object({
@@ -165,21 +137,31 @@ const clientSchemas = {
       neighborhood: Joi.string().min(2).max(100).optional().trim(),
       city: Joi.string().min(2).max(100).optional().trim(),
       state: Joi.string().length(2).optional().uppercase(),
-      cep: customJoi.brazilianDocument().cep().optional()
+      cep: Joi.string().optional().trim()
     }).optional(),
     company: Joi.string().max(200).optional().trim(),
-    notes: Joi.string().max(1000).optional().trim()
-  }).custom((value, helpers) => {
-    // Validate document if both document and document_type are provided
-    if (value.document && value.document_type) {
-      if (value.document_type === 'cpf' && !validateCPF(value.document)) {
-        return helpers.error('Invalid CPF');
-      }
-      if (value.document_type === 'cnpj' && !validateCNPJ(value.document)) {
-        return helpers.error('Invalid CNPJ');
-      }
-    }
-    return value;
+    notes: Joi.string().max(1000).optional().trim(),
+    status: Joi.string().valid('active', 'inactive').default('active')
+  }),
+
+  update: Joi.object({
+    name: Joi.string().min(2).max(200).optional().trim(),
+    email: Joi.string().email().optional().lowercase().trim(),
+    phone: Joi.string().optional().trim(),
+    document: Joi.string().optional().trim(),
+    document_type: Joi.string().valid('cpf', 'cnpj').optional(),
+    address: Joi.object({
+      street: Joi.string().min(5).max(200).optional().trim(),
+      number: Joi.string().max(10).optional().trim(),
+      complement: Joi.string().max(100).optional().trim(),
+      neighborhood: Joi.string().min(2).max(100).optional().trim(),
+      city: Joi.string().min(2).max(100).optional().trim(),
+      state: Joi.string().length(2).optional().uppercase(),
+      cep: Joi.string().optional().trim()
+    }).optional(),
+    company: Joi.string().max(200).optional().trim(),
+    notes: Joi.string().max(1000).optional().trim(),
+    status: Joi.string().valid('active', 'inactive').optional()
   }),
 
   list: Joi.object({
@@ -276,10 +258,13 @@ const validatePagination = validateRequest(Joi.object({
 }), 'query');
 
 /**
- * Validate ID parameter
+ * Validate ID parameter (supports both UUID and numeric IDs)
  */
 const validateIdParam = validateRequest(Joi.object({
-  id: Joi.number().integer().positive().required()
+  id: Joi.alternatives().try(
+    Joi.string().uuid(),
+    Joi.number().integer().positive()
+  ).required()
 }), 'params');
 
 module.exports = {

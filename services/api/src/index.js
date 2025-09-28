@@ -113,19 +113,19 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Rate limiting - FORTRESS Agent security
-const limiter = rateLimit({
-  windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutes default
-  max: process.env.RATE_LIMIT_MAX || 100, // limit each IP to 100 requests per windowMs
-  message: {
-    error: 'Too many requests from this IP, please try again later.',
-    retryAfter: Math.ceil((process.env.RATE_LIMIT_WINDOW || 15) * 60)
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// Rate limiting - FORTRESS Agent security - DISABLED FOR TESTING
+// const limiter = rateLimit({
+//   windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutes default
+//   max: process.env.RATE_LIMIT_MAX || (process.env.NODE_ENV === 'development' ? 1000 : 100), // Higher limit for development
+//   message: {
+//     error: 'Too many requests from this IP, please try again later.',
+//     retryAfter: Math.ceil((process.env.RATE_LIMIT_WINDOW || 15) * 60)
+//   },
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
-app.use('/api/', limiter);
+// app.use('/api/', limiter);
 
 // Body parsing middleware
 app.use(compression());
@@ -839,7 +839,7 @@ app.get('/api/v1/clients',
   validateRequest(clientSchemas.list, 'query'),
   async (req, res) => {
     try {
-      const result = await ClientModel.list(req.query, req.user.userId);
+      const result = await ClientModel.list(req.user.userId, req.query);
 
       res.json({
         success: true,

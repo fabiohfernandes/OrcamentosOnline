@@ -6,10 +6,11 @@
 
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
+import { AuthToken } from '@/lib/simple-auth';
 import {
   Bars3Icon,
   XMarkIcon,
@@ -39,9 +40,24 @@ const navigation = [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { logout, user } = useAuthStore();
+
+  // Check authentication on mount
+  useEffect(() => {
+    const checkAuth = () => {
+      if (!AuthToken.get() || !AuthToken.isValid()) {
+        AuthToken.clear();
+        router.push('/auth/login');
+        return;
+      }
+      setIsAuthChecked(true);
+    };
+
+    checkAuth();
+  }, [router]);
 
   const handleLogout = () => {
     logout();
@@ -54,6 +70,18 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
     return pathname.startsWith(href);
   };
+
+  // Show loading while checking authentication
+  if (!isAuthChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-secondary-50">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-secondary-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-secondary-50">
