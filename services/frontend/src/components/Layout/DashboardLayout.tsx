@@ -10,7 +10,6 @@ import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
-import { AuthToken } from '@/lib/simple-auth';
 import {
   Bars3Icon,
   XMarkIcon,
@@ -40,24 +39,31 @@ const navigation = [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { logout, user } = useAuthStore();
+  const { logout, user, isAuthenticated, tokens, isLoading, initialize } = useAuthStore();
 
-  // Check authentication on mount
+  // Initialize authentication state on mount
   useEffect(() => {
-    const checkAuth = () => {
-      if (!AuthToken.get() || !AuthToken.isValid()) {
-        AuthToken.clear();
-        router.push('/auth/login');
+    const initAuth = async () => {
+      // If already authenticated, nothing to do
+      if (isAuthenticated && tokens) {
         return;
       }
-      setIsAuthChecked(true);
+
+      // Try to initialize from stored data
+      await initialize();
     };
 
-    checkAuth();
-  }, [router]);
+    initAuth();
+  }, [initialize, isAuthenticated, tokens]);
+
+  // Redirect to login if not authenticated after loading
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && !tokens) {
+      router.push('/auth/login');
+    }
+  }, [isLoading, isAuthenticated, tokens, router]);
 
   const handleLogout = () => {
     logout();
@@ -72,15 +78,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   // Show loading while checking authentication
-  if (!isAuthChecked) {
+  if (isLoading || (!isAuthenticated && !tokens)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-secondary-50">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-secondary-600">Checking authentication...</p>
+          <p className="text-secondary-600">Verificando autenticação...</p>
         </div>
       </div>
     );
+  }
+
+  // Don't render if not authenticated
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (

@@ -25,7 +25,7 @@ interface Proposal {
   proposal_name: string;
   client_name: string;
   job_name: string;
-  status: 'open' | 'closed' | 'archived';
+  status: 'open' | 'closed' | 'rejected' | 'pending_changes' | 'archived';
   proposal_value: number;
   created_at: string;
   updated_at: string;
@@ -39,12 +39,16 @@ const getStatusBadge = (status: string) => {
   const styles = {
     open: 'bg-blue-100 text-blue-800 border-blue-200',
     closed: 'bg-green-100 text-green-800 border-green-200',
+    rejected: 'bg-red-100 text-red-800 border-red-200',
+    pending_changes: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     archived: 'bg-gray-100 text-gray-800 border-gray-200'
   };
 
   const labels = {
     open: 'Aberta',
     closed: 'Fechada',
+    rejected: 'Rejeitada',
+    pending_changes: 'Alterações Solicitadas',
     archived: 'Arquivada'
   };
 
@@ -61,6 +65,10 @@ const getStatusIcon = (status: string) => {
       return <ClockIcon className="h-4 w-4 text-blue-500" />;
     case 'closed':
       return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+    case 'rejected':
+      return <XMarkIcon className="h-4 w-4 text-red-500" />;
+    case 'pending_changes':
+      return <DocumentTextIcon className="h-4 w-4 text-yellow-500" />;
     case 'archived':
       return <ArchiveBoxIcon className="h-4 w-4 text-gray-500" />;
     default:
@@ -253,6 +261,8 @@ export default function ProposalsPage() {
                 <option value="all">Todos os status</option>
                 <option value="open">Abertas</option>
                 <option value="closed">Fechadas</option>
+                <option value="rejected">Rejeitadas</option>
+                <option value="pending_changes">Alterações Solicitadas</option>
                 <option value="archived">Arquivadas</option>
               </select>
             </div>

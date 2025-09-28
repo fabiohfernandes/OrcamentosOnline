@@ -95,7 +95,7 @@ const authenticateClient = async (req, res, next) => {
     const proposal = result.rows[0];
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(password, proposal.client_password_hash);
+    const isPasswordValid = await bcrypt.compare(password, proposal.password);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
@@ -154,7 +154,7 @@ router.get('/proposals', authenticateUser, async (req, res) => {
     let paramCount = 1;
 
     // Add status filter
-    if (status && ['open', 'closed', 'archived'].includes(status)) {
+    if (status && ['open', 'closed', 'rejected', 'pending_changes', 'archived'].includes(status)) {
       paramCount++;
       query += ` AND status = $${paramCount}`;
       queryParams.push(status);
@@ -180,7 +180,7 @@ router.get('/proposals', authenticateUser, async (req, res) => {
     let countQuery = `SELECT COUNT(*) FROM proposals WHERE user_id = $1`;
     const countParams = [req.user.userId];
 
-    if (status && ['open', 'closed', 'archived'].includes(status)) {
+    if (status && ['open', 'closed', 'rejected', 'pending_changes', 'archived'].includes(status)) {
       countQuery += ` AND status = $2`;
       countParams.push(status);
     }
@@ -220,9 +220,9 @@ router.post('/proposals', authenticateUser, async (req, res) => {
       commercialProposalUrl,
       scopeText,
       termsText,
-      clientUsername,
       clientPassword,
-      proposalValue
+      proposalValue,
+      proposalAccessNumber
     } = req.body;
 
     // Validate required fields
@@ -232,8 +232,8 @@ router.post('/proposals', authenticateUser, async (req, res) => {
       jobName: 'Job name is required',
       scopeText: 'Scope text is required',
       termsText: 'Terms text is required',
-      clientUsername: 'Client username is required',
-      clientPassword: 'Client password is required'
+      clientPassword: 'Client password is required',
+      proposalAccessNumber: 'Proposal access number is required'
     };
 
     const errors = [];
@@ -250,18 +250,38 @@ router.post('/proposals', authenticateUser, async (req, res) => {
       });
     }
 
-    // Check if client username is unique
-    const existingUsername = await pool.query(
-      'SELECT id FROM proposals WHERE client_username = $1',
-      [clientUsername]
-    );
-
-    if (existingUsername.rows.length > 0) {
-      return res.status(409).json({
+    // Proposal access number is provided by frontend - validate it's a 6-digit number
+    if (!/^\d{6}$/.test(proposalAccessNumber)) {
+      return res.status(400).json({
         success: false,
-        error: 'Client username already exists. Please choose a different username.'
+        error: 'Proposal access number must be a 6-digit number'
       });
     }
+
+    // Check if proposal access number already exists
+    const existingProposal = await pool.query(
+      'SELECT id FROM proposals WHERE proposal_access_number = $1',
+      [proposalAccessNumber]
+    );
+
+    if (existingProposal.rows.length > 0) {
+      return res.status(409).json({
+        success: false,
+        error: 'Proposal access number already exists. Please refresh and try again.'
+      });
+    }
+
+    // Generate unique username based on client name and access number
+    const normalizedName = clientName
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '_')
+      .replace(/_+/g, '_')
+      .replace(/^_|_$/g, '');
+
+    const clientUsername = `${normalizedName}_${proposalAccessNumber}`;
+
+    // Note: Removed username uniqueness check to allow multiple proposals per client
+    // Each proposal now has its own unique access credentials
 
     // Hash client password for authentication
     const saltRounds = 10;
@@ -295,9 +315,10 @@ router.post('/proposals', authenticateUser, async (req, res) => {
         proposal_value,
         status,
         public_token,
+        proposal_access_number,
         created_at,
         updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, NOW(), NOW())
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, NOW(), NOW())
       RETURNING *`,
       [
         req.user.userId,
@@ -315,14 +336,15 @@ router.post('/proposals', authenticateUser, async (req, res) => {
         displayPassword,
         proposalValue || 0,
         'open',
-        publicToken
+        publicToken,
+        proposalAccessNumber
       ]
     );
 
     const proposal = proposalResult.rows[0];
 
     // Remove sensitive data before sending response
-    delete proposal.client_password_hash;
+    delete proposal.password;
     delete proposal.organization_id;
 
     logger.info(`Proposal created: ${proposal.id} by user ${req.user.userId}`);
@@ -333,7 +355,7 @@ router.post('/proposals', authenticateUser, async (req, res) => {
       data: {
         proposal: {
           ...proposal,
-          clientAccessUrl: `${process.env.FRONTEND_URL}/proposal/${proposal.public_token}`
+          clientAccessUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/proposal/${proposal.public_token}`
         }
       }
     });
@@ -366,7 +388,8 @@ router.get('/proposals/:id', authenticateUser, async (req, res) => {
         created_at,
         updated_at,
         closed_at,
-        public_token
+        public_token,
+        proposal_access_number
       FROM proposals
       WHERE id = $1 AND user_id = $2`,
       [req.params.id, req.user.userId]
@@ -386,7 +409,7 @@ router.get('/proposals/:id', authenticateUser, async (req, res) => {
       data: {
         proposal: {
           ...proposal,
-          clientAccessUrl: `${process.env.FRONTEND_URL}/proposal/${proposal.public_token}`
+          clientAccessUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/proposal/${proposal.public_token}`
         }
       }
     });
@@ -528,7 +551,7 @@ router.put('/proposals/:id', authenticateUser, async (req, res) => {
     }
 
     const proposal = result.rows[0];
-    delete proposal.client_password_hash;
+    delete proposal.password;
     delete proposal.organization_id;
 
     res.json({
@@ -630,31 +653,31 @@ router.get('/proposals/:id/analytics', authenticateUser, async (req, res) => {
 // CLIENT-FACING ROUTES (Proposal Viewing)
 // ============================================================================
 
-// Client login to proposal
-router.post('/client/login/:id', async (req, res) => {
+// Client login using proposal number
+router.post('/client/login/proposal', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const proposalIdentifier = req.params.id; // Can be ID or public_token
+    const { proposalNumber, password } = req.body;
 
-    if (!username || !password) {
+    if (!proposalNumber || !password) {
       return res.status(400).json({
         success: false,
-        error: 'Username and password are required'
+        error: 'Proposal number and password are required'
       });
     }
 
-    // Find proposal by ID or public token
+    // Find proposal by access number
     const proposalResult = await pool.query(
       `SELECT
         id,
         client_username,
-        client_password_hash,
+        password,
         status,
         proposal_name,
-        client_name
+        client_name,
+        proposal_access_number
       FROM proposals
-      WHERE (id = $1 OR public_token = $1) AND client_username = $2`,
-      [proposalIdentifier, username]
+      WHERE proposal_access_number = $1`,
+      [proposalNumber]
     );
 
     if (proposalResult.rows.length === 0) {
@@ -667,7 +690,95 @@ router.post('/client/login/:id', async (req, res) => {
     const proposal = proposalResult.rows[0];
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(password, proposal.client_password_hash);
+    const isPasswordValid = await bcrypt.compare(password, proposal.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials'
+      });
+    }
+
+    // Check proposal status
+    if (proposal.status === 'archived') {
+      return res.status(403).json({
+        success: false,
+        error: 'This proposal is no longer accessible'
+      });
+    }
+
+    // Generate client session token
+    const clientToken = jwt.sign(
+      {
+        proposalId: proposal.id,
+        proposalNumber: proposal.proposal_access_number,
+        type: 'client'
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        token: clientToken,
+        proposalId: proposal.id,
+        proposal: {
+          id: proposal.id,
+          name: proposal.proposal_name,
+          clientName: proposal.client_name,
+          status: proposal.status
+        }
+      }
+    });
+  } catch (error) {
+    logger.error('Client login error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Login failed'
+    });
+  }
+});
+
+// Client login to proposal (legacy - keeping for backward compatibility)
+router.post('/client/login/:id', async (req, res) => {
+  try {
+    const { proposalNumber, password } = req.body;
+    const proposalIdentifier = req.params.id; // Can be ID or public_token
+
+    if (!proposalNumber || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Proposal number and password are required'
+      });
+    }
+
+    // Find proposal by access number
+    const proposalResult = await pool.query(
+      `SELECT
+        id,
+        client_username,
+        password,
+        status,
+        proposal_name,
+        client_name,
+        proposal_access_number
+      FROM proposals
+      WHERE proposal_access_number = $1`,
+      [proposalNumber]
+    );
+
+    if (proposalResult.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials'
+      });
+    }
+
+    const proposal = proposalResult.rows[0];
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, proposal.password);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
@@ -730,7 +841,15 @@ router.get('/client/proposal/:id', async (req, res) => {
     }
 
     // Verify client token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
 
     if (decoded.type !== 'client') {
       return res.status(403).json({
@@ -739,7 +858,11 @@ router.get('/client/proposal/:id', async (req, res) => {
       });
     }
 
-    // Get proposal content
+    // Validate that the token's proposalId matches the requested proposal
+    // The proposal ID can be either a UUID (public_token) or internal ID
+    const requestedProposalId = req.params.id;
+
+    // Get proposal content - check both by ID and public_token to allow both access methods
     const proposalResult = await pool.query(
       `SELECT
         id,
@@ -754,8 +877,8 @@ router.get('/client/proposal/:id', async (req, res) => {
         proposal_value,
         public_token
       FROM proposals
-      WHERE id = $1 AND status != 'archived'`,
-      [decoded.proposalId]
+      WHERE (id::text = $1 OR public_token = $1) AND status != 'archived'`,
+      [requestedProposalId]
     );
 
     if (proposalResult.rows.length === 0) {
@@ -766,6 +889,14 @@ router.get('/client/proposal/:id', async (req, res) => {
     }
 
     const proposal = proposalResult.rows[0];
+
+    // Verify that the token is for this specific proposal
+    if (decoded.proposalId !== proposal.id) {
+      return res.status(403).json({
+        success: false,
+        error: 'Token is not valid for this proposal'
+      });
+    }
 
     // Get existing comments
     const commentsResult = await pool.query(
@@ -788,9 +919,9 @@ router.get('/client/proposal/:id', async (req, res) => {
           client_name: proposal.client_name,
           job_name: proposal.job_name,
           presentation_url: proposal.presentation_url,
-          commercial_proposal_url: proposal.commercial_url,
-          scope_text: proposal.scope_content,
-          terms_text: proposal.terms_content,
+          commercial_url: proposal.commercial_url,
+          scope_content: proposal.scope_content,
+          terms_content: proposal.terms_content,
           status: proposal.status,
           proposal_value: proposal.proposal_value
         },
@@ -835,7 +966,15 @@ router.post('/client/proposal/:id/comment', async (req, res) => {
     }
 
     // Verify client token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
 
     if (decoded.type !== 'client') {
       return res.status(403).json({
@@ -893,7 +1032,15 @@ router.post('/client/proposal/:id/accept', async (req, res) => {
     }
 
     // Verify client token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
 
     if (decoded.type !== 'client') {
       return res.status(403).json({
@@ -943,6 +1090,158 @@ router.post('/client/proposal/:id/accept', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to accept proposal'
+    });
+  }
+});
+
+// Reject proposal
+router.post('/client/proposal/:id/reject', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        error: 'Access token required'
+      });
+    }
+
+    // Verify client token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+
+    if (decoded.type !== 'client') {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid token type'
+      });
+    }
+
+    // Update proposal status to rejected
+    const result = await pool.query(
+      `UPDATE proposals
+      SET status = 'rejected', updated_at = NOW()
+      WHERE id = $1 AND status = 'open'
+      RETURNING *`,
+      [decoded.proposalId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Proposal cannot be rejected (may already be closed, rejected, or archived)'
+      });
+    }
+
+    logger.info(`Proposal ${decoded.proposalId} rejected by client`);
+
+    res.json({
+      success: true,
+      message: 'Proposal rejected successfully.',
+      data: {
+        proposal: {
+          id: result.rows[0].id,
+          status: result.rows[0].status,
+          rejectedAt: result.rows[0].updated_at
+        }
+      }
+    });
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid token'
+      });
+    }
+
+    logger.error('Error rejecting proposal:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to reject proposal'
+    });
+  }
+});
+
+// Request changes to proposal
+router.post('/client/proposal/:id/request-changes', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        error: 'Access token required'
+      });
+    }
+
+    // Verify client token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+
+    if (decoded.type !== 'client') {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid token type'
+      });
+    }
+
+    // Update proposal status to pending_changes
+    const result = await pool.query(
+      `UPDATE proposals
+      SET status = 'pending_changes', updated_at = NOW()
+      WHERE id = $1 AND status = 'open'
+      RETURNING *`,
+      [decoded.proposalId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Proposal cannot be modified (may already be closed, rejected, or archived)'
+      });
+    }
+
+    logger.info(`Proposal ${decoded.proposalId} - changes requested by client`);
+
+    res.json({
+      success: true,
+      message: 'Changes requested successfully. The proposal owner will be notified.',
+      data: {
+        proposal: {
+          id: result.rows[0].id,
+          status: result.rows[0].status,
+          changesRequestedAt: result.rows[0].updated_at
+        }
+      }
+    });
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(403).json({
+        success: false,
+        error: 'Invalid token'
+      });
+    }
+
+    logger.error('Error requesting proposal changes:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to request changes'
     });
   }
 });

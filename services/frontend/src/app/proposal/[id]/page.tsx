@@ -10,9 +10,9 @@ interface ProposalData {
   client_name: string;
   job_name: string;
   presentation_url: string;
-  commercial_proposal_url: string;
-  scope_text: string;
-  terms_text: string;
+  commercial_url: string;
+  scope_content: string;
+  terms_content: string;
   status: string;
 }
 
@@ -20,7 +20,7 @@ const pages = [
   { id: 1, name: 'Apresentação', description: 'Apresentação do projeto' },
   { id: 2, name: 'Proposta Comercial', description: 'Detalhes comerciais' },
   { id: 3, name: 'Escopo', description: 'Escopo do trabalho' },
-  { id: 4, name: 'Termos', description: 'Termos e condições' }
+  { id: 4, name: 'Termos e Condições', description: 'Termos e condições' }
 ];
 
 export default function ProposalViewerPage() {
@@ -32,20 +32,15 @@ export default function ProposalViewerPage() {
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
   const [savingComment, setSavingComment] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(1.3);
+  const [zoomLevel, setZoomLevel] = useState(1.0);
 
   // Load proposal data
   useEffect(() => {
     const loadProposal = async () => {
       const token = localStorage.getItem('client_token');
       if (!token) {
-        // Check if proposalId is a UUID (public token) or number (proposal ID)
-        const isPublicToken = proposalId.includes('-') && proposalId.length > 10;
-        if (isPublicToken) {
-          window.location.href = `/client-login?token=${proposalId}`;
-        } else {
-          window.location.href = '/client-login';
-        }
+        // Redirect to proposal-specific access page
+        window.location.href = `/proposal/${proposalId}/access`;
         return;
       }
 
@@ -61,8 +56,15 @@ export default function ProposalViewerPage() {
         if (response.ok && data.success) {
           setProposal(data.data.proposal);
         } else {
-          toast.error('Erro ao carregar proposta');
-          window.location.href = '/client-login';
+          // If token is invalid for this proposal, clear it and redirect to auth
+          if (response.status === 403) {
+            localStorage.removeItem('client_token');
+            localStorage.removeItem('proposal_id');
+            toast.error('Acesso negado. Por favor, faça login para esta proposta.');
+          } else {
+            toast.error('Erro ao carregar proposta');
+          }
+          window.location.href = `/proposal/${proposalId}/access`;
         }
       } catch (error) {
         console.error('Error loading proposal:', error);
@@ -175,6 +177,72 @@ export default function ProposalViewerPage() {
     }
   };
 
+  // Reject proposal
+  const rejectProposal = async () => {
+    const confirmed = window.confirm(
+      'Tem certeza que deseja rejeitar esta proposta? Esta ação não pode ser desfeita.'
+    );
+
+    if (!confirmed) return;
+
+    const token = localStorage.getItem('client_token');
+    if (!token) return;
+
+    try {
+      const response = await fetch(`/api/v1/client/proposal/${proposalId}/reject`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success('Proposta rejeitada.');
+        setProposal(prev => prev ? { ...prev, status: 'rejected' } : null);
+      } else {
+        toast.error(data.message || 'Erro ao rejeitar proposta');
+      }
+    } catch (error) {
+      console.error('Error rejecting proposal:', error);
+      toast.error('Erro ao rejeitar proposta');
+    }
+  };
+
+  // Request changes
+  const requestChanges = async () => {
+    const confirmed = window.confirm(
+      'Tem certeza que deseja solicitar alterações na proposta? Isso notificará o responsável pela proposta sobre suas solicitações de mudança.'
+    );
+
+    if (!confirmed) return;
+
+    const token = localStorage.getItem('client_token');
+    if (!token) return;
+
+    try {
+      const response = await fetch(`/api/v1/client/proposal/${proposalId}/request-changes`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success('Solicitação de alterações enviada com sucesso!');
+        setProposal(prev => prev ? { ...prev, status: 'pending_changes' } : null);
+      } else {
+        toast.error(data.message || 'Erro ao solicitar alterações');
+      }
+    } catch (error) {
+      console.error('Error requesting changes:', error);
+      toast.error('Erro ao solicitar alterações');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -192,10 +260,10 @@ export default function ProposalViewerPage() {
         <div className="text-center">
           <p className="text-gray-600">Proposta não encontrada.</p>
           <button
-            onClick={() => window.location.href = '/client-login'}
+            onClick={() => window.location.href = `/proposal/${proposalId}/access`}
             className="mt-4 text-blue-600 hover:text-blue-700"
           >
-            Voltar ao login
+            Fazer login
           </button>
         </div>
       </div>
@@ -240,9 +308,9 @@ export default function ProposalViewerPage() {
         // Page 2: Commercial Proposal (iframe embed)
         return (
           <div className="iframe-container">
-            {proposal.commercial_proposal_url ? (
+            {proposal.commercial_url ? (
               <iframe
-                src={proposal.commercial_proposal_url}
+                src={proposal.commercial_url}
                 style={{
                   width: `${100 * zoomLevel}%`,
                   height: `${100 * zoomLevel}%`,
@@ -262,7 +330,20 @@ export default function ProposalViewerPage() {
               />
             ) : (
               <div className="flex items-center justify-center h-full bg-gray-100">
-                <p className="text-gray-500">Proposta comercial não disponível</p>
+                <div className="text-center max-w-md mx-auto p-8">
+                  <div className="mb-4">
+                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Proposta Comercial</h3>
+                  <p className="text-gray-500 mb-4">
+                    Esta seção estará disponível quando o documento comercial for anexado à proposta.
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Entre em contato para obter mais detalhes sobre valores e condições.
+                  </p>
+                </div>
               </div>
             )}
           </div>
@@ -276,10 +357,9 @@ export default function ProposalViewerPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Escopo do Trabalho</h2>
 
               <div className="prose max-w-none mb-8">
-                <div
-                  className="text-gray-700 leading-relaxed whitespace-pre-wrap"
-                  dangerouslySetInnerHTML={{ __html: proposal.scope_text }}
-                />
+                <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {proposal.scope_content || 'Conteúdo do escopo não disponível.'}
+                </div>
               </div>
 
               <div className="border-t pt-6">
@@ -315,10 +395,31 @@ export default function ProposalViewerPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Termos e Condições</h2>
 
               <div className="prose max-w-none mb-8">
-                <div
-                  className="text-gray-700 leading-relaxed whitespace-pre-wrap"
-                  dangerouslySetInnerHTML={{ __html: proposal.terms_text }}
-                />
+                <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {proposal.terms_content || 'Conteúdo dos termos não disponível.'}
+                </div>
+              </div>
+
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Comentários</h3>
+
+                <div className="space-y-4">
+                  <textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Deixe seu comentário sobre os termos e condições..."
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+
+                  <button
+                    onClick={saveComment}
+                    disabled={savingComment || !comment.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {savingComment ? 'Salvando...' : 'Salvar Comentário'}
+                  </button>
+                </div>
               </div>
 
               <div className="border-t pt-6">
@@ -331,18 +432,52 @@ export default function ProposalViewerPage() {
                       <span className="text-green-800 font-semibold">Proposta Aceita - Negócio Fechado!</span>
                     </div>
                   </div>
+                ) : proposal.status === 'rejected' ? (
+                  <div className="bg-red-100 border border-red-300 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <svg className="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      <span className="text-red-800 font-semibold">Proposta Rejeitada</span>
+                    </div>
+                  </div>
+                ) : proposal.status === 'pending_changes' ? (
+                  <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <svg className="h-5 w-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
+                      <span className="text-yellow-800 font-semibold">Alterações Solicitadas - Aguardando Revisão</span>
+                    </div>
+                  </div>
                 ) : (
-                  <div className="flex items-center justify-between">
+                  <div className="space-y-4">
                     <p className="text-gray-600">
-                      Ao aceitar, você concorda com todos os termos apresentados.
+                      Você pode aceitar a proposta, rejeitá-la ou solicitar modificações.
                     </p>
 
-                    <button
-                      onClick={acceptProposal}
-                      className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-semibold text-lg"
-                    >
-                      Aceitar e Fechar Negócio
-                    </button>
+                    <div className="flex items-center justify-center space-x-3">
+                      <button
+                        onClick={rejectProposal}
+                        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md font-semibold"
+                      >
+                        Rejeitar Proposta
+                      </button>
+
+                      <button
+                        onClick={requestChanges}
+                        className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-md font-semibold"
+                      >
+                        Solicitar Alterações
+                      </button>
+
+                      <button
+                        onClick={acceptProposal}
+                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-semibold"
+                      >
+                        Aceitar e Fechar Negócio
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -437,8 +572,8 @@ export default function ProposalViewerPage() {
                   </button>
                   <button
                     onClick={() => {
-                      console.log('Resetting zoom to 1.3');
-                      setZoomLevel(1.3);
+                      console.log('Resetting zoom to 1.0');
+                      setZoomLevel(1.0);
                     }}
                     className="px-2 py-1 rounded text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 ml-2"
                     title="Reset zoom"

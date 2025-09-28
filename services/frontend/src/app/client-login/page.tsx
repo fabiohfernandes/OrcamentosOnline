@@ -10,7 +10,7 @@ export default function ClientLoginPage() {
   const publicToken = searchParams.get('token');
 
   const [formData, setFormData] = useState({
-    username: '',
+    proposalNumber: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ export default function ClientLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.password) {
+    if (!formData.proposalNumber || !formData.password) {
       toast.error('Por favor, preencha todos os campos');
       return;
     }
@@ -26,10 +26,8 @@ export default function ClientLoginPage() {
     setLoading(true);
 
     try {
-      // Use token-specific login endpoint if public token is provided
-      const loginEndpoint = publicToken
-        ? `/api/v1/client/login/${publicToken}`
-        : '/api/v1/client/login';
+      // Use direct proposal number login endpoint
+      const loginEndpoint = `/api/v1/client/login/proposal`;
 
       const response = await fetch(loginEndpoint, {
         method: 'POST',
@@ -83,19 +81,23 @@ export default function ClientLoginPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Nome de usuário
+              <label htmlFor="proposalNumber" className="block text-sm font-medium text-gray-700">
+                Número da Proposta
               </label>
               <input
-                id="username"
-                name="username"
+                id="proposalNumber"
+                name="proposalNumber"
                 type="text"
                 required
-                value={formData.username}
-                onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
-                className="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Digite seu nome de usuário"
+                value={formData.proposalNumber}
+                onChange={(e) => setFormData(prev => ({ ...prev, proposalNumber: e.target.value }))}
+                className="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm font-mono text-lg"
+                placeholder="123456"
+                maxLength={6}
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Código de 6 dígitos fornecido junto com a proposta
+              </p>
             </div>
 
             <div>

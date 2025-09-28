@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import {
@@ -10,19 +10,29 @@ import {
   CurrencyDollarIcon,
   EyeIcon,
   LockClosedIcon,
-  ClipboardDocumentCheckIcon
+  ClipboardDocumentCheckIcon,
+  ChevronDownIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../../store/auth';
+import { apiClient } from '../../../lib/api';
+
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  company?: string;
+}
 
 interface ProposalFormData {
   proposalName: string;
   clientName: string;
+  clientId: string;
   jobName: string;
   presentationUrl: string;
   commercialProposalUrl: string;
   scopeText: string;
   termsText: string;
-  clientUsername: string;
   clientPassword: string;
   proposalValue: string;
 }
@@ -36,30 +46,25 @@ const generatePassword = (): string => {
   return password;
 };
 
-const generateUsername = (clientName: string): string => {
-  const normalized = clientName
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '_')
-    .replace(/_+/g, '_')
-    .replace(/^_|_$/g, '');
-
-  const year = new Date().getFullYear();
-  return `${normalized}_${year}`;
+// Generate proposal access number (6-digit random number)
+const generateProposalNumber = (): string => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 export default function CreateProposal() {
   const router = useRouter();
   const { user, tokens } = useAuthStore();
 
+  const [proposalNumber, setProposalNumber] = useState<string>('');
   const [formData, setFormData] = useState<ProposalFormData>({
     proposalName: '',
     clientName: '',
+    clientId: '',
     jobName: '',
     presentationUrl: '',
     commercialProposalUrl: '',
     scopeText: '',
     termsText: '',
-    clientUsername: '',
     clientPassword: '',
     proposalValue: ''
   });
@@ -67,6 +72,9 @@ export default function CreateProposal() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [createdProposal, setCreatedProposal] = useState<any>(null);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientsLoading, setClientsLoading] = useState(true);
+  const [showClientDropdown, setShowClientDropdown] = useState(false);
 
   // Template texts
   const defaultScopeTemplate = `**Escopo do Projeto:**
@@ -120,14 +128,48 @@ export default function CreateProposal() {
 
 *Ao clicar em "Aceitar e Fechar Negócio", você concorda com todos os termos acima.*`;
 
+  // Generate proposal number on component load
+  useEffect(() => {
+    const newProposalNumber = generateProposalNumber();
+    setProposalNumber(newProposalNumber);
+  }, []);
+
+  // Load clients from database
+  useEffect(() => {
+    const loadClients = async () => {
+      if (!tokens?.accessToken) return;
+
+      try {
+        setClientsLoading(true);
+        const response = await apiClient.get('/clients');
+
+        if (response.data.success && response.data.data.clients) {
+          setClients(response.data.data.clients);
+        }
+      } catch (error) {
+        console.error('Error loading clients:', error);
+        toast.error('Erro ao carregar clientes');
+      } finally {
+        setClientsLoading(false);
+      }
+    };
+
+    loadClients();
+  }, [tokens]);
+
+  // Handle client selection
+  const handleClientSelect = (client: Client) => {
+    setFormData(prev => ({
+      ...prev,
+      clientId: client.id,
+      clientName: client.name,
+    }));
+
+    setShowClientDropdown(false);
+  };
+
   const handleInputChange = (field: keyof ProposalFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-
-    // Auto-generate username when client name changes
-    if (field === 'clientName' && value) {
-      const username = generateUsername(value);
-      setFormData(prev => ({ ...prev, clientUsername: username }));
-    }
   };
 
   const handleGeneratePassword = () => {
@@ -158,11 +200,10 @@ export default function CreateProposal() {
     // Validate required fields
     const requiredFields = {
       proposalName: 'Nome da proposta',
-      clientName: 'Nome do cliente',
+      clientId: 'Cliente selecionado',
       jobName: 'Nome do trabalho',
       scopeText: 'Texto do escopo',
       termsText: 'Termos e condições',
-      clientUsername: 'Nome de usuário do cliente',
       clientPassword: 'Senha do cliente'
     };
 
@@ -183,10 +224,7 @@ export default function CreateProposal() {
       errors.push('URL da proposta comercial inválida');
     }
 
-    // Validate username format
-    if (formData.clientUsername && !/^[a-zA-Z0-9_]+$/.test(formData.clientUsername)) {
-      errors.push('Nome de usuário deve conter apenas letras, números e underscore');
-    }
+    // Username validation removed - using proposal access number system
 
     // Validate password strength
     if (formData.clientPassword.length < 6) {
@@ -209,15 +247,16 @@ export default function CreateProposal() {
         },
         body: JSON.stringify({
           proposalName: formData.proposalName.trim(),
+          clientId: formData.clientId,
           clientName: formData.clientName.trim(),
           jobName: formData.jobName.trim(),
           presentationUrl: formData.presentationUrl.trim() || null,
           commercialProposalUrl: formData.commercialProposalUrl.trim() || null,
           scopeText: formData.scopeText.trim(),
           termsText: formData.termsText.trim(),
-          clientUsername: formData.clientUsername.trim(),
           clientPassword: formData.clientPassword,
-          proposalValue: formData.proposalValue ? parseFloat(formData.proposalValue) : 0
+          proposalValue: formData.proposalValue ? parseFloat(formData.proposalValue) : 0,
+          proposalAccessNumber: proposalNumber
         }),
       });
 
@@ -228,6 +267,15 @@ export default function CreateProposal() {
         setCreatedProposal(data.data.proposal);
         // Don't redirect immediately, show success screen first
       } else {
+        // Check if it's a proposal number conflict
+        if (response.status === 409 && data.error?.includes('already exists')) {
+          // Generate a new proposal number and retry
+          const newProposalNumber = generateProposalNumber();
+          setProposalNumber(newProposalNumber);
+          toast.error('Número da proposta já existe. Gerando novo número...');
+          return; // Don't show other errors, let user try again
+        }
+
         if (data.errors) {
           data.errors.forEach((error: string) => toast.error(error));
         } else {
@@ -328,9 +376,9 @@ export default function CreateProposal() {
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <dt className="text-sm font-medium text-blue-700">Usuário</dt>
-                      <dd className="mt-1 text-sm bg-white border border-blue-300 rounded px-3 py-2">
-                        {createdProposal.client_username}
+                      <dt className="text-sm font-medium text-blue-700">Número da Proposta</dt>
+                      <dd className="mt-1 text-sm bg-white border border-blue-300 rounded px-3 py-2 font-mono text-lg">
+                        {createdProposal.proposal_access_number}
                       </dd>
                     </div>
                     <div>
@@ -340,9 +388,14 @@ export default function CreateProposal() {
                       </dd>
                     </div>
                   </div>
-                  <p className="text-xs text-blue-600">
-                    💡 Envie essas credenciais para o cliente acessar a proposta online
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-xs text-blue-600">
+                      💡 <strong>Para múltiplos destinatários:</strong> Envie o mesmo número da proposta e senha para todas as pessoas que devem ter acesso
+                    </p>
+                    <p className="text-xs text-blue-500">
+                      📧 Exemplo de mensagem: "Para acessar nossa proposta, use o número {createdProposal.proposal_access_number} e a senha fornecida no site de propostas"
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -391,6 +444,26 @@ export default function CreateProposal() {
             <p className="mt-1 text-sm text-gray-600">
               Crie uma nova proposta para apresentar ao seu cliente
             </p>
+            {proposalNumber && (
+              <div className="mt-3 flex items-center space-x-3">
+                <div className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-mono rounded-full">
+                  <span className="font-medium">Proposta Nº</span>
+                  <span className="ml-2 text-lg font-bold">{proposalNumber}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newNumber = generateProposalNumber();
+                    setProposalNumber(newNumber);
+                    toast.success('Novo número gerado!');
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-700 underline"
+                  title="Gerar novo número"
+                >
+                  Gerar novo número
+                </button>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-8">
@@ -415,17 +488,90 @@ export default function CreateProposal() {
                   />
                 </div>
 
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Nome do Cliente *
                   </label>
-                  <input
-                    type="text"
-                    value={formData.clientName}
-                    onChange={(e) => handleInputChange('clientName', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Nome do cliente ou empresa"
-                  />
+
+                  {clientsLoading ? (
+                    <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      <span className="text-gray-500">Carregando clientes...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setShowClientDropdown(!showClientDropdown)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between bg-white"
+                      >
+                        <span className={formData.clientName ? 'text-gray-900' : 'text-gray-500'}>
+                          {formData.clientName || 'Selecione um cliente'}
+                        </span>
+                        <ChevronDownIcon className={`h-5 w-5 text-gray-400 transition-transform ${showClientDropdown ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {showClientDropdown && (
+                        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                          {clients.length === 0 ? (
+                            <div className="px-3 py-2 text-gray-500 text-sm">
+                              Nenhum cliente encontrado. <br />
+                              <button
+                                type="button"
+                                onClick={() => router.push('/clients')}
+                                className="text-blue-600 hover:text-blue-700 underline"
+                              >
+                                Adicione um cliente primeiro
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              {clients.map((client) => (
+                                <button
+                                  key={client.id}
+                                  type="button"
+                                  onClick={() => handleClientSelect(client)}
+                                  className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center justify-between"
+                                >
+                                  <div>
+                                    <div className="font-medium text-gray-900">{client.name}</div>
+                                    {client.company && (
+                                      <div className="text-sm text-gray-500">{client.company}</div>
+                                    )}
+                                  </div>
+                                  {formData.clientId === client.id && (
+                                    <CheckCircleIcon className="h-5 w-5 text-blue-600" />
+                                  )}
+                                </button>
+                              ))}
+
+                              {/* Add New Client Option */}
+                              <div className="border-t border-gray-200">
+                                <button
+                                  type="button"
+                                  onClick={() => router.push('/clients')}
+                                  className="w-full px-3 py-2 text-left hover:bg-blue-50 flex items-center text-blue-600"
+                                >
+                                  <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                  </svg>
+                                  Adicionar novo cliente
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Click outside to close dropdown */}
+                  {showClientDropdown && (
+                    <div
+                      className="fixed inset-0 z-0"
+                      onClick={() => setShowClientDropdown(false)}
+                    />
+                  )}
                 </div>
 
                 <div className="md:col-span-2">
@@ -461,11 +607,11 @@ export default function CreateProposal() {
             </div>
 
             {/* URLs */}
-            <div className="space-y-6">
-              <h2 className="text-lg font-medium text-gray-900 flex items-center">
+            <fieldset className="space-y-6">
+              <legend className="text-lg font-medium text-gray-900 flex items-center">
                 <GlobeAltIcon className="h-5 w-5 text-gray-400 mr-2" />
                 Links das Páginas (Opcional)
-              </h2>
+              </legend>
 
               <div className="space-y-4">
                 <div>
@@ -500,7 +646,7 @@ export default function CreateProposal() {
                   </p>
                 </div>
               </div>
-            </div>
+            </fieldset>
 
             {/* Scope Text */}
             <div className="space-y-4">
@@ -559,58 +705,53 @@ export default function CreateProposal() {
                 Acesso do Cliente
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nome de Usuário *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.clientUsername}
-                    onChange={(e) => handleInputChange('clientUsername', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="username_2024"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Apenas letras, números e underscore
-                  </p>
-                </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-blue-800">
+                  <strong>🔐 Sistema de Acesso Multi-Usuário:</strong> O sistema gerará automaticamente um número único da proposta que será usado junto com a senha para acesso do cliente.
+                </p>
+                <ul className="mt-2 text-sm text-blue-700 list-disc list-inside space-y-1">
+                  <li>Mesmas credenciais podem ser compartilhadas com múltiplas pessoas</li>
+                  <li>Cada pessoa pode acessar e comentar individualmente</li>
+                  <li>Ideal para equipes ou comitês de decisão</li>
+                  <li>Acesso simultâneo permitido</li>
+                </ul>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Senha *
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={formData.clientPassword}
-                      onChange={(e) => handleInputChange('clientPassword', e.target.value)}
-                      className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Senha do cliente"
-                    />
-                    <div className="absolute right-2 top-1 space-x-1">
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="p-1 text-gray-400 hover:text-gray-600"
-                        title={showPassword ? 'Ocultar' : 'Mostrar'}
-                      >
-                        <EyeIcon className="h-4 w-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleGeneratePassword}
-                        className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
-                        title="Gerar senha"
-                      >
-                        Gerar
-                      </button>
-                    </div>
+              <div className="max-w-md">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Senha de Acesso *
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    value={formData.clientPassword}
+                    onChange={(e) => handleInputChange('clientPassword', e.target.value)}
+                    className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Senha do cliente"
+                  />
+                  <div className="absolute right-2 top-1 space-x-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="p-1 text-gray-400 hover:text-gray-600"
+                      title={showPassword ? 'Ocultar' : 'Mostrar'}
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleGeneratePassword}
+                      className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
+                      title="Gerar senha"
+                    >
+                      Gerar
+                    </button>
                   </div>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Mínimo 6 caracteres
-                  </p>
                 </div>
+                <p className="mt-1 text-xs text-gray-500">
+                  Mínimo 6 caracteres - será usada junto com o número da proposta
+                </p>
               </div>
             </div>
 

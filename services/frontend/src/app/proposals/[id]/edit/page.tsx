@@ -22,11 +22,12 @@ interface ProposalData {
   client_name: string;
   job_name: string;
   presentation_url?: string;
-  commercial_proposal_url?: string;
-  scope_text?: string;
-  terms_text?: string;
+  commercial_url?: string;
+  scope_content?: string;
+  terms_content?: string;
   client_username: string;
   client_password_display?: string;
+  proposal_access_number?: string;
   status: string;
   proposal_value: number;
   created_at: string;
@@ -103,9 +104,9 @@ export default function EditProposal() {
             clientName: proposalData.client_name || '',
             jobName: proposalData.job_name || '',
             presentationUrl: proposalData.presentation_url || '',
-            commercialProposalUrl: proposalData.commercial_proposal_url || '',
-            scopeText: proposalData.scope_text || '',
-            termsText: proposalData.terms_text || '',
+            commercialProposalUrl: proposalData.commercial_url || '',
+            scopeText: proposalData.scope_content || '',
+            termsText: proposalData.terms_content || '',
             clientUsername: proposalData.client_username || '',
             clientPassword: proposalData.client_password_display || '',
             proposalValue: proposalData.proposal_value?.toString() || ''
@@ -341,9 +342,21 @@ export default function EditProposal() {
               <div className="bg-gray-50 p-4 rounded-md">
                 <p className="text-sm font-medium text-gray-700 mb-2">Informações da Proposta:</p>
                 <div className="space-y-1 text-sm text-gray-600">
-                  <p><span className="font-medium">ID:</span> {proposal.id}</p>
-                  <p><span className="font-medium">Status:</span> {proposal.status}</p>
-                  <p><span className="font-medium">Token Público:</span> {proposal.public_token}</p>
+                  <p><span className="font-medium">Status:</span>
+                    <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      proposal.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                      proposal.status === 'closed' ? 'bg-green-100 text-green-800' :
+                      proposal.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      proposal.status === 'pending_changes' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {proposal.status === 'open' ? 'Aberta' :
+                       proposal.status === 'closed' ? 'Fechada' :
+                       proposal.status === 'rejected' ? 'Rejeitada' :
+                       proposal.status === 'pending_changes' ? 'Alterações Solicitadas' :
+                       'Arquivada'}
+                    </span>
+                  </p>
                   <p><span className="font-medium">Link de Acesso:</span>
                     <a
                       href={`/proposal/${proposal.public_token}`}
@@ -377,18 +390,15 @@ export default function EditProposal() {
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="clientUsername" className="block text-sm font-medium text-gray-700 mb-1">
-                    Usuário de Acesso
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Número da Proposta
                   </label>
-                  <input
-                    type="text"
-                    id="clientUsername"
-                    name="clientUsername"
-                    value={formData.clientUsername}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                    placeholder="Nome de usuário para o cliente"
-                  />
+                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono text-lg">
+                    {proposal.proposal_access_number || 'Não disponível'}
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Código de 6 dígitos que o cliente usa para acesso
+                  </p>
                 </div>
 
                 <div>
@@ -519,7 +529,21 @@ export default function EditProposal() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <dt className="text-sm font-medium text-gray-500">Status</dt>
-              <dd className="mt-1 text-sm text-gray-900 capitalize">{proposal.status}</dd>
+              <dd className="mt-1">
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  proposal.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                  proposal.status === 'closed' ? 'bg-green-100 text-green-800' :
+                  proposal.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                  proposal.status === 'pending_changes' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {proposal.status === 'open' ? 'Aberta' :
+                   proposal.status === 'closed' ? 'Fechada' :
+                   proposal.status === 'rejected' ? 'Rejeitada' :
+                   proposal.status === 'pending_changes' ? 'Alterações Solicitadas' :
+                   'Arquivada'}
+                </span>
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Valor</dt>
