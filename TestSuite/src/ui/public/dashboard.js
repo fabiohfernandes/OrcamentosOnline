@@ -1,5 +1,5 @@
 /**
- * TESTER Dashboard JavaScript
+ * TESTER - Professional Autonomous Testing Dashboard
  * Real-time WebSocket Communication and UI Control
  */
 
@@ -8,17 +8,28 @@ class TesterDashboard {
         this.socket = null;
         this.isConnected = false;
         this.currentSession = null;
+        this.sessionStartTime = null;
         this.metrics = {
             totalTests: 0,
             passedTests: 0,
             failedTests: 0,
-            activeUsers: 0,
-            progress: 0
+            virtualUsers: 0,
+            completedTests: 0,
+            discoveredItems: 0,
+            claudeMode: 'Real-time',
+            estimatedTime: 'Calculating...'
+        };
+        this.systemStatus = {
+            database: false,
+            discovery: false,
+            stressRunner: false,
+            claudeAi: false
         };
 
         this.initializeSocket();
         this.bindEventListeners();
         this.startPeriodicUpdates();
+        this.loadConfigurationData();
     }
 
     initializeSocket() {
@@ -80,37 +91,29 @@ class TesterDashboard {
     }
 
     bindEventListeners() {
-        // Control buttons (start/stop removed - managed by scripts)
-        document.getElementById('pauseBtn').addEventListener('click', () => this.pauseTesting());
-        document.getElementById('discoveryBtn').addEventListener('click', () => this.runDiscovery());
-        document.getElementById('emergencyStop').addEventListener('click', () => this.emergencyStop());
-
         // Log controls
-        document.getElementById('clearLogBtn').addEventListener('click', () => this.clearLog());
-        document.getElementById('downloadLogBtn').addEventListener('click', () => this.downloadLog());
+        const downloadLogBtn = document.getElementById('downloadLogBtn');
+        if (downloadLogBtn) {
+            downloadLogBtn.addEventListener('click', () => this.downloadLog());
+        }
 
         // Issues controls
-        document.getElementById('analyzeAllBtn').addEventListener('click', () => this.analyzeAllIssues());
+        const analyzeAllBtn = document.getElementById('analyzeAllBtn');
+        if (analyzeAllBtn) {
+            analyzeAllBtn.addEventListener('click', () => this.analyzeAllIssues());
+        }
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
                 switch (e.key) {
-                    case 's':
-                        e.preventDefault();
-                        this.startTesting();
-                        break;
-                    case 'p':
-                        e.preventDefault();
-                        this.pauseTesting();
-                        break;
-                    case 'x':
-                        e.preventDefault();
-                        this.stopTesting();
-                        break;
                     case 'd':
                         e.preventDefault();
-                        this.runDiscovery();
+                        this.downloadLog();
+                        break;
+                    case 'a':
+                        e.preventDefault();
+                        this.analyzeAllIssues();
                         break;
                 }
             }
@@ -161,182 +164,79 @@ class TesterDashboard {
     }
 
     updateProjectInfo(data) {
-        document.getElementById('projectName').textContent = data.name;
-
-        // Update target URL input
-        if (data.targetUrl) {
-            document.getElementById('targetUrl').value = data.targetUrl;
-        }
+        document.getElementById('projectName').textContent = data.name || 'Loading...';
+        document.getElementById('sessionName').textContent = data.sessionName || 'Loading...';
+        document.getElementById('targetUrl').textContent = data.targetUrl || 'Loading...';
 
         this.addLogEntry({
             type: 'info',
-            message: `Project: ${data.name} | Target: ${data.targetUrl}`,
+            message: `Project: ${data.name} | Session: ${data.sessionName} | Target: ${data.targetUrl}`,
             timestamp: new Date(data.timestamp)
         });
     }
 
     updateSystemStatus(status) {
         // Update database status
-        const dbStatus = document.getElementById('dbStatus');
+        const databaseStatus = document.getElementById('databaseStatus');
+        const databaseStatusText = document.getElementById('databaseStatusText');
         if (status.subsystems?.database) {
-            dbStatus.textContent = 'Healthy';
-            dbStatus.className = 'status-value healthy';
+            databaseStatus.className = 'status-icon healthy';
+            databaseStatusText.textContent = 'Healthy';
+            this.systemStatus.database = true;
         } else {
-            dbStatus.textContent = 'Error';
-            dbStatus.className = 'status-value error';
+            databaseStatus.className = 'status-icon unhealthy';
+            databaseStatusText.textContent = 'Error';
+            this.systemStatus.database = false;
         }
 
-        // Update discovery status
+        // Update discovery status with discovered items count
         const discoveryStatus = document.getElementById('discoveryStatus');
+        const discoveryStatusText = document.getElementById('discoveryStatusText');
         if (status.subsystems?.discovery) {
-            discoveryStatus.textContent = 'Ready';
-            discoveryStatus.className = 'status-value healthy';
+            discoveryStatus.className = 'status-icon running';
+            const itemCount = status.discoveredItems || this.metrics.discoveredItems || 0;
+            discoveryStatusText.textContent = `${itemCount} items`;
+            this.systemStatus.discovery = true;
         } else {
-            discoveryStatus.textContent = 'Not Ready';
-            discoveryStatus.className = 'status-value warning';
+            discoveryStatus.className = 'status-icon offline';
+            discoveryStatusText.textContent = 'Not Ready';
+            this.systemStatus.discovery = false;
         }
 
         // Update stress runner status
-        const stressStatus = document.getElementById('stressStatus');
-        const stressRunnerStatus = status.subsystems?.stressRunner;
-        if (stressRunnerStatus?.status === 'running') {
-            stressStatus.textContent = 'Running';
-            stressStatus.className = 'status-value healthy';
-        } else if (stressRunnerStatus?.status === 'paused') {
-            stressStatus.textContent = 'Paused';
-            stressStatus.className = 'status-value warning';
+        const stressRunnerStatus = document.getElementById('stressRunnerStatus');
+        const stressRunnerStatusText = document.getElementById('stressRunnerStatusText');
+        const stressSystemStatus = status.subsystems?.stressRunner;
+        if (stressSystemStatus?.status === 'running') {
+            stressRunnerStatus.className = 'status-icon running';
+            stressRunnerStatusText.textContent = 'Running';
+            this.systemStatus.stressRunner = true;
+        } else if (stressSystemStatus?.status === 'paused') {
+            stressRunnerStatus.className = 'status-icon unhealthy';
+            stressRunnerStatusText.textContent = 'Paused';
+            this.systemStatus.stressRunner = false;
         } else {
-            stressStatus.textContent = 'Idle';
-            stressStatus.className = 'status-value';
+            stressRunnerStatus.className = 'status-icon offline';
+            stressRunnerStatusText.textContent = 'Stopped';
+            this.systemStatus.stressRunner = false;
         }
 
-        // Update Claude status
-        const claudeStatus = document.getElementById('claudeStatus');
+        // Update Claude AI status
+        const claudeAiStatus = document.getElementById('claudeAiStatus');
+        const claudeAiStatusText = document.getElementById('claudeAiStatusText');
         const claudeSystemStatus = status.subsystems?.claude;
         if (claudeSystemStatus?.connected) {
-            claudeStatus.textContent = 'Connected';
-            claudeStatus.className = 'status-value healthy';
+            claudeAiStatus.className = 'status-icon healthy';
+            claudeAiStatusText.textContent = 'Online';
+            this.systemStatus.claudeAi = true;
         } else {
-            claudeStatus.textContent = 'Offline';
-            claudeStatus.className = 'status-value warning';
-        }
-
-        // Update button states
-        this.updateButtonStates(status.isRunning);
-    }
-
-    updateButtonStates(isRunning) {
-        const pauseBtn = document.getElementById('pauseBtn');
-
-        if (isRunning) {
-            pauseBtn.disabled = false;
-            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Testing';
-        } else {
-            pauseBtn.disabled = true;
-            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Testing';
+            claudeAiStatus.className = 'status-icon offline';
+            claudeAiStatusText.textContent = 'Offline';
+            this.systemStatus.claudeAi = false;
         }
     }
 
-    // Start testing is now managed by start-test.sh script
-
-    async pauseTesting() {
-        try {
-            const response = await fetch('/api/session/pause', { method: 'POST' });
-            const result = await response.json();
-
-            if (result.success) {
-                this.addLogEntry({
-                    type: 'warning',
-                    message: 'Testing session paused',
-                    timestamp: new Date()
-                });
-            }
-        } catch (error) {
-            this.addLogEntry({
-                type: 'error',
-                message: `Failed to pause testing: ${error.message}`,
-                timestamp: new Date()
-            });
-        }
-    }
-
-    // Stop testing is now managed by stop-test.sh script
-
-    async runDiscovery() {
-        try {
-            this.showModal('discoveryModal');
-
-            const targetUrl = document.getElementById('targetUrl').value;
-            const response = await fetch('/api/discovery');
-            const coverage = await response.json();
-
-            this.displayDiscoveryResults(coverage);
-
-            this.addLogEntry({
-                type: 'info',
-                message: `Discovery completed: ${coverage.pages?.length || 0} pages, ${coverage.elements?.length || 0} elements found`,
-                timestamp: new Date()
-            });
-
-        } catch (error) {
-            this.addLogEntry({
-                type: 'error',
-                message: `Discovery failed: ${error.message}`,
-                timestamp: new Date()
-            });
-        }
-    }
-
-    displayDiscoveryResults(coverage) {
-        const resultsContainer = document.getElementById('discoveryResults');
-
-        resultsContainer.innerHTML = `
-            <div class="discovery-summary">
-                <h4>Discovery Summary</h4>
-                <div class="discovery-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Pages:</span>
-                        <span class="stat-value">${coverage.pages?.length || 0}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Interactive Elements:</span>
-                        <span class="stat-value">${coverage.elements?.length || 0}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Forms:</span>
-                        <span class="stat-value">${coverage.forms?.length || 0}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">API Endpoints:</span>
-                        <span class="stat-value">${coverage.apis?.length || 0}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="discovery-details">
-                <h4>Discovered Flows</h4>
-                <div class="flows-list">
-                    ${coverage.flows?.map(flow => `
-                        <div class="flow-item">
-                            <span class="flow-type">${flow.type}</span>
-                            <span class="flow-name">${flow.name}</span>
-                        </div>
-                    `).join('') || '<p>No flows detected</p>'}
-                </div>
-            </div>
-        `;
-    }
-
-    emergencyStop() {
-        if (confirm('Emergency stop will immediately halt all testing. Continue?')) {
-            this.stopTesting();
-            this.addLogEntry({
-                type: 'warning',
-                message: 'EMERGENCY STOP activated',
-                timestamp: new Date()
-            });
-        }
-    }
+    // Professional dashboard methods - testing is managed by scripts
 
     handleSessionStarted(session) {
         this.currentSession = session;
@@ -370,7 +270,7 @@ class TesterDashboard {
         } else {
             this.metrics.failedTests++;
         }
-        this.metrics.totalTests++;
+        this.metrics.completedTests = this.metrics.passedTests + this.metrics.failedTests;
 
         this.updateMetricsDisplay();
 
@@ -383,25 +283,44 @@ class TesterDashboard {
 
     updateMetrics(metrics) {
         this.metrics = { ...this.metrics, ...metrics };
+
+        // Update completed tests count
+        this.metrics.completedTests = this.metrics.passedTests + this.metrics.failedTests;
+
+        // Calculate estimated time
+        this.calculateEstimatedTime();
+
         this.updateMetricsDisplay();
     }
 
     updateMetricsDisplay() {
-        document.getElementById('testsPassed').textContent = this.metrics.passedTests;
-        document.getElementById('testsFailed').textContent = this.metrics.failedTests;
+        // Update session status information
         document.getElementById('totalTests').textContent = this.metrics.totalTests;
-        document.getElementById('activeUsers').textContent = this.metrics.activeUsers;
-        document.getElementById('testProgress').textContent = `${this.metrics.progress}%`;
+        document.getElementById('virtualUsers').textContent = this.metrics.virtualUsers;
+        document.getElementById('claudeMode').textContent = this.metrics.claudeMode;
+        document.getElementById('estimatedTime').textContent = this.metrics.estimatedTime;
 
-        // Update progress bar
-        const progressFill = document.getElementById('progressFill');
-        progressFill.style.width = `${this.metrics.progress}%`;
+        // Update session time
+        this.updateSessionTime();
 
-        // Calculate success rate
-        const successRate = this.metrics.totalTests > 0
-            ? Math.round((this.metrics.passedTests / this.metrics.totalTests) * 100)
+        // Update progress circles
+        const completedPercentage = this.metrics.totalTests > 0
+            ? Math.round((this.metrics.completedTests / this.metrics.totalTests) * 100)
+            : 0;
+        document.getElementById('completedPercentage').textContent = `${completedPercentage}%`;
+
+        const successRate = this.metrics.completedTests > 0
+            ? Math.round((this.metrics.passedTests / this.metrics.completedTests) * 100)
             : 100;
-        document.getElementById('successRate').textContent = `${successRate}%`;
+        document.getElementById('successPercentage').textContent = `${successRate}%`;
+
+        const failureRate = this.metrics.completedTests > 0
+            ? Math.round((this.metrics.failedTests / this.metrics.completedTests) * 100)
+            : 0;
+        document.getElementById('failurePercentage').textContent = `${failureRate}%`;
+
+        // Update issues summary
+        this.updateIssuesSummary();
     }
 
     resetMetrics() {
@@ -409,9 +328,13 @@ class TesterDashboard {
             totalTests: 0,
             passedTests: 0,
             failedTests: 0,
-            activeUsers: 0,
-            progress: 0
+            virtualUsers: 0,
+            completedTests: 0,
+            discoveredItems: 0,
+            claudeMode: 'Real-time',
+            estimatedTime: 'Calculating...'
         };
+        this.sessionStartTime = new Date();
         this.updateMetricsDisplay();
     }
 
@@ -429,23 +352,28 @@ class TesterDashboard {
     addIssueToList(issue) {
         const issuesList = document.getElementById('issuesList');
 
-        // Remove "no issues" message if present
-        const noIssues = issuesList.querySelector('.no-issues');
-        if (noIssues) {
-            noIssues.remove();
+        // Remove the example/placeholder issue if present
+        const example = issuesList.querySelector('.issue-item.example');
+        if (example) {
+            example.remove();
         }
 
         const issueElement = document.createElement('div');
-        issueElement.className = 'issue-item slide-in';
+        issueElement.className = 'issue-item';
+
+        const priorityClass = this.getPriorityClass(issue.severity || issue.priority || 'medium');
+        const statusClass = this.getStatusClass(issue.status || 'monitoring');
+
         issueElement.innerHTML = `
-            <div class="issue-header">
-                <span class="issue-title">${issue.title}</span>
-                <span class="issue-severity ${issue.severity}">${issue.severity.toUpperCase()}</span>
+            <div class="issue-priority ${priorityClass}">
+                <i class="fas fa-circle"></i>
             </div>
-            <div class="issue-description">${issue.description || 'No description available'}</div>
-            <div class="issue-meta">
-                <span>Page: ${issue.pageUrl || 'Unknown'}</span>
-                <span>First seen: ${new Date(issue.firstSeen).toLocaleTimeString()}</span>
+            <div class="issue-content">
+                <div class="issue-title">${issue.title}</div>
+                <div class="issue-description">${issue.description || 'No description available'}</div>
+            </div>
+            <div class="issue-status">
+                <span class="status-badge ${statusClass}">${issue.status || 'monitoring'}</span>
             </div>
         `;
 
@@ -488,40 +416,46 @@ class TesterDashboard {
     }
 
     addLogEntry(entry) {
-        const logContainer = document.getElementById('logContainer');
+        const logContent = document.getElementById('logContent');
         const logEntry = document.createElement('div');
-        logEntry.className = `log-entry ${entry.type} slide-in`;
+        logEntry.className = 'log-entry';
 
         const timestamp = entry.timestamp ? new Date(entry.timestamp) : new Date();
-        const timeString = timestamp.toLocaleTimeString();
+        const timeString = timestamp.toLocaleTimeString('en-US', { hour12: false });
 
         logEntry.innerHTML = `
-            <span class="log-time">[${timeString}]</span>
+            <span class="log-time">${timeString}</span>
             <span class="log-message">${entry.message}</span>
         `;
 
-        logContainer.appendChild(logEntry);
-        logContainer.scrollTop = logContainer.scrollHeight;
+        // Remove the placeholder entry if it exists
+        const placeholder = logContent.querySelector('.log-entry');
+        if (placeholder && placeholder.querySelector('.log-message').textContent.includes('Activity log will appear here')) {
+            logContent.removeChild(placeholder);
+        }
+
+        logContent.appendChild(logEntry);
+        logContent.scrollTop = logContent.scrollHeight;
 
         // Limit log entries to prevent memory issues
-        const entries = logContainer.querySelectorAll('.log-entry');
+        const entries = logContent.querySelectorAll('.log-entry');
         if (entries.length > 1000) {
             entries[0].remove();
         }
     }
 
     clearLog() {
-        const logContainer = document.getElementById('logContainer');
-        logContainer.innerHTML = `
-            <div class="log-entry info">
-                <span class="log-time">[${new Date().toLocaleTimeString()}]</span>
+        const logContent = document.getElementById('logContent');
+        logContent.innerHTML = `
+            <div class="log-entry">
+                <span class="log-time">${new Date().toLocaleTimeString('en-US', { hour12: false })}</span>
                 <span class="log-message">Log cleared</span>
             </div>
         `;
     }
 
     downloadLog() {
-        const logEntries = document.querySelectorAll('.log-entry');
+        const logEntries = document.querySelectorAll('#logContent .log-entry');
         const logData = Array.from(logEntries).map(entry => {
             const time = entry.querySelector('.log-time').textContent;
             const message = entry.querySelector('.log-message').textContent;
@@ -537,10 +471,7 @@ class TesterDashboard {
         URL.revokeObjectURL(url);
     }
 
-    showModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.add('active');
-    }
+    // Modal functionality removed in professional dashboard
 
     updateTimestamps() {
         // Update any relative timestamps in the UI
@@ -561,6 +492,124 @@ class TesterDashboard {
         if (hours > 0) return `${hours}h ago`;
         if (minutes > 0) return `${minutes}m ago`;
         return `${seconds}s ago`;
+    }
+
+    // New methods for professional dashboard
+    updateSessionTime() {
+        if (!this.sessionStartTime) {
+            document.getElementById('sessionTime').textContent = '00:00:00';
+            return;
+        }
+
+        const now = new Date();
+        const diff = now - this.sessionStartTime;
+        const hours = Math.floor(diff / 3600000);
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+
+        const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById('sessionTime').textContent = timeString;
+    }
+
+    updateIssuesSummary() {
+        const issueItems = document.querySelectorAll('#issuesList .issue-item:not(.example)');
+        let openCount = 0;
+        let fixedCount = 0;
+        let analyzedCount = 0;
+
+        issueItems.forEach(item => {
+            const statusBadge = item.querySelector('.status-badge');
+            if (statusBadge) {
+                const status = statusBadge.textContent.toLowerCase();
+                if (status === 'fixed') {
+                    fixedCount++;
+                } else if (status === 'analyzing') {
+                    analyzedCount++;
+                } else {
+                    openCount++;
+                }
+            }
+        });
+
+        document.getElementById('openIssues').textContent = openCount;
+        document.getElementById('fixedIssues').textContent = fixedCount;
+        document.getElementById('analyzedIssues').textContent = analyzedCount;
+    }
+
+    getPriorityClass(priority) {
+        const p = priority.toLowerCase();
+        if (p.includes('high') || p.includes('critical')) return 'high';
+        if (p.includes('low')) return 'low';
+        if (p.includes('done') || p.includes('fixed')) return 'done';
+        return 'medium';
+    }
+
+    getStatusClass(status) {
+        const s = status.toLowerCase();
+        if (s.includes('fixed') || s.includes('resolved')) return 'fixed';
+        if (s.includes('analyzing') || s.includes('processing')) return 'analyzing';
+        return 'monitoring';
+    }
+
+    loadConfigurationData() {
+        // Load session configuration from the configuration file
+        fetch('/api/session/config')
+            .then(response => response.json())
+            .then(config => {
+                if (config.projectName) {
+                    document.getElementById('projectName').textContent = config.projectName;
+                }
+                if (config.sessionName) {
+                    document.getElementById('sessionName').textContent = config.sessionName;
+                }
+                if (config.targetUrl) {
+                    document.getElementById('targetUrl').textContent = config.targetUrl;
+                }
+                if (config.virtualUsers) {
+                    this.metrics.virtualUsers = config.virtualUsers;
+                }
+                if (config.claudeRealtime !== undefined) {
+                    this.metrics.claudeMode = config.claudeRealtime ? 'Real-time' : 'After completion';
+                }
+                if (config.startTime) {
+                    this.sessionStartTime = new Date(config.startTime);
+                }
+                this.updateMetricsDisplay();
+            })
+            .catch(() => {
+                // Configuration not available, use defaults
+                console.log('Session configuration not available, using defaults');
+            });
+    }
+
+    calculateEstimatedTime() {
+        if (!this.sessionStartTime || this.metrics.completedTests === 0 || this.metrics.totalTests === 0) {
+            this.metrics.estimatedTime = 'Calculating...';
+            return;
+        }
+
+        const now = new Date();
+        const elapsed = now - this.sessionStartTime;
+        const avgTimePerTest = elapsed / this.metrics.completedTests;
+        const remainingTests = this.metrics.totalTests - this.metrics.completedTests;
+        const estimatedRemaining = remainingTests * avgTimePerTest;
+
+        if (estimatedRemaining <= 0) {
+            this.metrics.estimatedTime = 'Complete';
+            return;
+        }
+
+        const hours = Math.floor(estimatedRemaining / 3600000);
+        const minutes = Math.floor((estimatedRemaining % 3600000) / 60000);
+        const seconds = Math.floor((estimatedRemaining % 60000) / 1000);
+
+        if (hours > 0) {
+            this.metrics.estimatedTime = `${hours}h ${minutes}m`;
+        } else if (minutes > 0) {
+            this.metrics.estimatedTime = `${minutes}m ${seconds}s`;
+        } else {
+            this.metrics.estimatedTime = `${seconds}s`;
+        }
     }
 }
 

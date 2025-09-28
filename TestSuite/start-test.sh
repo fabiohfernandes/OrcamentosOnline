@@ -26,6 +26,103 @@ echo -e "${PURPLE}   OrçamentosOnline TestSuite - Professional Testing Automati
 echo -e "${PURPLE}════════════════════════════════════════════════════════════════${NC}"
 echo ""
 
+# Interactive Configuration Dialog
+show_configuration_dialog() {
+    clear
+    echo -e "${PURPLE}════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${PURPLE}                    TESTER Configuration Dialog                   ${NC}"
+    echo -e "${PURPLE}════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+
+    # Generate project and session IDs
+    PROJECT_ID="Project_$(date +%Y%m%d_%H%M%S)"
+    SESSION_ID="SessionTest_$(date +%s | tail -c 5)"
+
+    echo -e "${CYAN}📋 Test Session Configuration${NC}"
+    echo ""
+
+    # Project Name
+    echo -e "${BLUE}Project Name:${NC}"
+    read -p "Enter project name (default: $PROJECT_ID): " PROJECT_NAME
+    PROJECT_NAME="${PROJECT_NAME:-$PROJECT_ID}"
+
+    # Session Name
+    echo -e "${BLUE}Session Name:${NC}"
+    read -p "Enter session name (default: $SESSION_ID): " SESSION_NAME
+    SESSION_NAME="${SESSION_NAME:-$SESSION_ID}"
+
+    # Interactions per item
+    echo -e "${BLUE}Interactions per Item:${NC}"
+    echo -e "${YELLOW}How many interactions should TESTER run for each UI element?${NC}"
+    read -p "Enter number (default: 3): " INTERACTIONS_PER_ITEM
+    INTERACTIONS_PER_ITEM="${INTERACTIONS_PER_ITEM:-3}"
+
+    # Virtual users
+    echo -e "${BLUE}Virtual Users:${NC}"
+    echo -e "${YELLOW}How many virtual users should alternate randomly during testing?${NC}"
+    read -p "Enter number (default: 2): " VIRTUAL_USERS
+    VIRTUAL_USERS="${VIRTUAL_USERS:-2}"
+
+    # Claude autofix mode
+    echo -e "${BLUE}Claude AutoFix Mode:${NC}"
+    echo -e "${YELLOW}Should Claude automatically fix issues during tests or wait until completion?${NC}"
+    echo -e "  ${GREEN}R)${NC} Real-time fixing (recommended)"
+    echo -e "  ${GREEN}A)${NC} After test completion"
+    read -p "Choose mode (R/A, default: R): " CLAUDE_MODE
+    CLAUDE_MODE="${CLAUDE_MODE:-R}"
+
+    # Target URL
+    echo -e "${BLUE}Target URL:${NC}"
+    read -p "Enter target URL (default: $TARGET_URL): " CUSTOM_TARGET_URL
+    TARGET_URL="${CUSTOM_TARGET_URL:-$TARGET_URL}"
+
+    echo ""
+    echo -e "${CYAN}═══════════════ Configuration Summary ═══════════════${NC}"
+    echo -e "${GREEN}Project:${NC}              $PROJECT_NAME"
+    echo -e "${GREEN}Session:${NC}              $SESSION_NAME"
+    echo -e "${GREEN}Target URL:${NC}           $TARGET_URL"
+    echo -e "${GREEN}Interactions/Item:${NC}    $INTERACTIONS_PER_ITEM"
+    echo -e "${GREEN}Virtual Users:${NC}        $VIRTUAL_USERS"
+    if [ "$CLAUDE_MODE" = "R" ] || [ "$CLAUDE_MODE" = "r" ]; then
+        echo -e "${GREEN}Claude Mode:${NC}          Real-time AutoFix"
+        CLAUDE_REALTIME=true
+    else
+        echo -e "${GREEN}Claude Mode:${NC}          After completion"
+        CLAUDE_REALTIME=false
+    fi
+    echo ""
+
+    # Ready to start confirmation
+    echo -e "${YELLOW}🚀 Ready to start testing?${NC}"
+    read -p "Continue? (Y/n): " START_CONFIRM
+    if [ "$START_CONFIRM" = "n" ] || [ "$START_CONFIRM" = "N" ]; then
+        echo -e "${RED}❌ Testing cancelled${NC}"
+        exit 0
+    fi
+
+    # Store configuration for the session
+    CONFIG_FILE="$LOG_DIR/session-config.json"
+    mkdir -p "$LOG_DIR"
+    cat > "$CONFIG_FILE" << EOF
+{
+  "projectName": "$PROJECT_NAME",
+  "sessionName": "$SESSION_NAME",
+  "targetUrl": "$TARGET_URL",
+  "interactionsPerItem": $INTERACTIONS_PER_ITEM,
+  "virtualUsers": $VIRTUAL_USERS,
+  "claudeRealtime": $CLAUDE_REALTIME,
+  "startTime": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "configuredBy": "interactive_dialog"
+}
+EOF
+
+    echo -e "${GREEN}✅ Configuration saved${NC}"
+    echo ""
+}
+
+# Run configuration dialog
+show_configuration_dialog
+
 # Function to print section headers
 print_section() {
     echo -e "${CYAN}▶ $1${NC}"
@@ -74,11 +171,12 @@ open_browser() {
 }
 
 # Step 1: Feature Discovery and Testing Scope Update
-print_section "Step 1: Feature Discovery & Testing Scope Update" "Reviewing application features to maintain updated testing scope"
+print_section "Step 1: Feature Discovery & Testing Scope Analysis" "TESTER analyzing UI to find testing targets"
 
 cd "$TESTSUITE_DIR"
 
 # Check if main application is running
+echo -e "${BLUE}🔍 Checking target application at $TARGET_URL${NC}"
 if ! curl -s "$TARGET_URL" > /dev/null 2>&1; then
     echo -e "${YELLOW}⚠️  Main application not detected at $TARGET_URL${NC}"
     echo -e "${BLUE}📋 Recommended: Start your main application first${NC}"
@@ -91,6 +189,10 @@ if ! curl -s "$TARGET_URL" > /dev/null 2>&1; then
         exit 1
     fi
 fi
+
+echo -e "${BLUE}🎯 TESTER analyzing UI and discovering testing targets...${NC}"
+echo -e "${YELLOW}   - Scanning for buttons, links, forms, and interactive elements${NC}"
+echo -e "${YELLOW}   - Calculating total tests: (discovered items × $INTERACTIONS_PER_ITEM interactions)${NC}"
 
 # Step 2: Start TestSuite Infrastructure
 print_section "Step 2: TestSuite Infrastructure Startup" "Starting Docker containers and services"
@@ -162,12 +264,21 @@ print_section "Step 5: Testing Process Initialization" "Starting comprehensive f
 # Wait for dashboard to be fully ready
 sleep 3
 
-# Start a default test session
-echo -e "  ${BLUE}🚀 Starting initial test session...${NC}"
+# Start configured test session
+echo -e "  ${BLUE}🚀 Starting configured test session...${NC}"
+echo -e "  ${CYAN}Project: $PROJECT_NAME${NC}"
+echo -e "  ${CYAN}Session: $SESSION_NAME${NC}"
+echo -e "  ${CYAN}Virtual Users: $VIRTUAL_USERS${NC}"
+echo -e "  ${CYAN}Claude AutoFix: $([ "$CLAUDE_REALTIME" = "true" ] && echo "Real-time" || echo "After completion")${NC}"
+
 curl -X POST "$DASHBOARD_URL/api/session/start" \
     -H "Content-Type: application/json" \
     -d "{
-        \"virtualUsers\": 3,
+        \"projectName\": \"$PROJECT_NAME\",
+        \"sessionName\": \"$SESSION_NAME\",
+        \"virtualUsers\": $VIRTUAL_USERS,
+        \"interactionsPerItem\": $INTERACTIONS_PER_ITEM,
+        \"claudeRealtime\": $CLAUDE_REALTIME,
         \"durationMinutes\": 0,
         \"targetUrl\": \"$TARGET_URL\"
     }" \

@@ -189,6 +189,45 @@ class TesterMain {
                 res.status(500).json({ error: error.message });
             }
         });
+
+        // Session Configuration Route for Professional Dashboard
+        this.app.get('/api/session/config', async (req, res) => {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+
+                // Try to read the session configuration file created by start-test.sh
+                const configPath = path.join('/app/logs', 'session-config.json');
+
+                if (fs.existsSync(configPath)) {
+                    const configData = fs.readFileSync(configPath, 'utf8');
+                    const config = JSON.parse(configData);
+                    res.json(config);
+                } else {
+                    // Return default configuration if no session config file exists
+                    res.json({
+                        projectName: this.projectName,
+                        sessionName: 'Default Session',
+                        targetUrl: this.targetUrl,
+                        virtualUsers: 1,
+                        claudeRealtime: true,
+                        startTime: new Date().toISOString(),
+                        configuredBy: 'default'
+                    });
+                }
+            } catch (error) {
+                // If there's an error reading the config, return defaults
+                res.json({
+                    projectName: this.projectName,
+                    sessionName: 'Default Session',
+                    targetUrl: this.targetUrl,
+                    virtualUsers: 1,
+                    claudeRealtime: true,
+                    startTime: new Date().toISOString(),
+                    configuredBy: 'fallback'
+                });
+            }
+        });
     }
 
     setupSocketHandlers() {

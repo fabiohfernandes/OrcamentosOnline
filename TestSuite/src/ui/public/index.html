@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTER - Autonomous Stress Testing Dashboard</title>
+    <title>TESTER - Autonomous Stress Testing</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <script src="/socket.io/socket.io.js"></script>
@@ -19,17 +19,26 @@
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-robot"></i>
-                    <h1>TESTER</h1>
-                    <span class="subtitle">Autonomous Stress Testing</span>
+                    <h1>TESTER - Autonomous Stress Testing</h1>
                 </div>
-                <div class="header-controls">
+                <div class="header-info">
+                    <div class="project-session-info">
+                        <div class="info-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span id="projectName">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-vial"></i>
+                            <span id="sessionName">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-globe"></i>
+                            <span id="targetUrl">Loading...</span>
+                        </div>
+                    </div>
                     <div class="connection-status" id="connectionStatus">
                         <i class="fas fa-circle"></i>
                         <span>Connecting...</span>
-                    </div>
-                    <div class="project-info" id="projectInfo">
-                        <i class="fas fa-project-diagram"></i>
-                        <span id="projectName">Loading...</span>
                     </div>
                 </div>
             </div>
@@ -37,174 +46,156 @@
 
         <!-- Main Dashboard -->
         <main class="dashboard">
-            <!-- Control Panel -->
-            <section class="control-panel glass-card">
-                <h2><i class="fas fa-control"></i> Control Panel</h2>
-                <div class="control-grid">
-                    <div class="control-group">
-                        <label for="targetUrl">Target URL</label>
-                        <input type="url" id="targetUrl" placeholder="http://localhost:3000" value="http://localhost:3001">
-                    </div>
-                    <div class="control-group">
-                        <label for="virtualUsers">Virtual Users</label>
-                        <input type="number" id="virtualUsers" min="1" max="100" value="5">
-                    </div>
-                    <div class="control-group">
-                        <label for="duration">Duration (minutes)</label>
-                        <input type="number" id="duration" min="1" max="120" value="10">
-                    </div>
-                    <div class="control-group">
-                        <label>
-                            <input type="checkbox" id="claudeAutonomous">
-                            <span class="checkmark"></span>
-                            Claude Autonomous Mode
-                        </label>
-                    </div>
-                </div>
-                <div class="control-actions">
-                    <button id="pauseBtn" class="btn btn-warning">
-                        <i class="fas fa-pause"></i> Pause Testing
-                    </button>
-                    <button id="discoveryBtn" class="btn btn-info">
-                        <i class="fas fa-search"></i> Run Discovery
-                    </button>
-                </div>
-                <div class="automation-notice">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Testing is managed automatically by <strong>start-test.sh</strong> and <strong>stop-test.sh</strong> scripts</p>
-                </div>
-            </section>
-
-            <!-- System Status -->
+            <!-- System Status Section -->
             <section class="system-status glass-card">
                 <h2><i class="fas fa-heartbeat"></i> System Status</h2>
                 <div class="status-grid">
                     <div class="status-item">
-                        <div class="status-icon">
+                        <div class="status-icon" id="databaseStatus">
                             <i class="fas fa-database"></i>
                         </div>
-                        <div class="status-content">
+                        <div class="status-info">
                             <span class="status-label">Database</span>
-                            <span class="status-value" id="dbStatus">Checking...</span>
+                            <span class="status-value" id="databaseStatusText">Healthy</span>
                         </div>
                     </div>
                     <div class="status-item">
-                        <div class="status-icon">
+                        <div class="status-icon" id="discoveryStatus">
                             <i class="fas fa-search"></i>
                         </div>
-                        <div class="status-content">
+                        <div class="status-info">
                             <span class="status-label">Discovery</span>
-                            <span class="status-value" id="discoveryStatus">Checking...</span>
+                            <span class="status-value" id="discoveryStatusText">Not Ready</span>
                         </div>
                     </div>
                     <div class="status-item">
-                        <div class="status-icon">
-                            <i class="fas fa-vial"></i>
+                        <div class="status-icon" id="stressRunnerStatus">
+                            <i class="fas fa-running"></i>
                         </div>
-                        <div class="status-content">
+                        <div class="status-info">
                             <span class="status-label">Stress Runner</span>
-                            <span class="status-value" id="stressStatus">Checking...</span>
+                            <span class="status-value" id="stressRunnerStatusText">Running</span>
                         </div>
                     </div>
                     <div class="status-item">
-                        <div class="status-icon">
+                        <div class="status-icon" id="claudeAiStatus">
                             <i class="fas fa-brain"></i>
                         </div>
-                        <div class="status-content">
+                        <div class="status-info">
                             <span class="status-label">Claude AI</span>
-                            <span class="status-value" id="claudeStatus">Checking...</span>
+                            <span class="status-value" id="claudeAiStatusText">Offline</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Live Metrics -->
-            <section class="metrics-section">
-                <div class="metric-card glass-card">
-                    <h3><i class="fas fa-chart-line"></i> Test Progress</h3>
-                    <div class="metric-value" id="testProgress">0%</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+            <!-- Session Status Section -->
+            <section class="session-status glass-card">
+                <h2><i class="fas fa-chart-line"></i> Session Status</h2>
+                <div class="session-grid">
+                    <div class="session-info">
+                        <div class="info-row">
+                            <span class="info-label">Programmed Tests:</span>
+                            <span class="info-value" id="totalTests">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Virtual Users:</span>
+                            <span class="info-value" id="virtualUsers">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Claude AutoFix:</span>
+                            <span class="info-value" id="claudeMode">Real-time</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Session Time:</span>
+                            <span class="info-value" id="sessionTime">00:00:00</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">ETA:</span>
+                            <span class="info-value" id="estimatedTime">Calculating...</span>
+                        </div>
                     </div>
-                </div>
-                <div class="metric-card glass-card">
-                    <h3><i class="fas fa-check-circle"></i> Tests Passed</h3>
-                    <div class="metric-value" id="testsPassed">0</div>
-                    <div class="metric-subtitle">Total: <span id="totalTests">0</span></div>
-                </div>
-                <div class="metric-card glass-card">
-                    <h3><i class="fas fa-times-circle"></i> Tests Failed</h3>
-                    <div class="metric-value error" id="testsFailed">0</div>
-                    <div class="metric-subtitle">Success Rate: <span id="successRate">100%</span></div>
-                </div>
-                <div class="metric-card glass-card">
-                    <h3><i class="fas fa-users"></i> Active Users</h3>
-                    <div class="metric-value" id="activeUsers">0</div>
-                    <div class="metric-subtitle">Virtual Users</div>
+                    <div class="progress-charts">
+                        <div class="chart-container">
+                            <div class="chart-item">
+                                <div class="chart-label">Tests Completed</div>
+                                <div class="progress-circle" id="completedProgress">
+                                    <div class="progress-value" id="completedPercentage">0%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">Success Rate</div>
+                                <div class="progress-circle success" id="successProgress">
+                                    <div class="progress-value" id="successPercentage">0%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">Failure Rate</div>
+                                <div class="progress-circle error" id="failureProgress">
+                                    <div class="progress-value" id="failurePercentage">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Live Log Feed -->
-            <section class="log-section glass-card">
-                <h2><i class="fas fa-terminal"></i> Live Activity Log</h2>
+            <!-- Live Activity Log Section -->
+            <section class="activity-log glass-card">
+                <h2><i class="fas fa-file-alt"></i> Live Activity Log</h2>
                 <div class="log-controls">
-                    <button id="clearLogBtn" class="btn btn-small">
-                        <i class="fas fa-trash"></i> Clear
-                    </button>
-                    <button id="downloadLogBtn" class="btn btn-small">
-                        <i class="fas fa-download"></i> Download
+                    <button class="btn btn-primary" id="downloadLogBtn">
+                        <i class="fas fa-download"></i>
+                        Download Log
                     </button>
                 </div>
-                <div class="log-container" id="logContainer">
-                    <div class="log-entry info">
-                        <span class="log-time">[Starting]</span>
-                        <span class="log-message">TESTER Dashboard initialized</span>
+                <div class="log-content" id="logContent">
+                    <div class="log-entry">
+                        <span class="log-time">--:--:--</span>
+                        <span class="log-message">Activity log will appear here during testing...</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Issues & Fixes -->
-            <section class="issues-section glass-card">
-                <h2><i class="fas fa-bug"></i> Issues & Autonomous Fixes</h2>
-                <div class="issues-header">
-                    <div class="issues-stats">
-                        <span class="stat"><i class="fas fa-exclamation-triangle"></i> Open: <span id="openIssues">0</span></span>
-                        <span class="stat"><i class="fas fa-wrench"></i> Fixed: <span id="fixedIssues">0</span></span>
-                        <span class="stat"><i class="fas fa-brain"></i> AI Analyzed: <span id="analyzedIssues">0</span></span>
+            <!-- Issues & Autonomous Fixes Section -->
+            <section class="issues-fixes glass-card">
+                <h2><i class="fas fa-wrench"></i> Issues & Autonomous Fixes</h2>
+                <div class="issues-summary">
+                    <div class="summary-item">
+                        <div class="summary-count" id="openIssues">0</div>
+                        <div class="summary-label">Open</div>
                     </div>
-                    <button id="analyzeAllBtn" class="btn btn-info btn-small">
-                        <i class="fas fa-robot"></i> Analyze All
+                    <div class="summary-item">
+                        <div class="summary-count" id="fixedIssues">0</div>
+                        <div class="summary-label">Fixed</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-count" id="analyzedIssues">0</div>
+                        <div class="summary-label">AI Analyzed</div>
+                    </div>
+                </div>
+                <div class="issues-controls">
+                    <button class="btn btn-secondary" id="analyzeAllBtn">
+                        <i class="fas fa-brain"></i>
+                        Analyze All
                     </button>
                 </div>
                 <div class="issues-list" id="issuesList">
-                    <div class="no-issues">
-                        <i class="fas fa-check-circle"></i>
-                        <p>No issues detected yet</p>
+                    <div class="issue-item example">
+                        <div class="issue-priority low">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="issue-content">
+                            <div class="issue-title">No issues detected yet</div>
+                            <div class="issue-description">Issues will appear here during testing</div>
+                        </div>
+                        <div class="issue-status">
+                            <span class="status-badge monitoring">Monitoring</span>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
-
-        <!-- Floating Action Button -->
-        <button class="fab" id="emergencyStop" title="Emergency Stop">
-            <i class="fas fa-hand-paper"></i>
-        </button>
-    </div>
-
-    <!-- Modals -->
-    <div class="modal" id="discoveryModal">
-        <div class="modal-content glass-card">
-            <h3><i class="fas fa-search"></i> Discovery Results</h3>
-            <div class="discovery-results" id="discoveryResults">
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Discovering application structure...</p>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('discoveryModal')">Close</button>
-            </div>
-        </div>
     </div>
 
     <script src="dashboard.js"></script>
