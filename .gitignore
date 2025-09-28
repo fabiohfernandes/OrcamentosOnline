@@ -199,3 +199,23 @@ api_keys.txt
 *.pem
 *.key
 *.crt
+
+# TestSuite Evidence Files (Auto-generated test artifacts)
+OrçamentosOnlineTestSuite/screenshots/
+OrçamentosOnlineTestSuite/traces/
+OrçamentosOnlineTestSuite/videos/
+OrçamentosOnlineTestSuite/reports/
+OrçamentosOnlineTestSuite/logs/
+
+# TestSuite Binary Evidence Files
+*.png
+*.zip
+*.webm
+*.mp4
+*.mov
+
+# Test logs and temporary data
+TestSuite/logs/
+TestSuite/screenshots/
+TestSuite/traces/
+TestSuite/videos/
