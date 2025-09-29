@@ -149,8 +149,8 @@ export default function CreateProposal() {
         ...prev,
         clientId: clientId,
         clientName: clientName,
-        // Auto-generate proposal name based on client
-        proposalName: `Proposta para ${clientCompany || clientName} - ${generateProposalNumber()}`
+        // Keep proposal name empty for user input
+        proposalName: ''
       }));
 
       // Show toast to inform user
