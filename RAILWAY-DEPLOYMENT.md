@@ -59,35 +59,37 @@ JWT_SECRET=your_jwt_secret_key_min_32_chars
 **Step 3: Deploy API Service**
 1. Click "+" to add service
 2. Select "GitHub Repo" → `fabiohfernandes/OrcamentosOnline`
-3. **IMPORTANT**: Set **Root Directory**: `services/api`
-4. **Settings** → **Build**:
-   - Build Command: `npm install --only=production`
-   - Start Command: `npm start`
-5. **Environment Variables**:
+3. **🚨 CRITICAL**: After selecting repo, **IMMEDIATELY** go to **Settings** tab
+4. **Settings** → **Source**:
+   - Set **Root Directory**: `services/api` (⚠️ THIS IS ESSENTIAL)
+   - Verify it shows "services/api" in the field
+5. **Settings** → **Environment Variables**:
    ```
    NODE_ENV=production
    PORT=3000
-   DATABASE_URL=[copy from PostgreSQL service Variables tab]
-   REDIS_URL=[copy from Redis service Variables tab]
-   JWT_SECRET=[generate-32-char-secret]
+   DATABASE_URL=[copy from PostgreSQL Variables tab]
+   REDIS_URL=[copy from Redis Variables tab]
+   JWT_SECRET=[your-32-char-secret]
    CORS_ORIGIN=*
    ```
-6. Deploy and wait for completion (should take 2-3 minutes)
+6. **Settings** → **Deploy** tab, then click **Deploy**
+7. **Verify build logs show building from services/api directory**
 
 **Step 4: Deploy Frontend Service**
 1. Click "+" to add service
 2. Select "GitHub Repo" → `fabiohfernandes/OrcamentosOnline`
-3. **IMPORTANT**: Set **Root Directory**: `services/frontend`
-4. **Settings** → **Build**:
-   - Build Command: `npm run build`
-   - Start Command: `npm start`
-5. **Environment Variables**:
+3. **🚨 CRITICAL**: After selecting repo, **IMMEDIATELY** go to **Settings** tab
+4. **Settings** → **Source**:
+   - Set **Root Directory**: `services/frontend` (⚠️ THIS IS ESSENTIAL)
+   - Verify it shows "services/frontend" in the field
+5. **Settings** → **Environment Variables**:
    ```
    NODE_ENV=production
    PORT=3001
-   NEXT_PUBLIC_API_URL=https://[your-api-service-domain-from-step-3]
+   NEXT_PUBLIC_API_URL=https://[api-service-domain]
    ```
-6. Deploy and wait for completion (should take 3-5 minutes)
+6. **Settings** → **Deploy** tab, then click **Deploy**
+7. **Verify build logs show building from services/frontend directory**
 
 ### 3. Deploy via Railway CLI
 
@@ -178,12 +180,15 @@ Access real-time logs and metrics:
 ### Common Issues
 
 1. **Build Timeout (Most Common)**
-   - **Problem**: "Build timed out" error during deployment
-   - **Cause**: Railway trying to build entire monorepo instead of individual service
+   - **Problem**: "Build timed out" error after 44+ minutes
+   - **Cause**: Railway building entire monorepo instead of specific service
    - **Solution**:
-     - Ensure **Root Directory** is set to `services/api` or `services/frontend`
-     - Do NOT deploy from root directory
-     - Deploy each service separately with proper root directory setting
+     - ⚠️ **CRITICAL**: Set **Root Directory** BEFORE first deployment
+     - Go to **Settings** → **Source** → **Root Directory**
+     - API service: `services/api`
+     - Frontend service: `services/frontend`
+     - **Redeploy** after setting root directory
+   - **Verification**: Build logs should show building from service directory, not root
 
 2. **Database Connection Errors**
    - Verify `POSTGRES_PASSWORD` is set

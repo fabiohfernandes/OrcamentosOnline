@@ -1,12 +1,12 @@
 {
-  "name": "orcamentos-online",
+  "name": "orcamentos-online-monorepo",
   "version": "1.0.0",
   "description": "OrçamentosOnline - AI-driven commercial proposal platform",
   "private": true,
   "scripts": {
-    "build": "echo 'Building service specified by RAILWAY_SERVICE_NAME'",
-    "start": "./start.sh",
-    "dev": "echo 'Development mode - use docker-compose for local development'"
+    "dev": "echo 'Use docker-compose for local development'",
+    "build": "echo 'Deploy individual services using root directory: services/api or services/frontend'",
+    "start": "echo 'This is a monorepo. Deploy services individually.'"
   },
   "engines": {
     "node": ">=18.0.0",
