@@ -33,7 +33,13 @@
       "Bash(timeout:*)",
       "Bash(./stress_test_functional.sh:*)",
       "Bash(cat:*)",
-      "Read(//d/**)"
+      "Read(//d/**)",
+      "Bash(railway add:*)",
+      "Bash(railway variables set:*)",
+      "Bash(railway variables:*)",
+      "Bash(railway init:*)",
+      "Bash(railway up:*)",
+      "Bash(railway domain:*)"
     ],
     "deny": [],
     "ask": []
