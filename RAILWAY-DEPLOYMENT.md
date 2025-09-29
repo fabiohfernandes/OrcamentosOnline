@@ -101,7 +101,35 @@ JWT_SECRET=your_jwt_secret_key_min_32_chars
    - Build logs show building from services/frontend directory
    - After deployment, service shows a public URL (e.g., `abc-production.up.railway.app`)
 
-### 3. Deploy via Railway CLI
+### 3. Alternative: Template-Based Deployment
+
+If manual deployment continues to fail, use Railway templates:
+
+**Option A - Node.js Template Deployment:**
+1. Go to Railway dashboard
+2. Click "New Project" → "Template"
+3. Search for "Node.js" template
+4. Use template, then connect your GitHub repo
+5. Set root directory after template creation
+
+**Option B - Direct Service Creation:**
+1. **Create API Service:**
+   ```bash
+   # Using Railway CLI in services/api directory
+   cd services/api
+   railway init
+   railway up
+   ```
+
+2. **Create Frontend Service:**
+   ```bash
+   # Using Railway CLI in services/frontend directory
+   cd services/frontend
+   railway init
+   railway up
+   ```
+
+### 4. Manual Railway CLI Deployment
 
 ```bash
 # Install Railway CLI
@@ -110,10 +138,14 @@ npm install -g @railway/cli
 # Login to Railway
 railway login
 
-# Initialize project
-railway init
+# Deploy API service
+cd services/api
+railway init --name "orcamentos-api"
+railway up
 
-# Deploy all services
+# Deploy Frontend service
+cd ../frontend
+railway init --name "orcamentos-frontend"
 railway up
 ```
 
@@ -211,14 +243,29 @@ Access real-time logs and metrics:
    - Check CORS configuration in API service (`CORS_ORIGIN=*` for testing)
    - Ensure API service is deployed and running before frontend
 
-4. **No Public URL Generated**
-   - **Problem**: Service shows only internal port, no public domain
-   - **Cause**: Public Networking not enabled
-   - **Solution**:
-     - Go to service **Settings** → **Networking**
-     - Toggle **Public Networking** to ON
-     - Wait 1-2 minutes for Railway to generate domain
-     - Redeploy if necessary
+4. **No Public URL Generated (CRITICAL ISSUE)**
+   - **Problem**: Service shows only internal port (e.g., `:3000`), no public domain
+   - **Multiple Solutions to Try**:
+
+   **Solution A - Enable Public Networking:**
+   - Go to service **Settings** → **Networking**
+   - Toggle **Public Networking** to ON
+   - Wait 1-2 minutes for Railway to generate domain
+
+   **Solution B - Force Port Configuration:**
+   - Go to **Settings** → **Variables**
+   - Add: `PORT = 3000` (for API) or `PORT = 3001` (for frontend)
+   - Redeploy service
+
+   **Solution C - Manual Domain Generation:**
+   - Go to **Settings** → **Networking**
+   - Click **Generate Domain** button manually
+   - Select public domain option
+
+   **Solution D - Service Type Detection:**
+   - Delete and recreate service
+   - When creating, Railway should auto-detect as "Web Service"
+   - Ensure service type shows as "Web" not "Worker"
 
 5. **Build Failures**
    - Review build logs in Railway dashboard
