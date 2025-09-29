@@ -119,15 +119,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
           <nav className="flex-1 space-y-2 p-4">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''}`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <item.icon className="h-5 w-5 mr-3" />
-                {item.name}
-              </Link>
+              item.href === '/reports' ? (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    router.push('/reports');
+                    setSidebarOpen(false);
+                  }}
+                  className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''} w-full text-left`}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </button>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''}`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </Link>
+              )
             ))}
           </nav>
 
@@ -171,14 +185,26 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Navigation */}
           <nav className="flex-1 space-y-2 p-4">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''}`}
-              >
-                <item.icon className="h-5 w-5 mr-3" />
-                {item.name}
-              </Link>
+              item.href === '/reports' ? (
+                <button
+                  key={item.name}
+                  onClick={() => router.push('/reports')}
+                  className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''} w-full text-left`}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </button>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`nav-link ${isActive(item.href) ? 'nav-link-active' : ''}`}
+                  onClick={() => {}}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </Link>
+              )
             ))}
           </nav>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import {
   DocumentTextIcon,
@@ -53,6 +53,7 @@ const generateProposalNumber = (): string => {
 
 export default function CreateProposal() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, tokens } = useAuthStore();
 
   const [proposalNumber, setProposalNumber] = useState<string>('');
@@ -133,6 +134,29 @@ export default function CreateProposal() {
     const newProposalNumber = generateProposalNumber();
     setProposalNumber(newProposalNumber);
   }, []);
+
+  // Pre-fill client data from URL parameters (when coming from client list)
+  useEffect(() => {
+    const clientId = searchParams.get('clientId');
+    const clientName = searchParams.get('clientName');
+    const clientEmail = searchParams.get('clientEmail');
+    const clientCompany = searchParams.get('clientCompany');
+
+    if (clientId && clientName) {
+      console.log('Pre-filling client data from URL:', { clientId, clientName, clientEmail, clientCompany });
+
+      setFormData(prev => ({
+        ...prev,
+        clientId: clientId,
+        clientName: clientName,
+        // Auto-generate proposal name based on client
+        proposalName: `Proposta para ${clientCompany || clientName} - ${generateProposalNumber()}`
+      }));
+
+      // Show toast to inform user
+      toast.success(`Cliente ${clientName} selecionado automaticamente`);
+    }
+  }, [searchParams]);
 
   // Load clients from database
   useEffect(() => {

@@ -15,6 +15,7 @@ import {
   UserGroupIcon,
   PencilIcon,
   TrashIcon,
+  DocumentPlusIcon,
 } from '@heroicons/react/24/outline';
 
 // Client form validation schema
@@ -190,6 +191,19 @@ export default function SimpleClientsPage() {
     }
   };
 
+  // Handle create proposal for client
+  const handleCreateProposal = (client: any) => {
+    // Navigate to proposal creation page with client info as query parameters
+    const queryParams = new URLSearchParams({
+      clientId: client.id,
+      clientName: client.name,
+      clientEmail: client.email,
+      clientCompany: client.company || '',
+    });
+
+    router.push(`/proposals/create?${queryParams.toString()}`);
+  };
+
   // Handle adding new client
   const onSubmit = async (data: ClientFormData) => {
     try {
@@ -334,6 +348,14 @@ export default function SimpleClientsPage() {
                       }`}>
                         {client.status}
                       </span>
+                      <button
+                        onClick={() => handleCreateProposal(client)}
+                        className="px-3 py-1 text-sm text-green-600 hover:bg-green-50 border border-green-200 rounded-md transition-colors flex items-center"
+                        title="Criar proposta para este cliente"
+                      >
+                        <DocumentPlusIcon className="h-4 w-4 mr-1" />
+                        Nova Proposta
+                      </button>
                       <button
                         onClick={() => handleEditClient(client)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-md"
