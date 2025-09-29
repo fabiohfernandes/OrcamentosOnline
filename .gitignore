@@ -185,11 +185,13 @@ scratch_*
 test_*
 .temp/
 
-# Future AI model files (large files)
+# Future AI model files (large files) - exclude AI/ML models but NOT API source code
 *.model
 *.pkl
 *.joblib
-models/
+ai_models/
+ml_models/
+trained_models/
 checkpoints/
 
 # Future API keys and secrets (NEVER commit these)
