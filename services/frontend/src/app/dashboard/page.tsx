@@ -542,7 +542,7 @@ export default function DashboardPage() {
                       <div className="text-right">
                         <div className="font-medium">{page.views} visualizações</div>
                         <div className="text-sm text-gray-500">
-                          {Math.floor(parseInt(page.avg_time) / 60)}:{String(parseInt(page.avg_time) % 60).padStart(2, '0')} tempo médio
+                          {Math.floor(parseInt(String(page.avg_time)) / 60)}:{String(parseInt(String(page.avg_time)) % 60).padStart(2, '0')} tempo médio
                         </div>
                       </div>
                     </div>
