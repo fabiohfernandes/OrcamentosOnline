@@ -42,14 +42,16 @@ const nextConfig = {
     return config;
   },
 
+  // Output configuration for deployment - optimized for Railway
+  output: 'standalone',
+
   // Experimental features
   experimental: {
     // Enable server components
     serverComponentsExternalPackages: ['@prisma/client'],
+    // Disable build traces collection to prevent hanging on Railway
+    outputFileTracingRoot: undefined,
   },
-
-  // Output configuration for deployment
-  output: 'standalone',
 
   // Security headers
   async headers() {
