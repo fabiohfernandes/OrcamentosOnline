@@ -44,8 +44,6 @@ const nextConfig = {
 
   // Experimental features
   experimental: {
-    // Enable app directory (App Router)
-    appDir: true,
     // Enable server components
     serverComponentsExternalPackages: ['@prisma/client'],
   },
