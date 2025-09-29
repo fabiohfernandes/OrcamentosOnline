@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ['nodejs_18', 'npm']
+nixPkgs = ['nodejs_20', 'npm']
 
 [phases.install]
-cmds = ['npm ci --only=production']
+cmds = ['npm ci --omit=dev --ignore-scripts']
 
 [phases.build]
 cmds = ['echo "API service build complete"']
@@ -12,3 +12,4 @@ cmd = 'npm start'
 
 [variables]
 NODE_ENV = 'production'
+PORT = '3000'

@@ -2,7 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm run build && npm start"
+startCommand = "npm start"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
@@ -10,7 +10,7 @@ restartPolicyMaxRetries = 10
 
 # Optimize build resources
 [build.nixpacksConfigOverride]
-memory = "2048"
+memory = "3072"
 
 # Network configuration
 [deploy.networking]
@@ -19,4 +19,5 @@ expose = true
 # Environment variables
 [deploy.env]
 NODE_ENV = "production"
-PORT = "3001"
+PORT = "3000"
+NEXT_TELEMETRY_DISABLED = "1"

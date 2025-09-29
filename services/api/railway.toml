@@ -16,3 +16,6 @@ expose = true
 [deploy.env]
 NODE_ENV = "production"
 PORT = "3000"
+DATABASE_URL = "${{ Postgres.DATABASE_URL }}"
+JWT_SECRET = "${{ JWT_SECRET }}"
+BCRYPT_ROUNDS = "12"
