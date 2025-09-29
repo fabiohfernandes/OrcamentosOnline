@@ -3,24 +3,10 @@
   "version": "1.0.0",
   "description": "OrçamentosOnline - AI-driven commercial proposal platform",
   "private": true,
-  "workspaces": [
-    "services/frontend",
-    "services/api"
-  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\"",
-    "dev:api": "cd services/api && npm run dev",
-    "dev:frontend": "cd services/frontend && npm run dev",
-    "build": "npm run build:api && npm run build:frontend",
-    "build:api": "cd services/api && npm install --only=production",
-    "build:frontend": "cd services/frontend && npm run build",
-    "start": "concurrently \"npm run start:api\" \"npm run start:frontend\"",
-    "start:api": "cd services/api && npm start",
-    "start:frontend": "cd services/frontend && npm start",
-    "postinstall": "cd services/api && npm install && cd ../frontend && npm install"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.0"
+    "build": "echo 'Building service specified by RAILWAY_SERVICE_NAME'",
+    "start": "./start.sh",
+    "dev": "echo 'Development mode - use docker-compose for local development'"
   },
   "engines": {
     "node": ">=18.0.0",

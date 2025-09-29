@@ -59,28 +59,35 @@ JWT_SECRET=your_jwt_secret_key_min_32_chars
 **Step 3: Deploy API Service**
 1. Click "+" to add service
 2. Select "GitHub Repo" → `fabiohfernandes/OrcamentosOnline`
-3. Set **Root Directory**: `services/api`
-4. **Environment Variables**:
+3. **IMPORTANT**: Set **Root Directory**: `services/api`
+4. **Settings** → **Build**:
+   - Build Command: `npm install --only=production`
+   - Start Command: `npm start`
+5. **Environment Variables**:
    ```
    NODE_ENV=production
    PORT=3000
-   DATABASE_URL=[copy from PostgreSQL service]
-   REDIS_URL=[copy from Redis service]
-   JWT_SECRET=[your-jwt-secret-32-chars]
+   DATABASE_URL=[copy from PostgreSQL service Variables tab]
+   REDIS_URL=[copy from Redis service Variables tab]
+   JWT_SECRET=[generate-32-char-secret]
+   CORS_ORIGIN=*
    ```
-5. Deploy and wait for completion
+6. Deploy and wait for completion (should take 2-3 minutes)
 
 **Step 4: Deploy Frontend Service**
 1. Click "+" to add service
 2. Select "GitHub Repo" → `fabiohfernandes/OrcamentosOnline`
-3. Set **Root Directory**: `services/frontend`
-4. **Environment Variables**:
+3. **IMPORTANT**: Set **Root Directory**: `services/frontend`
+4. **Settings** → **Build**:
+   - Build Command: `npm run build`
+   - Start Command: `npm start`
+5. **Environment Variables**:
    ```
    NODE_ENV=production
    PORT=3001
-   NEXT_PUBLIC_API_URL=https://[your-api-service-url]
+   NEXT_PUBLIC_API_URL=https://[your-api-service-domain-from-step-3]
    ```
-5. Deploy and wait for completion
+6. Deploy and wait for completion (should take 3-5 minutes)
 
 ### 3. Deploy via Railway CLI
 
@@ -170,19 +177,30 @@ Access real-time logs and metrics:
 
 ### Common Issues
 
-1. **Database Connection Errors**
+1. **Build Timeout (Most Common)**
+   - **Problem**: "Build timed out" error during deployment
+   - **Cause**: Railway trying to build entire monorepo instead of individual service
+   - **Solution**:
+     - Ensure **Root Directory** is set to `services/api` or `services/frontend`
+     - Do NOT deploy from root directory
+     - Deploy each service separately with proper root directory setting
+
+2. **Database Connection Errors**
    - Verify `POSTGRES_PASSWORD` is set
    - Check PostgreSQL service is running
    - Review API service logs
+   - Ensure `DATABASE_URL` is copied exactly from PostgreSQL Variables tab
 
-2. **Frontend API Connection Issues**
+3. **Frontend API Connection Issues**
    - Verify `NEXT_PUBLIC_API_URL` points to correct API domain
-   - Check CORS configuration in API service
+   - Check CORS configuration in API service (`CORS_ORIGIN=*` for testing)
+   - Ensure API service is deployed and running before frontend
 
-3. **Build Failures**
+4. **Build Failures**
    - Review build logs in Railway dashboard
    - Verify all dependencies are in package.json
-   - Check Dockerfile syntax
+   - For API: Use build command `npm install --only=production`
+   - For Frontend: Use build command `npm run build`
 
 ### Log Access
 ```bash
