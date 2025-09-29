@@ -72,8 +72,13 @@ JWT_SECRET=your_jwt_secret_key_min_32_chars
    JWT_SECRET=[your-32-char-secret]
    CORS_ORIGIN=*
    ```
-6. **Settings** → **Deploy** tab, then click **Deploy**
-7. **Verify build logs show building from services/api directory**
+6. **Settings** → **Networking** tab:
+   - Enable **Public Networking** (toggle ON)
+   - Railway will generate a public domain automatically
+7. **Settings** → **Deploy** tab, then click **Deploy**
+8. **Verify**:
+   - Build logs show building from services/api directory
+   - After deployment, service shows a public URL (e.g., `xyz-production.up.railway.app`)
 
 **Step 4: Deploy Frontend Service**
 1. Click "+" to add service
@@ -88,8 +93,13 @@ JWT_SECRET=your_jwt_secret_key_min_32_chars
    PORT=3001
    NEXT_PUBLIC_API_URL=https://[api-service-domain]
    ```
-6. **Settings** → **Deploy** tab, then click **Deploy**
-7. **Verify build logs show building from services/frontend directory**
+6. **Settings** → **Networking** tab:
+   - Enable **Public Networking** (toggle ON)
+   - Railway will generate a public domain automatically
+7. **Settings** → **Deploy** tab, then click **Deploy**
+8. **Verify**:
+   - Build logs show building from services/frontend directory
+   - After deployment, service shows a public URL (e.g., `abc-production.up.railway.app`)
 
 ### 3. Deploy via Railway CLI
 
@@ -201,7 +211,16 @@ Access real-time logs and metrics:
    - Check CORS configuration in API service (`CORS_ORIGIN=*` for testing)
    - Ensure API service is deployed and running before frontend
 
-4. **Build Failures**
+4. **No Public URL Generated**
+   - **Problem**: Service shows only internal port, no public domain
+   - **Cause**: Public Networking not enabled
+   - **Solution**:
+     - Go to service **Settings** → **Networking**
+     - Toggle **Public Networking** to ON
+     - Wait 1-2 minutes for Railway to generate domain
+     - Redeploy if necessary
+
+5. **Build Failures**
    - Review build logs in Railway dashboard
    - Verify all dependencies are in package.json
    - For API: Use build command `npm install --only=production`
@@ -258,13 +277,23 @@ Expected monthly cost for OrçamentosOnline:
 ## Quick Deploy Summary
 
 1. ✅ Create Railway account
-2. ✅ Connect GitHub repository
-3. ✅ Set environment variables (passwords, secrets)
-4. ✅ Deploy via dashboard or CLI
-5. ✅ Monitor deployment logs
+2. ✅ Create empty project
+3. ✅ Add PostgreSQL + Redis databases
+4. ✅ Deploy API service:
+   - Root Directory: `services/api`
+   - **Enable Public Networking**
+   - Set environment variables
+5. ✅ Deploy Frontend service:
+   - Root Directory: `services/frontend`
+   - **Enable Public Networking**
+   - Set `NEXT_PUBLIC_API_URL` to API service domain
 6. ✅ Test application functionality
-7. ✅ Configure custom domains (optional)
 
-**Total Deployment Time**: 10-15 minutes
+**Total Deployment Time**: 15-20 minutes
+
+**Critical Steps**:
+- ⚠️ Set Root Directory immediately after repo selection
+- ⚠️ Enable Public Networking for URL generation
+- ⚠️ Verify build logs show correct service directory
 
 **Platform Status**: 🚀 Production-ready with all features operational
