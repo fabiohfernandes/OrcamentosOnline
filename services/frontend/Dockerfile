@@ -105,7 +105,7 @@ ENV PORT=3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:3001/api/health || exit 1
+    CMD curl -f http://localhost:3001/ || exit 1
 
 # Start the application
 CMD ["node", "server.js"]
@@ -123,5 +123,5 @@ COPY .storybook ./.storybook
 RUN npm run test -- --passWithNoTests
 RUN npm run type-check
 
-# Default to development stage
-FROM development
+# Default to production stage for Railway deployment
+FROM production
