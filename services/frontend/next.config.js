@@ -21,12 +21,12 @@ const nextConfig = {
 
   // Environment variables available in the browser
   env: {
-    NEXT_PUBLIC_API_URL: process.env.VITE_API_URL || 'http://localhost:3000/api/v1',
-    NEXT_PUBLIC_WS_URL: process.env.VITE_WS_URL || 'ws://localhost:3000',
-    NEXT_PUBLIC_APP_NAME: process.env.VITE_APP_NAME || 'OrçamentosOnline',
-    NEXT_PUBLIC_APP_VERSION: process.env.VITE_APP_VERSION || '1.0.0',
-    NEXT_PUBLIC_MAX_FILE_SIZE: process.env.VITE_MAX_FILE_SIZE || '10485760',
-    NEXT_PUBLIC_SUPPORTED_FILE_TYPES: process.env.VITE_SUPPORTED_FILE_TYPES || 'image/jpeg,image/png,image/gif,application/pdf',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1',
+    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3000',
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'OrçamentosOnline',
+    NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+    NEXT_PUBLIC_MAX_FILE_SIZE: process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '10485760',
+    NEXT_PUBLIC_SUPPORTED_FILE_TYPES: process.env.NEXT_PUBLIC_SUPPORTED_FILE_TYPES || 'image/jpeg,image/png,image/gif,application/pdf',
   },
 
   // Webpack configuration

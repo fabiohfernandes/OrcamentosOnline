@@ -1,0 +1,26 @@
+{
+  "name": "orcamentos-online",
+  "version": "1.0.0",
+  "description": "OrçamentosOnline - AI-driven commercial proposal platform",
+  "private": true,
+  "workspaces": [
+    "services/frontend",
+    "services/api"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\"",
+    "dev:api": "cd services/api && npm run dev",
+    "dev:frontend": "cd services/frontend && npm run dev",
+    "build": "echo 'Use Railway root directory setting: services/api or services/frontend'",
+    "start": "echo 'Use Railway root directory setting for individual services'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "author": "MAESTRO Orchestrator - Multi-Agent System",
+  "license": "MIT"
+}
