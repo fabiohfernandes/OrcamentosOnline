@@ -8,7 +8,22 @@
       "Bash(git rm:*)",
       "Bash(railway --version)",
       "Bash(node:*)",
-      "Bash(npm:*)"
+      "Bash(npm:*)",
+      "Bash(cat:*)",
+      "Bash(railway whoami:*)",
+      "Bash(railway init:*)",
+      "Bash(railway link:*)",
+      "Bash(railway add:*)",
+      "Bash(railway status:*)",
+      "Bash(openssl rand:*)",
+      "Bash(railway service:*)",
+      "Bash(railway variables:*)",
+      "Bash(railway list:*)",
+      "Bash(railway logs:*)",
+      "Bash(if [ -f \"D:\\OrçamentosOnline\\DEPLOYMENT-STATUS.md\" ])",
+      "Bash(then echo \"exists\")",
+      "Bash(else echo \"new\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

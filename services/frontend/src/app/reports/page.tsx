@@ -128,7 +128,8 @@ export default function ReportsPage() {
         }
 
         // Load real dashboard stats (same as dashboard page)
-        const statsResponse = await fetch('/api/v1/dashboard/stats', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        const statsResponse = await fetch(`${apiUrl}/api/v1/dashboard/stats`, {
           headers: {
             'Authorization': `Bearer ${tokens.accessToken}`,
           },
@@ -144,7 +145,7 @@ export default function ReportsPage() {
 
           // Try to fetch clients count from clients API
           try {
-            const clientsResponse = await fetch('/api/v1/clients', {
+            const clientsResponse = await fetch(`${apiUrl}/api/v1/clients`, {
               headers: {
                 'Authorization': `Bearer ${tokens.accessToken}`,
               },
@@ -159,7 +160,7 @@ export default function ReportsPage() {
 
           // Fetch proposals to build monthly statistics
           try {
-            const proposalsResponse = await fetch('/api/v1/proposals', {
+            const proposalsResponse = await fetch(`${apiUrl}/api/v1/proposals`, {
               headers: {
                 'Authorization': `Bearer ${tokens.accessToken}`,
               },

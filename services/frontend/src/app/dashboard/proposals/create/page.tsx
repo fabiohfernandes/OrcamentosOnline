@@ -202,7 +202,8 @@ export default function CreateProposal() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/v1/proposals', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/proposals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

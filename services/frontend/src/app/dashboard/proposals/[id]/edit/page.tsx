@@ -86,7 +86,8 @@ export default function EditProposal() {
 
       try {
         setLoading(true);
-        const response = await fetch(`/api/v1/proposals/${params.id}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/v1/proposals/${params.id}`, {
           headers: {
             'Authorization': `Bearer ${tokens.accessToken}`,
           },
@@ -153,7 +154,8 @@ export default function EditProposal() {
         proposalValue: parseFloat(formData.proposalValue) || 0
       };
 
-      const response = await fetch(`/api/v1/proposals/${proposal.id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/proposals/${proposal.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

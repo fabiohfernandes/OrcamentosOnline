@@ -45,7 +45,8 @@ export default function ProposalViewerPage() {
       }
 
       try {
-        const response = await fetch(`/api/v1/client/proposal/${proposalId}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -86,7 +87,8 @@ export default function ProposalViewerPage() {
       if (!token || !proposal) return;
 
       try {
-        await fetch(`/api/v1/client/proposal/${proposalId}/view`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}/view`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -117,7 +119,8 @@ export default function ProposalViewerPage() {
     setSavingComment(true);
 
     try {
-      const response = await fetch(`/api/v1/client/proposal/${proposalId}/comment`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}/comment`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -156,7 +159,8 @@ export default function ProposalViewerPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`/api/v1/client/proposal/${proposalId}/accept`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}/accept`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -189,7 +193,8 @@ export default function ProposalViewerPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`/api/v1/client/proposal/${proposalId}/reject`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}/reject`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -222,7 +227,8 @@ export default function ProposalViewerPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`/api/v1/client/proposal/${proposalId}/request-changes`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/client/proposal/${proposalId}/request-changes`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
