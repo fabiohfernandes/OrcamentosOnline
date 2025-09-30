@@ -1,7 +1,7 @@
 # OrçamentosOnline - Deployment Status
 
-**Last Updated:** 2025-09-30
-**Status:** 🟢 Fixes Deployed - Dashboard stats endpoint fixed, waiting for Railway deployment
+**Last Updated:** 2025-09-30 (Latest: Commit 1835c8d)
+**Status:** 🟡 Fixes Committed - Waiting for Railway deployment to complete
 
 ---
 
