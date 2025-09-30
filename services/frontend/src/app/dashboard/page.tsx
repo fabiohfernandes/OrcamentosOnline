@@ -124,8 +124,11 @@ export default function DashboardPage() {
     try {
       setLoading(true);
 
+      // Get API URL from environment
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
       // Load stats
-      const statsResponse = await fetch('/api/v1/dashboard/stats', {
+      const statsResponse = await fetch(`${apiUrl}/api/v1/dashboard/stats`, {
         headers: {
           'Authorization': `Bearer ${tokens.accessToken}`,
         },
@@ -137,7 +140,7 @@ export default function DashboardPage() {
       }
 
       // Load proposals
-      const proposalsResponse = await fetch('/api/v1/proposals?limit=10', {
+      const proposalsResponse = await fetch(`${apiUrl}/api/v1/proposals?limit=10`, {
         headers: {
           'Authorization': `Bearer ${tokens.accessToken}`,
         },
@@ -160,7 +163,8 @@ export default function DashboardPage() {
     if (!tokens?.accessToken) return;
 
     try {
-      const response = await fetch(`/api/v1/proposals/${proposalId}/analytics`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/proposals/${proposalId}/analytics`, {
         headers: {
           'Authorization': `Bearer ${tokens.accessToken}`,
         },
@@ -186,7 +190,8 @@ export default function DashboardPage() {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/v1/proposals/${proposalId}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/v1/proposals/${proposalId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${tokens.accessToken}`,
