@@ -235,10 +235,78 @@ app.get('/api/v1/health', async (req, res) => {
   }
 });
 
+// Dashboard statistics endpoint
+app.get('/api/v1/dashboard/stats', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Get total proposals count
+    const proposalsCount = await pool.query(
+      'SELECT COUNT(*) as count FROM proposals WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)',
+      [userId]
+    );
+
+    // Get proposals by status
+    const proposalsByStatus = await pool.query(
+      `SELECT status, COUNT(*) as count
+       FROM proposals
+       WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)
+       GROUP BY status`,
+      [userId]
+    );
+
+    // Get total clients count
+    const clientsCount = await pool.query(
+      'SELECT COUNT(*) as count FROM clients WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)',
+      [userId]
+    );
+
+    // Calculate conversion rate (proposals fechadas / total proposals)
+    const conversionRate = await pool.query(
+      `SELECT
+        COUNT(CASE WHEN status = 'fechada' THEN 1 END)::float /
+        NULLIF(COUNT(*)::float, 0) * 100 as rate
+       FROM proposals
+       WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)`,
+      [userId]
+    );
+
+    // Format response
+    const stats = {
+      totalProposals: parseInt(proposalsCount.rows[0].count),
+      totalClients: parseInt(clientsCount.rows[0].count),
+      conversionRate: parseFloat(conversionRate.rows[0].rate || 0).toFixed(2),
+      proposalsByStatus: {
+        aberta: 0,
+        alteracoes_solicitadas: 0,
+        fechada: 0,
+        rejeitada: 0
+      }
+    };
+
+    // Map status counts
+    proposalsByStatus.rows.forEach(row => {
+      stats.proposalsByStatus[row.status] = parseInt(row.count);
+    });
+
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    logger.error('Dashboard stats error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch dashboard statistics',
+      error: error.message
+    });
+  }
+});
+
 // Authentication endpoints
 app.post('/api/v1/auth/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password} = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
