@@ -1,15 +1,8 @@
 [phases.setup]
-nixPkgs = ['nodejs_20', 'npm']
+nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ['npm ci --omit=dev --ignore-scripts']
-
-[phases.build]
-cmds = ['echo "API service build complete"']
+cmds = ["npm install --omit=dev"]
 
 [start]
-cmd = 'npm start'
-
-[variables]
-NODE_ENV = 'production'
-# PORT is automatically assigned by Railway
+cmd = "npm start"
