@@ -113,6 +113,21 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Debug endpoint to check CORS configuration
+app.get('/api/v1/debug/cors', (req, res) => {
+  res.json({
+    corsOrigin: process.env.CORS_ORIGIN,
+    corsOptions: {
+      origin: corsOptions.origin,
+      credentials: corsOptions.credentials
+    },
+    allEnvVars: Object.keys(process.env).filter(key => key.includes('CORS')).reduce((obj, key) => {
+      obj[key] = process.env[key];
+      return obj;
+    }, {})
+  });
+});
+
 // Rate limiting - FORTRESS Agent security - DISABLED FOR TESTING
 // const limiter = rateLimit({
 //   windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutes default
