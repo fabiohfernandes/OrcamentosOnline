@@ -448,6 +448,64 @@ app.post('/api/v1/auth/register', async (req, res) => {
   }
 });
 
+// Forgot password endpoint - POST /api/v1/auth/forgot-password
+app.post('/api/v1/auth/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required',
+        errors: ['Email field is missing']
+      });
+    }
+
+    // Check if user exists
+    const userQuery = await pool.query(
+      'SELECT id, name, email FROM users WHERE email = $1',
+      [email.toLowerCase()]
+    );
+
+    // Always return success for security (don't reveal if email exists)
+    // In production, you would:
+    // 1. Generate a password reset token
+    // 2. Store it in database with expiration
+    // 3. Send email with reset link
+    // For now, we just log the request
+
+    if (userQuery.rows.length > 0) {
+      logger.info(`Password reset requested for: ${email}`);
+      // TODO: Generate reset token and send email
+      // const resetToken = crypto.randomBytes(32).toString('hex');
+      // const resetTokenHash = await bcrypt.hash(resetToken, 10);
+      // await pool.query(
+      //   'UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE email = $3',
+      //   [resetTokenHash, new Date(Date.now() + 3600000), email.toLowerCase()]
+      // );
+      // await sendResetEmail(email, resetToken);
+    } else {
+      logger.info(`Password reset requested for non-existent email: ${email}`);
+    }
+
+    res.json({
+      success: true,
+      message: 'If the email exists, a password reset link has been sent',
+      data: {
+        email: email
+      }
+    });
+
+  } catch (error) {
+    logger.error('Forgot password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to process request',
+      errors: ['Internal server error']
+    });
+  }
+});
+
 // Protected route example - GET /api/v1/auth/profile (matching frontend config)
 app.get('/api/v1/auth/profile', authenticateToken, (req, res) => {
   res.json({

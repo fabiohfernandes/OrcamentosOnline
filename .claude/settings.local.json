@@ -40,7 +40,9 @@
       "Bash(railway init:*)",
       "Bash(railway up:*)",
       "Bash(railway domain:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git commit:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
