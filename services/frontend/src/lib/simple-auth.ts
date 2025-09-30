@@ -3,7 +3,7 @@
 
 import axios from 'axios';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 // Simple token storage
 export const AuthToken = {
@@ -42,7 +42,7 @@ export const AuthToken = {
 // Simple API client
 export const SimpleAPI = {
   async login(email: string, password: string) {
-    const response = await axios.post(`${API_BASE}/auth/login`, {
+    const response = await axios.post(`${API_BASE}/api/v1/auth/login`, {
       email,
       password
     });
@@ -64,7 +64,7 @@ export const SimpleAPI = {
     const token = AuthToken.get();
     if (!token) throw new Error('No token');
 
-    const response = await axios.get(`${API_BASE}/clients`, {
+    const response = await axios.get(`${API_BASE}/api/v1/clients`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -77,7 +77,7 @@ export const SimpleAPI = {
     const token = AuthToken.get();
     if (!token) throw new Error('No token');
 
-    const response = await axios.post(`${API_BASE}/clients`, clientData, {
+    const response = await axios.post(`${API_BASE}/api/v1/clients`, clientData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -91,7 +91,7 @@ export const SimpleAPI = {
     const token = AuthToken.get();
     if (!token) throw new Error('No token');
 
-    const response = await axios.put(`${API_BASE}/clients/${id}`, clientData, {
+    const response = await axios.put(`${API_BASE}/api/v1/clients/${id}`, clientData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ export const SimpleAPI = {
     const token = AuthToken.get();
     if (!token) throw new Error('No token');
 
-    const response = await axios.delete(`${API_BASE}/clients/${id}`, {
+    const response = await axios.delete(`${API_BASE}/api/v1/clients/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

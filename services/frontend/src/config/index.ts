@@ -11,7 +11,7 @@ import type { AppConfig } from '@/types';
  */
 export const appConfig: AppConfig = {
   // API Configuration
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3000',
 
   // App Information
@@ -214,6 +214,7 @@ export const isFeatureEnabled = (feature: keyof typeof appConfig.features): bool
 
 /**
  * Get API URL with endpoint
+ * Endpoints should include /api/v1 prefix (e.g., '/api/v1/users')
  */
 export const getApiUrl = (endpoint: string): string => {
   return `${appConfig.apiUrl}${endpoint}`;
