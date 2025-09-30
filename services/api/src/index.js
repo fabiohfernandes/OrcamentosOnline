@@ -1211,7 +1211,8 @@ process.on('SIGINT', async () => {
     logger.info('Using existing database schema');
 
     // Start server
-    app.listen(port, () => {
+    // Bind to 0.0.0.0 to accept connections in Railway container environment
+    app.listen(port, '0.0.0.0', () => {
       logger.info(`🚀 OrçamentosOnline API server started on port ${port}`, {
         port,
         environment: process.env.NODE_ENV || 'development',
