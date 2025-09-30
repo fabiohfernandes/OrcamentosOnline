@@ -1,184 +1,301 @@
-# Railway Deployment Status - OrçamentosOnline
+# OrçamentosOnline - Deployment Status
 
-## ✅ Fixes Applied (September 30, 2025)
-
-### Changes Committed and Pushed
-**Commit:** `3a55846` - "fix: Resolve Railway deployment failures - database schema, Next.js standalone, and sharp"
+**Last Updated:** 2025-09-30
+**Status:** 🟡 Partially Working - Authentication works, API endpoints need fixes
 
 ---
 
-## 🔧 What Was Fixed
+## ✅ What's Working
 
-### 1. Database Schema Initialization ✅
-**File Created:** [services/api/src/models/schema.js](./services/api/src/models/schema.js)
-- Automatic table creation on server startup
-- 7 tables with proper relationships and indexes
-- LGPD compliance audit logging
-- Session management for JWT tokens
-
-**File Modified:** [services/api/src/index.js](./services/api/src/index.js)
-- Added `initializeSchema()` call on startup (line 1217)
-- Ensures database is ready before accepting requests
-
-### 2. Next.js Standalone Mode ✅
-**File Modified:** [services/frontend/package.json](./services/frontend/package.json)
-- Changed start script from `next start` to `node .next/standalone/server.js`
-- Compatible with `output: 'standalone'` in next.config.js
-
-### 3. Sharp Package for Image Optimization ✅
-**File Modified:** [services/frontend/package.json](./services/frontend/package.json)
-- Added `"sharp": "^0.33.0"` to dependencies
-- Required for Next.js production image optimization
-
-### 4. Image Configuration Update ✅
-**File Modified:** [services/frontend/next.config.js](./services/frontend/next.config.js)
-- Migrated from deprecated `images.domains` to `images.remotePatterns`
+- ✅ All 4 services deployed to Railway (PostgreSQL, Redis, Backend, Frontend)
+- ✅ Frontend accessible at: https://angelic-perception-production.up.railway.app
+- ✅ Backend API accessible at: https://orcamentosonline-production-2693.up.railway.app
+- ✅ SSL/HTTPS enabled on both domains
+- ✅ User authentication (registration and login) working
+- ✅ Dashboard navigation working
+- ✅ Database connected with 7 tables
+- ✅ Redis connected
 
 ---
 
-## 📊 Expected Deployment Flow
+## 🔧 Issues Requiring Fixes
 
-### Backend Deployment
-1. ✅ Railway detects GitHub push
-2. ⏳ Triggers build for backend service
-3. ⏳ Installs Node.js dependencies
-4. ⏳ Starts application with `npm start`
-5. ⏳ Connects to PostgreSQL database
-6. ⏳ Runs schema initialization (creates tables)
-7. ⏳ Server starts on port 8080
-8. ⏳ Health check passes
+### Issue 1: Frontend Not Connecting to Backend API ⚠️ CRITICAL
 
-### Frontend Deployment
-1. ✅ Railway detects GitHub push
-2. ⏳ Triggers build for frontend service
-3. ⏳ Installs dependencies (including sharp)
-4. ⏳ Runs `next build` (creates standalone output)
-5. ⏳ Starts with `node .next/standalone/server.js`
-6. ⏳ Server ready on assigned port
-7. ⏳ Health check passes
-
----
-
-## 🧪 Verification Steps
-
-Once deployment completes, verify:
-
-### 1. Backend Health
-```bash
-curl https://backend-production-XXXX.up.railway.app/api/v1/health
+**Problem:** Frontend is making API calls to itself instead of the backend
+**Evidence:**
+```
+GET https://angelic-perception-production.up.railway.app/api/v1/proposals 404 (Not Found)
 ```
 
-**Expected:**
-```json
-{
-  "success": true,
-  "status": "healthy",
-  "database": true
-}
-```
+Frontend is calling the **frontend** domain (`angelic-perception-production.up.railway.app`) when it should call the **backend** domain (`orcamentosonline-production-2693.up.railway.app`).
 
-### 2. Database Tables Created
-Check Railway logs for:
-```
-✅ Users table created/verified
-✅ Clients table created/verified
-✅ Proposals table created/verified
-✅ Proposal sections table created/verified
-✅ Proposal activities table created/verified
-✅ LGPD audit log table created/verified
-✅ Sessions table created/verified
-✅ Database schema initialized successfully
-```
+**Root Cause:** `NEXT_PUBLIC_API_URL` environment variable not set in Railway Frontend service
 
-### 3. Frontend Running
-```bash
-curl https://frontend-production-XXXX.up.railway.app
-```
-
-Should return HTML for the application
-
-### 4. User Registration
-```bash
-curl -X POST https://backend-production-XXXX.up.railway.app/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test User",
-    "email": "test@example.com",
-    "phone": "(48) 99999-9999",
-    "password": "TestPassword123"
-  }'
-```
-
----
-
-## 🚨 If Issues Persist
-
-### Backend Not Starting
-1. Check Railway logs: `railway logs --service backend`
-2. Look for database connection errors
-3. Verify DATABASE_URL environment variable
-4. Check PostgreSQL service is running
-
-### Frontend Not Starting
-1. Check Railway logs: `railway logs --service frontend`
-2. Verify sharp was installed during build
-3. Check for standalone output creation
-4. Verify PORT environment variable
-
-### Database Tables Not Created
-1. Check for schema initialization errors in logs
-2. Verify PostgreSQL permissions
-3. Check DATABASE_URL format
-4. Manual schema creation option:
-   ```bash
-   railway run -s backend node -e "require('./src/models/schema').initializeSchema()"
+**Fix Required:**
+1. Go to Railway Dashboard: https://railway.com/project/8813d495-aad1-4b19-8cca-2c7f2861bd54
+2. Select **Frontend** service (angelic-perception-production)
+3. Go to **Variables** tab
+4. Add new variable:
    ```
+   Name:  NEXT_PUBLIC_API_URL
+   Value: https://orcamentosonline-production-2693.up.railway.app
+   ```
+5. Click **Save** (Railway will auto-redeploy)
+6. Wait 2-3 minutes for deployment
+
+**Expected Result:** After fix, API calls should go to backend domain:
+```
+GET https://orcamentosonline-production-2693.up.railway.app/api/v1/proposals
+```
 
 ---
 
-## 📋 Current Status
+### Issue 2: Dashboard Stats Endpoint Returning 500 Error
 
-- **Code Status:** ✅ Committed and pushed to GitHub
-- **Railway Detection:** ⏳ Waiting for Railway to detect changes
-- **Backend Deployment:** ⏳ Pending
-- **Frontend Deployment:** ⏳ Pending
-- **Database Schema:** ⏳ Will be created on first backend startup
+**Problem:** `/api/v1/dashboard/stats` endpoint returns Internal Server Error
+**Evidence:**
+```
+GET https://orcamentosonline-production-2693.up.railway.app/api/v1/dashboard/stats 500 (Internal Server Error)
+```
 
----
+**Root Cause:** Likely SQL query error - the endpoint was just added and may have syntax issues
 
-## 📞 Next Actions
+**Fix Required:**
+1. Check Railway backend logs for detailed error message
+2. The endpoint implementation in `services/api/src/index.js` (lines 238-304) may need adjustment
 
-1. **Monitor Railway Dashboard**
-   - Watch for new deployment triggers
-   - Check build logs for both services
+**To Check Backend Logs:**
+1. Go to Railway Dashboard → Backend service (orcamentosonline-production-2693)
+2. Click on **Deployments** tab
+3. Click on latest deployment
+4. View logs to see the exact error
 
-2. **Wait for Deployment**
-   - Backend should deploy in ~3-5 minutes
-   - Frontend should deploy in ~3-5 minutes
+**Likely Issue:** The dashboard/stats endpoint queries for `organization_id`, but the database table `proposals` only has `user_id`, not `organization_id`.
 
-3. **Run Verification Tests**
-   - Test health endpoints
-   - Register test user
-   - Login and access dashboard
+**Potential SQL Error:**
+```sql
+-- Current query (WRONG):
+SELECT COUNT(*) as count FROM proposals
+WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)
 
-4. **Document Results**
-   - Update this file with deployment outcome
-   - Note any additional issues encountered
-
----
-
-## 📚 Documentation
-
-- [Deployment Fixes Details](./RAILWAY-DEPLOYMENT-FIXES.md)
-- [Railway Deployment Guide](./RAILWAY-DEPLOYMENT.md)
-- [Database Schema](./services/api/src/models/schema.js)
+-- Should be (CORRECT):
+SELECT COUNT(*) as count FROM proposals
+WHERE user_id = $1
+```
 
 ---
 
-**Last Updated:** September 30, 2025 - 11:13 AM UTC
-**Status:** 🟡 **Deployment in Progress** (waiting for Railway to detect changes)
+### Issue 3: Missing /help Page (Low Priority)
+
+**Problem:** Next.js is looking for a `/help` page that doesn't exist
+**Evidence:**
+```
+GET https://angelic-perception-production.up.railway.app/help?_rsc=hi3jv 404 (Not Found)
+```
+
+**Root Cause:** Likely prefetch from a navigation link that references `/help`
+
+**Fix Required:** Create the help page or remove the link
+- Low priority - doesn't affect core functionality
 
 ---
 
-## ✓ Audit Tag
-✓ guardrails-ok
+## 🎯 Immediate Action Items
+
+### Priority 1: Fix Frontend API Connection (CRITICAL)
+
+**Steps:**
+1. [ ] Go to Railway → Frontend service → Variables
+2. [ ] Add: `NEXT_PUBLIC_API_URL=https://orcamentosonline-production-2693.up.railway.app`
+3. [ ] Wait for automatic redeploy (2-3 minutes)
+4. [ ] Test by refreshing dashboard page
+5. [ ] Open DevTools → Network tab
+6. [ ] Verify API calls go to `orcamentosonline-production-2693.up.railway.app`
+
+**Expected Time:** 5 minutes
+
+---
+
+### Priority 2: Fix Dashboard Stats Endpoint
+
+**Steps:**
+1. [ ] Go to Railway → Backend service → Deployments → View Logs
+2. [ ] Find the 500 error log for `/api/v1/dashboard/stats`
+3. [ ] Share the error message
+4. [ ] Fix the SQL query based on error
+5. [ ] Commit and push fix to GitHub
+6. [ ] Railway will auto-deploy
+
+**Expected Time:** 10-15 minutes
+
+---
+
+## 📊 Current Environment Variables
+
+### Backend Service (orcamentosonline-production-2693)
+
+**Currently Set (19 variables):**
+```bash
+DATABASE_URL=postgresql://postgres:wbDqgUCVqYiVAlFlXzZvTFEbUWvfJLMc@switchback.proxy.rlwy.net:31992/railway
+REDIS_URL=redis://default:tYCVMkohDJZXvzWSoofjnVFEHccBirOj@redis.railway.internal:6379
+JWT_SECRET=eb7c3a8192652e9b3119d75761415e03ec1f2ac5de96da2cdd5a9ad156ac0217
+JWT_REFRESH_SECRET=9e9026e33844dc2d2f91737b060167245fec02d470e9d0498668df48e8e9974b
+FRONTEND_URL=https://angelic-perception-production.up.railway.app
+CORS_ORIGIN=https://angelic-perception-production.up.railway.app,https://proposals.infigital.net,http://localhost:3001
+PORT=3000
+NODE_ENV=production
+API_VERSION=v1
+SESSION_COOKIE_SECURE=true
+SESSION_COOKIE_SAMESITE=none
+SESSION_COOKIE_DOMAIN=.railway.app
+BCRYPT_ROUNDS=10
+MAX_LOGIN_ATTEMPTS=5
+LOCKOUT_DURATION=900000
+RATE_LIMIT_WINDOW=900000
+RATE_LIMIT_MAX_REQUESTS=100
+LOG_LEVEL=info
+```
+
+**Status:** ✅ All correct
+
+---
+
+### Frontend Service (angelic-perception-production)
+
+**Currently Set (5 variables):**
+```bash
+NODE_ENV=production
+PORT=3001
+NEXT_PUBLIC_APP_NAME=OrçamentosOnline
+NEXT_PUBLIC_APP_VERSION=1.0.0
+```
+
+**MISSING (Critical):**
+```bash
+NEXT_PUBLIC_API_URL=https://orcamentosonline-production-2693.up.railway.app
+```
+
+**Status:** ⚠️ Missing critical environment variable
+
+---
+
+## 🧪 Testing Checklist (After Fixes)
+
+### Test 1: Frontend API Connection
+- [ ] Visit: https://angelic-perception-production.up.railway.app
+- [ ] Login with existing account
+- [ ] Open DevTools → Network tab
+- [ ] Navigate to "Minhas Propostas" page
+- [ ] Verify API call goes to backend domain
+- [ ] Verify no 404 errors for `/api/v1/proposals`
+
+### Test 2: Dashboard Stats
+- [ ] Stay on Dashboard page
+- [ ] Check Network tab for `/api/v1/dashboard/stats` call
+- [ ] Verify returns 200 OK (not 500)
+- [ ] Verify dashboard shows statistics:
+  - Total proposals count
+  - Total clients count
+  - Conversion rate
+  - Proposals by status
+
+### Test 3: End-to-End Flow
+- [ ] Register new user
+- [ ] Login successfully
+- [ ] Dashboard loads with no errors
+- [ ] Navigate to "Minhas Propostas"
+- [ ] Proposals list loads (empty or with data)
+- [ ] No console errors related to API calls
+
+---
+
+## 🚀 Next Steps After Fixes
+
+1. **Custom Domain Setup**
+   - Follow guide: `deploy/AWS-ROUTE53-CUSTOM-DOMAIN.md`
+   - Configure DNS in Route 53
+   - Update environment variables with custom domains
+
+2. **Proposals Functionality**
+   - Test creating new proposal
+   - Test editing proposal
+   - Test deleting proposal
+
+3. **Performance Optimization**
+   - Add caching headers
+   - Enable compression
+   - Optimize database queries
+
+4. **Monitoring Setup**
+   - Configure uptime monitoring
+   - Set up error tracking (Sentry)
+   - Add performance monitoring
+
+---
+
+## 📝 Commands Reference
+
+### View Backend Logs
+```bash
+# Via Railway CLI
+railway logs --service backend
+
+# Or visit Railway Dashboard:
+# https://railway.com/project/8813d495-aad1-4b19-8cca-2c7f2861bd54
+```
+
+### Test Backend API
+```bash
+# Health check
+curl https://orcamentosonline-production-2693.up.railway.app/health
+
+# Dashboard stats (requires auth token)
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://orcamentosonline-production-2693.up.railway.app/api/v1/dashboard/stats
+
+# Proposals (requires auth token)
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://orcamentosonline-production-2693.up.railway.app/api/v1/proposals
+```
+
+### Push Fixes to Railway
+```bash
+# Commit changes
+git add .
+git commit -m "fix: Your fix description"
+git push
+
+# Railway auto-deploys on push to master
+# Wait 2-5 minutes for deployment
+```
+
+---
+
+## 📞 Support Resources
+
+- **Railway Dashboard:** https://railway.com/project/8813d495-aad1-4b19-8cca-2c7f2861bd54
+- **Frontend URL:** https://angelic-perception-production.up.railway.app
+- **Backend URL:** https://orcamentosonline-production-2693.up.railway.app
+- **Repository:** https://github.com/fabiohfernandes/OrcamentosOnline
+
+---
+
+## 📈 Deployment Progress
+
+- [x] Phase 1: PostgreSQL database provisioned
+- [x] Phase 2: Redis cache provisioned
+- [x] Phase 3: Backend API deployed
+- [x] Phase 4: Frontend deployed
+- [x] Phase 5: Authentication working
+- [x] Phase 6: Dashboard navigation working
+- [ ] Phase 7: Fix API endpoint connections (IN PROGRESS)
+- [ ] Phase 8: Fix dashboard stats endpoint
+- [ ] Phase 9: Custom domain setup
+- [ ] Phase 10: Production readiness checklist
+
+---
+
+**Current Status:** 🟡 80% Complete - Core functionality working, minor API fixes needed
+
+**Estimated Time to Full Production:** 1-2 hours
