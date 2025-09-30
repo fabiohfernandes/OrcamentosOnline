@@ -103,6 +103,7 @@ const corsOptions = {
   origin: [
     'http://localhost:3001',
     'http://127.0.0.1:3001',
+    'https://frontend-production-0b59.up.railway.app',
     process.env.CORS_ORIGIN
   ].filter(Boolean),
   credentials: true,
