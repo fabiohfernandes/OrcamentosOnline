@@ -242,7 +242,7 @@ app.get('/api/v1/dashboard/stats', authenticateToken, async (req, res) => {
 
     // Get total proposals count
     const proposalsCount = await pool.query(
-      'SELECT COUNT(*) as count FROM proposals WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)',
+      'SELECT COUNT(*) as count FROM proposals WHERE user_id = $1',
       [userId]
     );
 
@@ -250,43 +250,46 @@ app.get('/api/v1/dashboard/stats', authenticateToken, async (req, res) => {
     const proposalsByStatus = await pool.query(
       `SELECT status, COUNT(*) as count
        FROM proposals
-       WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)
+       WHERE user_id = $1
        GROUP BY status`,
       [userId]
     );
 
     // Get total clients count
     const clientsCount = await pool.query(
-      'SELECT COUNT(*) as count FROM clients WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)',
+      'SELECT COUNT(*) as count FROM clients WHERE user_id = $1',
       [userId]
     );
 
-    // Calculate conversion rate (proposals fechadas / total proposals)
+    // Calculate conversion rate (closed proposals / total proposals)
     const conversionRate = await pool.query(
       `SELECT
-        COUNT(CASE WHEN status = 'fechada' THEN 1 END)::float /
+        COUNT(CASE WHEN status = 'closed' THEN 1 END)::float /
         NULLIF(COUNT(*)::float, 0) * 100 as rate
        FROM proposals
-       WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)`,
+       WHERE user_id = $1`,
       [userId]
     );
 
-    // Format response
+    // Format response with actual status values (open, closed, rejected, pending_changes, archived)
     const stats = {
       totalProposals: parseInt(proposalsCount.rows[0].count),
       totalClients: parseInt(clientsCount.rows[0].count),
       conversionRate: parseFloat(conversionRate.rows[0].rate || 0).toFixed(2),
       proposalsByStatus: {
-        aberta: 0,
-        alteracoes_solicitadas: 0,
-        fechada: 0,
-        rejeitada: 0
+        open: 0,
+        closed: 0,
+        rejected: 0,
+        pending_changes: 0,
+        archived: 0
       }
     };
 
     // Map status counts
     proposalsByStatus.rows.forEach(row => {
-      stats.proposalsByStatus[row.status] = parseInt(row.count);
+      if (stats.proposalsByStatus.hasOwnProperty(row.status)) {
+        stats.proposalsByStatus[row.status] = parseInt(row.count);
+      }
     });
 
     res.json({
