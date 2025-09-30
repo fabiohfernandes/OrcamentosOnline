@@ -1,7 +1,7 @@
 # OrçamentosOnline - Deployment Status
 
 **Last Updated:** 2025-09-30
-**Status:** 🟡 Partially Working - Authentication works, API endpoints need fixes
+**Status:** 🟢 Fixes Deployed - Dashboard stats endpoint fixed, waiting for Railway deployment
 
 ---
 
@@ -18,75 +18,48 @@
 
 ---
 
-## 🔧 Issues Requiring Fixes
+## 🔧 Recently Fixed Issues
 
-### Issue 1: Frontend Not Connecting to Backend API ⚠️ CRITICAL
+### ✅ Issue 1: Dashboard Stats Endpoint 500 Error - FIXED
 
-**Problem:** Frontend is making API calls to itself instead of the backend
-**Evidence:**
-```
-GET https://angelic-perception-production.up.railway.app/api/v1/proposals 404 (Not Found)
-```
+**Problem:** `/api/v1/dashboard/stats` endpoint was returning Internal Server Error
 
-Frontend is calling the **frontend** domain (`angelic-perception-production.up.railway.app`) when it should call the **backend** domain (`orcamentosonline-production-2693.up.railway.app`).
+**Root Cause Identified:**
+1. SQL queries referenced `organization_id` which doesn't exist in users or proposals tables
+2. Status values were in Portuguese (`aberta`, `fechada`) instead of English (`open`, `closed`)
 
-**Root Cause:** `NEXT_PUBLIC_API_URL` environment variable not set in Railway Frontend service
+**Fix Applied (Commit: ad26e84):**
+- Changed all queries from `organization_id` to `user_id`
+- Updated status values to match actual database values: `open`, `closed`, `rejected`, `pending_changes`, `archived`
+- Added safety check with `hasOwnProperty` for status mapping
 
-**Fix Required:**
-1. Go to Railway Dashboard: https://railway.com/project/8813d495-aad1-4b19-8cca-2c7f2861bd54
-2. Select **Frontend** service (angelic-perception-production)
-3. Go to **Variables** tab
-4. Add new variable:
-   ```
-   Name:  NEXT_PUBLIC_API_URL
-   Value: https://orcamentosonline-production-2693.up.railway.app
-   ```
-5. Click **Save** (Railway will auto-redeploy)
-6. Wait 2-3 minutes for deployment
-
-**Expected Result:** After fix, API calls should go to backend domain:
-```
-GET https://orcamentosonline-production-2693.up.railway.app/api/v1/proposals
-```
+**Status:** ✅ Committed and pushed to GitHub, Railway auto-deploying now
 
 ---
 
-### Issue 2: Dashboard Stats Endpoint Returning 500 Error
+### ⚠️ Issue 2: Frontend API Connection - Partially Fixed
 
-**Problem:** `/api/v1/dashboard/stats` endpoint returns Internal Server Error
-**Evidence:**
+**Problem:** Some API calls still going to frontend domain instead of backend
+
+**Evidence from Logs:**
 ```
-GET https://orcamentosonline-production-2693.up.railway.app/api/v1/dashboard/stats 500 (Internal Server Error)
+✅ Dashboard stats now calling: https://orcamentosonline-production-2693.up.railway.app/api/v1/dashboard/stats
+⚠️ Proposals still calling: https://angelic-perception-production.up.railway.app/api/v1/proposals
 ```
 
-**Root Cause:** Likely SQL query error - the endpoint was just added and may have syntax issues
+**Root Cause:** `NEXT_PUBLIC_API_URL` environment variable was recently added but may need full redeploy
 
-**Fix Required:**
-1. Check Railway backend logs for detailed error message
-2. The endpoint implementation in `services/api/src/index.js` (lines 238-304) may need adjustment
-
-**To Check Backend Logs:**
-1. Go to Railway Dashboard → Backend service (orcamentosonline-production-2693)
-2. Click on **Deployments** tab
-3. Click on latest deployment
-4. View logs to see the exact error
-
-**Likely Issue:** The dashboard/stats endpoint queries for `organization_id`, but the database table `proposals` only has `user_id`, not `organization_id`.
-
-**Potential SQL Error:**
-```sql
--- Current query (WRONG):
-SELECT COUNT(*) as count FROM proposals
-WHERE organization_id = (SELECT organization_id FROM users WHERE id = $1)
-
--- Should be (CORRECT):
-SELECT COUNT(*) as count FROM proposals
-WHERE user_id = $1
-```
+**Next Steps:**
+1. Wait for backend deployment to complete (2-3 minutes)
+2. Hard refresh frontend page (Ctrl+Shift+R)
+3. If proposals endpoint still fails, redeploy frontend service
+4. Verify all API calls go to backend domain
 
 ---
 
-### Issue 3: Missing /help Page (Low Priority)
+## 🔍 Minor Issues (Low Priority)
+
+### Issue 3: Missing /help Page
 
 **Problem:** Next.js is looking for a `/help` page that doesn't exist
 **Evidence:**
@@ -101,33 +74,36 @@ GET https://angelic-perception-production.up.railway.app/help?_rsc=hi3jv 404 (No
 
 ---
 
-## 🎯 Immediate Action Items
+## 🎯 Current Action Items
 
-### Priority 1: Fix Frontend API Connection (CRITICAL)
+### Priority 1: Verify Dashboard Stats Fix (IN PROGRESS)
+
+**Status:** Backend fix deployed via commit ad26e84, Railway is auto-deploying
 
 **Steps:**
-1. [ ] Go to Railway → Frontend service → Variables
-2. [ ] Add: `NEXT_PUBLIC_API_URL=https://orcamentosonline-production-2693.up.railway.app`
-3. [ ] Wait for automatic redeploy (2-3 minutes)
-4. [ ] Test by refreshing dashboard page
-5. [ ] Open DevTools → Network tab
-6. [ ] Verify API calls go to `orcamentosonline-production-2693.up.railway.app`
+1. [x] Identified SQL query errors (organization_id, wrong status values)
+2. [x] Fixed dashboard stats endpoint queries
+3. [x] Committed and pushed to GitHub
+4. [ ] Wait for Railway backend deployment (2-3 minutes)
+5. [ ] Test dashboard stats endpoint returns 200 OK
+6. [ ] Verify statistics display correctly in frontend
 
-**Expected Time:** 5 minutes
+**Expected Completion:** 5 minutes
 
 ---
 
-### Priority 2: Fix Dashboard Stats Endpoint
+### Priority 2: Verify Frontend API Connection
+
+**Status:** NEXT_PUBLIC_API_URL may have been added, needs verification
 
 **Steps:**
-1. [ ] Go to Railway → Backend service → Deployments → View Logs
-2. [ ] Find the 500 error log for `/api/v1/dashboard/stats`
-3. [ ] Share the error message
-4. [ ] Fix the SQL query based on error
-5. [ ] Commit and push fix to GitHub
-6. [ ] Railway will auto-deploy
+1. [ ] Hard refresh frontend page (Ctrl+Shift+R)
+2. [ ] Open DevTools → Network tab
+3. [ ] Check if `/api/v1/proposals` calls go to backend domain
+4. [ ] If still calling frontend, manually redeploy frontend service in Railway
+5. [ ] Verify all API calls route to `orcamentosonline-production-2693.up.railway.app`
 
-**Expected Time:** 10-15 minutes
+**Expected Completion:** 5-10 minutes
 
 ---
 
