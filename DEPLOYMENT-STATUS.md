@@ -1,7 +1,7 @@
 # OrçamentosOnline - Deployment Status
 
-**Last Updated:** 2025-09-30 (Latest: Commit 1835c8d)
-**Status:** 🟡 Fixes Committed - Waiting for Railway deployment to complete
+**Last Updated:** 2025-09-30 (Latest: Commit a50570b)
+**Status:** 🟡 Backend Fixed - Frontend still needs rebuild with NEXT_PUBLIC_API_URL
 
 ---
 
@@ -20,20 +20,20 @@
 
 ## 🔧 Recently Fixed Issues
 
-### ✅ Issue 1: Dashboard Stats Endpoint 500 Error - FIXED
+### ✅ Issue 1: Dashboard Stats Endpoint - FIXED
 
-**Problem:** `/api/v1/dashboard/stats` endpoint was returning Internal Server Error
+**Problems Fixed:**
+1. PostgreSQL `ROUND()` function type error (commit 3e29963)
+2. Response structure mismatch with frontend expectations (commit a50570b)
+3. Removed queries to non-existent tables (proposal_views, client_comments)
 
-**Root Cause Identified:**
-1. SQL queries referenced `organization_id` which doesn't exist in users or proposals tables
-2. Status values were in Portuguese (`aberta`, `fechada`) instead of English (`open`, `closed`)
+**Fixes Applied:**
+- Cast to `numeric` before ROUND: `CAST(...::float AS numeric)`
+- Restructured response to match frontend: `{ stats: { proposals: {}, activity: {}, revenue: {}, clients: {} } }`
+- Removed duplicate endpoint from index.js
+- All queries now use `user_id` correctly
 
-**Fix Applied (Commit: ad26e84):**
-- Changed all queries from `organization_id` to `user_id`
-- Updated status values to match actual database values: `open`, `closed`, `rejected`, `pending_changes`, `archived`
-- Added safety check with `hasOwnProperty` for status mapping
-
-**Status:** ✅ Committed and pushed to GitHub, Railway auto-deploying now
+**Status:** ✅ Deployed to Railway - Backend working correctly
 
 ---
 
