@@ -192,66 +192,6 @@ app.use('/api/v1', proposalPlatformRouter);
 // Mount client authentication routes
 app.use('/api/v1/client', clientAuthRouter);
 
-// Database schema setup endpoint (one-time use for production)
-app.post('/api/v1/setup-database', async (req, res) => {
-  try {
-    logger.info('Starting database schema setup...');
-
-    // Create users table if it doesn't exist
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        phone VARCHAR(20),
-        password_hash VARCHAR(255) NOT NULL,
-        role VARCHAR(50) DEFAULT 'user',
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
-      )
-    `);
-
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
-
-    // Create update trigger function
-    await pool.query(`
-      CREATE OR REPLACE FUNCTION update_updated_at_column()
-      RETURNS TRIGGER AS $$
-      BEGIN
-          NEW.updated_at = NOW();
-          RETURN NEW;
-      END;
-      $$ LANGUAGE plpgsql
-    `);
-
-    // Create trigger on users table
-    await pool.query(`
-      DROP TRIGGER IF EXISTS update_users_updated_at ON users;
-      CREATE TRIGGER update_users_updated_at
-          BEFORE UPDATE ON users
-          FOR EACH ROW
-          EXECUTE FUNCTION update_updated_at_column()
-    `);
-
-    logger.info('Database schema setup completed successfully');
-
-    res.json({
-      success: true,
-      message: 'Database schema created successfully',
-      tables: ['users'],
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    logger.error('Database setup error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Database setup failed',
-      error: error.message
-    });
-  }
-});
-
 // Health check endpoint
 app.get('/api/v1/health', async (req, res) => {
   try {

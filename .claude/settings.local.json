@@ -43,11 +43,7 @@
       "Bash(node:*)",
       "Bash(git commit:*)",
       "Bash(grep:*)",
-      "Bash(railway logs:*)",
-      "Bash(railway link:*)",
-      "Bash(railway status:*)",
-      "Bash(railway list:*)",
-      "Bash(railway run:*)"
+      "Bash(railway logs:*)"
     ],
     "deny": [],
     "ask": []
