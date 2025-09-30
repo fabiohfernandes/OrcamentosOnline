@@ -16,6 +16,7 @@ const winston = require('winston');
 
 // Import new modules
 const { initializeDatabase, checkConnection } = require('./models/database');
+const { initializeSchema } = require('./models/schema');
 const ProposalModel = require('./models/Proposal');
 const ClientModel = require('./models/Client');
 const {
@@ -1208,9 +1209,13 @@ process.on('SIGINT', async () => {
 // Initialize database and start server
 (async () => {
   try {
-    // Database tables already initialized via migration
-    // await initializeDatabase();
-    logger.info('Using existing database schema');
+    // Test database connection
+    await checkConnection();
+
+    // Initialize database schema (creates tables if they don't exist)
+    logger.info('Initializing database schema...');
+    await initializeSchema();
+    logger.info('Database schema ready');
 
     // Start server
     // Bind to 0.0.0.0 to accept connections in Railway container environment
