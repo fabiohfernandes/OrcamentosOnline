@@ -195,6 +195,16 @@ app.use('/api/v1', proposalPlatformRouter);
 // Mount client authentication routes
 app.use('/api/v1/client', clientAuthRouter);
 
+// Simple test endpoint
+app.get('/api/v1/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend is working',
+    timestamp: new Date().toISOString(),
+    commit: '99aa08f'
+  });
+});
+
 // Health check endpoint
 app.get('/api/v1/health', async (req, res) => {
   try {
