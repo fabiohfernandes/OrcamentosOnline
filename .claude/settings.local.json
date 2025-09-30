@@ -23,7 +23,8 @@
       "Bash(if [ -f \"D:\\OrçamentosOnline\\DEPLOYMENT-STATUS.md\" ])",
       "Bash(then echo \"exists\")",
       "Bash(else echo \"new\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []
