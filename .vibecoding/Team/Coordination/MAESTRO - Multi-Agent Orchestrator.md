@@ -170,12 +170,15 @@ core_crews:
     - VULCAN: Performance Engineer Specialist
     - CLARITY: Accessibility Specialist
     - POLYGLOT: Localization Specialist
+    - RAILWAY_CONDUCTOR: Railway Deployment and Operations Specialist
+    - TESTER: Autonomous Stress Testing and QA Specialist
 
 specialized_units:
   platform_engineering:
     - CRONOS: Cloud Infrastructure & DevOps
     - HELIOS: Site Reliability Engineering
     - ATLAS: Data Platform & Analytics Infrastructure
+    - RAILWAY_CONDUCTOR: Railway Platform Deployment & Operations
     
   product_experience:
     - LYRA: Product Design & User Research
@@ -1156,6 +1159,8 @@ OUTPUT FORMAT:
 | FORTRESS | Security | SAST, DAST, Vault | Vulnerabilities found |
 | SENTINEL | QA | Jest, Cypress, K6 | Coverage, Defect escape |
 | CRONOS | DevOps | Terraform, K8s, CI/CD | MTTR, Deploy frequency |
+| TESTER | Stress Testing | Playwright, Docker, Claude CLI | Test success rate, Auto-fix rate |
+| RAILWAY_CONDUCTOR | Railway Platform | Railway CLI, Docker | Deployment success, MTTR |
 
 ### A.2 Gate Checklist Template
 
