@@ -1386,7 +1386,7 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
 
     res.json({
       success: true,
-      data: stats
+      data: { stats }
     });
   } catch (error) {
     logger.error('Error fetching dashboard stats:', error);
