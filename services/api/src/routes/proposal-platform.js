@@ -1368,15 +1368,21 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
     );
 
     const stats = {
-      totalProposals: statusStats.rows.reduce((sum, row) => sum + parseInt(row.count), 0),
-      totalClients: parseInt(clientsCount.rows[0]?.count || 0),
-      conversionRate: parseFloat(conversionStats.rows[0]?.conversion_rate || 0),
-      proposalsByStatus: {
+      proposals: {
+        total: statusStats.rows.reduce((sum, row) => sum + parseInt(row.count), 0),
         open: parseInt(statusStats.rows.find(row => row.status === 'open')?.count || 0),
         closed: parseInt(statusStats.rows.find(row => row.status === 'closed')?.count || 0),
         rejected: parseInt(statusStats.rows.find(row => row.status === 'rejected')?.count || 0),
         pending_changes: parseInt(statusStats.rows.find(row => row.status === 'pending_changes')?.count || 0),
         archived: parseInt(statusStats.rows.find(row => row.status === 'archived')?.count || 0)
+      },
+      clients: {
+        total: parseInt(clientsCount.rows[0]?.count || 0)
+      },
+      activity: {
+        views: 0,
+        uniqueVisitors: 0,
+        conversionRate: parseFloat(conversionStats.rows[0]?.conversion_rate || 0)
       },
       revenue: {
         total: statusStats.rows.reduce((sum, row) => sum + parseFloat(row.total_value || 0), 0),
