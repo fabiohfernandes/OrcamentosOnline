@@ -15,7 +15,7 @@ expose = true
 # Environment variables
 [deploy.env]
 NODE_ENV = "production"
-PORT = "3000"
+# PORT is automatically assigned by Railway - don't hardcode
 DATABASE_URL = "${{ Postgres.DATABASE_URL }}"
 JWT_SECRET = "${{ JWT_SECRET }}"
 BCRYPT_ROUNDS = "12"

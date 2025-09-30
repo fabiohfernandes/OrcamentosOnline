@@ -38,6 +38,7 @@ const { router: clientAuthRouter, initializePool: initializeClientPool } = requi
 
 // Initialize Express app
 const app = express();
+// Railway dynamically assigns PORT - must use process.env.PORT
 const port = process.env.PORT || 3000;
 
 // Configure Winston Logger
