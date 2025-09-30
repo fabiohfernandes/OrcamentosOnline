@@ -51,8 +51,8 @@ const nextConfig = {
     return config;
   },
 
-  // Output configuration for deployment - optimized for Railway
-  output: 'standalone',
+  // Output configuration for deployment - using regular build for Railway
+  // output: 'standalone', // Disabled - conflicts with 'next start'
 
   // Experimental features
   experimental: {
