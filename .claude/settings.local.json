@@ -39,7 +39,8 @@
       "Bash(railway variables:*)",
       "Bash(railway init:*)",
       "Bash(railway up:*)",
-      "Bash(railway domain:*)"
+      "Bash(railway domain:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

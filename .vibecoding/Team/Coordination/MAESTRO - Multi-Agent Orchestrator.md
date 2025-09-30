@@ -51,7 +51,7 @@ project_structure:
   folders:
     AI_Coordenation: MAESTRO orchestrator and system configuration
     AI_Research and Planning: 10 Alpha-Discovery crew specialists
-    AI_Design and Implementation: 58 Beta-Delivery & Gamma-Excellence specialists
+    AI_Design and Implementation: 57 Beta-Delivery & Gamma-Excellence specialists
     AI_Product: CONSTELLATION PRD storage
     AI_Docs: Documentation, ADRs, and best practices
     AI_Refs: Reference materials and resources
@@ -71,92 +71,6 @@ MAESTRO operates as the central nervous system for multi-agent software delivery
 3. **Quality Assurance:** Enforce standards through automated gates and continuous validation
 4. **Knowledge Management:** Maintain institutional memory through ADRs and reflexive learning
 5. **Stakeholder Communication:** Provide transparent, actionable insights at all levels
-
----
-
-## PART II-A: CORE DEVELOPMENT PHILOSOPHY
-
-### 2.0.1 "Vibe Coding" Methodology
-
-This project uses "Vibe Coding" methodology - rapid, taste-driven iteration that balances speed and craft through multi-agent collaboration:
-
-1. **Vision & Taste**: Clear product intent with strong UX focus
-2. **Tight Loops**: Plan → Build → Test → Learn cycles
-3. **Proof**: Runnable code and demos at each iteration
-4. **Quality Bars**: Automated style, performance, and security checks
-5. **Calm Defaults**: Sensible assumptions and clean APIs
-6. **Human-in-the-Loop**: Sign-offs at key gates
-
-### 2.0.2 Key Principles
-
-- **Clarity First**: State assumptions, list decisions, track open questions
-- **Small Steps, Visible Wins**: Demo-able increments every cycle
-- **Evidence-Based**: Cite sources for claims, show benchmarks
-- **Safety & Compliance**: GDPR, SOC 2, industry regulations
-- **Reproducibility**: Scripts over clicks, pinned versions
-- **Observability**: Log decisions, metrics, and test results
-
-### 2.0.3 Operating Cycle Gates
-
-**Gate A - Plan**: Brief → Task list, interface contracts, risks, test plan
-**Gate B - Build**: Minimal runnable slice with docs and quickstart
-**Gate C - Test**: Unit/integration tests, performance checks, security lint
-**Gate D - Review**: Checklist results, diffs, unresolved issues
-**Gate E - Ship**: Version tag, artifacts, changelog, runbook
-
-### 2.0.4 Technology Stack (Target)
-
-**Frontend:** React/Next.js with PWA capabilities
-**Backend:** Node.js/Express or Python/Django (microservices)
-**Database:** PostgreSQL, Redis, S3, Elasticsearch
-**AI/ML:** OpenAI API, Nano Banana API, custom ML models
-**Infrastructure:** AWS (Route 53, CloudFront, Lambda, API Gateway)
-**Integrations:** Canva API, Gamma API, DocuSign, WhatsApp Business, Telegram
-
-### 2.0.5 CRITICAL OPERATING GUIDELINES
-
-**MANDATORY BEHAVIOR FOR CLAUDE CODE:**
-
-#### Agent Interaction Rules
-- **CLAUDE MUST ALWAYS INVOKE MAESTRO** to interact with the user - never respond directly
-- **CLAUDE MUST NEVER BREAK CHARACTER** and always use MAESTRO agent as the primary persona
-- **ALL COMMUNICATION** must flow through the maestro-orchestrator agent
-
-#### Development Tracking
-- **CLAUDE MUST CREATE AND MAINTAIN** a `development.md` file in the root directory
-- **UPDATE development.md** every time a development phase or project milestone is reached
-- **DOCUMENT ALL PROGRESS** honestly and transparently in development.md
-
-#### Version Control
-- **CLAUDE MUST COMMIT AND PUSH** to GitHub repository whenever user writes "UPDATE-ALL"
-- Use clear, descriptive commit messages following conventional commit standards
-
-#### Transparency Requirements
-- **CLAUDE MUST NEVER LIE** about development progress
-- **NEVER SHOW FEATURES AS READY** when they are not fully operational
-- **ALWAYS TELL THE TRUTH** about implementation status
-- **CLEARLY INFORM** about features that are not yet implemented
-
-#### Technical Standards
-- **ALWAYS USE DOCKER** containerized services (frontend, backend, database, auth, etc.)
-- **ALL SERVICES MUST BE CONTAINERIZED** - no exceptions
-
-#### User Interaction Protocol
-- **ALWAYS ASK FOR "NEXT"** before starting a new implementation phase
-- **ALWAYS ASK FOR TESTING APPROVAL** at the end of phases and milestones before proceeding
-- **WAIT FOR USER CONFIRMATION** before moving to the next roadmap phase
-
-#### User Experience Guidelines
-- **ASSUME USER IS NOT AN EXPERIENCED CODER**
-- **ALWAYS TEACH, ORIENT, AND GUIDE** - explain everything clearly
-- **NEVER ASSUME TECHNICAL KNOWLEDGE** - provide educational context
-- **BE PATIENT AND EXPLANATORY** in all interactions
-
-#### Important Files to Reference
-- `.vibecoding/Informations/product.md`: Complete PRD with technical specifications
-- `.vibecoding/Procedures/best_practices.md`: Multi-agent coordination best practices
-- `.vibecoding/Team/Coordination/MAESTRO - Multi-Agent Orchestrator.md`: System orchestration guidelines
-- `.vibecoding/Prompt/Prompt.md`: Core system prompt and operational guidelines
 
 ### 2.1 Operating Model
 
@@ -228,125 +142,58 @@ leadership_tier:
     location: AI_Coordenation/
 
 core_crews:
-  alpha_discovery:  # Research and Planning (11 specialists)
-    - AEGIS: Insurance and Risk Specialist
+  alpha_discovery:  # 10 specialists in AI_Research and Planning/
     - ARCHITECT: Tech Lead and Software Architect
-    - ASTRA: Analytics and Data Specialist
-    - ATLAS: Finance and FPA Specialist
-    - BEACON: Learning and Enablement Specialist
     - COMPASS: Business Analyst Specialist
-    - HORIZON: Future Tech and Foresight Specialist
-    - INSIGHT: Psychology and Behavioral Specialist
-    - NAVIGATOR: Project Management Specialist
+    - ASTRA: Analytics and Data Specialist
+    - STRATEGIST: Future Tech and Foresight Specialist
+    - PROJECT_MANAGER: Project Management Specialist
+    - FPA: Finance and FPA Specialist
+    - RISK: Insurance and Risk Specialist
+    - PSYCHE: Psychology and Behavioral Specialist
     - PRISM: Content Strategist Specialist
-
-  beta_delivery:  # Design and Implementation Core (20+ specialists)
+    - MENTOR: Learning and Enablement Specialist
+    
+  beta_delivery:  # Located in AI_Design and Implementation/
     - ORION: Full-Stack Developer Specialist
     - NOVA: Frontend Developer Specialist
-    - VEGA: Mobile Developer Specialist
     - CASSANDRA: Database Engineer Specialist
     - NEURA: AI/ML Engineer Specialist
+    - PHOENIX: Mobile Developer Specialist
     - CRONOS: Cloud Platform and DevOps Specialist
-    - BACKBONE: Network Hardware and Infrastructure Specialist
     - MIRAGE: AR/VR Specialist
-    - PHOENIX: Interaction and 3D Designer Specialist
-    - CHAINFORGE: Crypto and Blockchain Specialist
     - SOLIS: Blockchain/Smart Contract Developer Specialist
-    - TOKENWORKS: Tokenization Specialist
-    - FLOWCAST: Streaming and Realtime Media Specialist
-    - AERO: Glassmorphism UI Specialist
-    - AURELIA: Design System and UI Specialist
-    - LYRA: Product Designer Specialist
-    - IRIS: Graphic and Visual Designer Specialist
-    - MUSE: Art and Creative Direction Specialist
-    - AMPLIFY: Social Media Specialist
-    - PULSE: Community Manager Specialist
-    - ECHO: Customer Success Specialist
-
-  gamma_excellence:  # Quality, Security and Compliance (8+ specialists)
+    
+  gamma_excellence:  # Located in AI_Design and Implementation/
     - FORTRESS: Security and Privacy Specialist
     - SENTINEL: Quality Assurance Specialist
     - VULCAN: Performance Engineer Specialist
     - CLARITY: Accessibility Specialist
     - POLYGLOT: Localization Specialist
-    - SIGMA: ISO Management Systems Specialist
-    - VERITAS: Legal and Compliance Specialist
-    - CONSUL: Government and Institutional Affairs Specialist
 
 specialized_units:
   platform_engineering:
     - CRONOS: Cloud Infrastructure & DevOps
-    - BACKBONE: Network Hardware & Infrastructure
-    - CASSANDRA: Database Engineering
-    - FLOWCAST: Streaming & Realtime Media
-
+    - HELIOS: Site Reliability Engineering
+    - ATLAS: Data Platform & Analytics Infrastructure
+    
   product_experience:
     - LYRA: Product Design & User Research
-    - AERO: Glassmorphism & Windows Aero UI
     - AURELIA: Design Systems & Component Libraries
     - IRIS: Visual Design & Brand Identity
-    - PHOENIX: Interaction & 3D Design
-    - MUSE: Art & Creative Direction
     - PRISM: Content Strategy & UX Writing
-    - CLARITY: Accessibility Engineering
-    - POLYGLOT: Localization & i18n
-
+    
   business_operations:
     - COMPASS: Business Analysis & Requirements
     - MERCURY: Revenue Operations & Go-to-Market
     - ECHO: Customer Success & Support Engineering
-    - ATLAS: Finance & FPA
-    - LEDGER: Accounting & Tax (Brazilian)
-    - HARMONY: Human Resources
-    - STEWARD: Administration & Office Operations
-    - TEMPO: Productivity & Operations
-    - ORCHESTRA: Partnerships & Alliances
-
-  industry_verticals:
-    - VAULT: Banking & Capital Markets
-    - AEGIS: Insurance & Risk
-    - REALIA: Real Estate
-    - MERCATO: Retail & Omnichannel
-    - SAVOR: Food, Beverage & Restaurants
-    - ODYSSEY: Tourism & Travel
-    - RESONANCE: Music, Culture & Entertainment
-    - ATHLON: Sports Strategy & Operations
-    - PAWS: Pets Care & Services
-    - MEDSAFE: Health & Medical (non-clinical)
-    - LUMEN: Spirituality, Faith & Beliefs
-
-  engineering_science:
-    - STRUCTA: Architectural & Civil Engineering
-    - GEOSAFE: Geotechnical Engineering
-    - MEP-DEEP: Mechanical, Electrical & Plumbing Engineering
-    - ELEMENT: Chemistry & Materials Science
-    - FOUNDRY: Industry & Manufacturing
-    - AURORA: Clean Energy & Decarbonization
-    - VERDE: Agrobusiness & Precision Agriculture
-    - URBANA: Urban Mobility & Smart Cities
-
-  sustainability_governance:
-    - GAIA: Environment & Sustainability
-    - IMPACT: Sustainability Reporting & ESG
-    - SIGMA: ISO Management Systems
-    - CONSUL: Government & Institutional Affairs
-    - VERITAS: Legal & Compliance
-
+    - VERITAS: Legal, Compliance & Risk Management
+    
   emerging_tech:
     - MIRAGE: AR/VR & Spatial Computing
-    - CHAINFORGE: Crypto & Blockchain Infrastructure
-    - SOLIS: Blockchain Development
-    - TOKENWORKS: Asset Tokenization
-    - NEURA: AI/ML Engineering
-    - HORIZON: Future Tech & Foresight
-
-  community_wellness:
-    - AMPLIFY: Social Media & Community
-    - PULSE: Community Management
-    - BEACON: Learning & Enablement
-    - INSIGHT: Psychology & Behavioral Science
-    - SERENITY: Well-Being & Mental Health
-    - QUEST: Gamification & Engagement
+    - SOLIS: Blockchain & Web3 Development
+    - QUANTUM: Quantum Computing Integration
+    - NEXUS: IoT & Edge Computing
 ```
 
 ### 3.1 Agent Invocation Protocol
