@@ -1359,8 +1359,8 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
         SUM(CASE WHEN status = 'closed' THEN proposal_value ELSE 0 END) as closed_revenue,
         SUM(proposal_value) as total_revenue,
         ROUND(
-          COUNT(CASE WHEN status = 'closed' THEN 1 END)::float * 100.0 /
-          NULLIF(COUNT(*)::float, 0), 2
+          CAST(COUNT(CASE WHEN status = 'closed' THEN 1 END)::float * 100.0 /
+          NULLIF(COUNT(*)::float, 0) AS numeric), 2
         ) as conversion_rate
       FROM proposals
       WHERE user_id = $1`,
