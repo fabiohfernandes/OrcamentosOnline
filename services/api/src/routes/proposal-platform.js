@@ -1345,18 +1345,13 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
       [req.user.userId]
     );
 
-    // Get recent activity (last 30 days)
-    const recentActivity = await pool.query(
-      `SELECT
-        COUNT(*) as views,
-        COUNT(DISTINCT session_id) as unique_visitors
-      FROM proposal_views pa
-      INNER JOIN proposals p ON pa.proposal_id = p.id
-      WHERE p.user_id = $1 AND pa.viewed_at >= NOW() - INTERVAL '30 days'`,
+    // Get total clients count
+    const clientsCount = await pool.query(
+      'SELECT COUNT(*) as count FROM clients WHERE user_id = $1',
       [req.user.userId]
     );
 
-    // Get monthly conversion rate
+    // Get monthly conversion rate (all time, not just last 30 days)
     const conversionStats = await pool.query(
       `SELECT
         COUNT(CASE WHEN status = 'closed' THEN 1 END) as closed_count,
@@ -1364,51 +1359,34 @@ router.get('/dashboard/stats', authenticateUser, async (req, res) => {
         SUM(CASE WHEN status = 'closed' THEN proposal_value ELSE 0 END) as closed_revenue,
         SUM(proposal_value) as total_revenue,
         ROUND(
-          SUM(CASE WHEN status = 'closed' THEN proposal_value ELSE 0 END) * 100.0 /
-          NULLIF(SUM(proposal_value), 0), 2
+          COUNT(CASE WHEN status = 'closed' THEN 1 END)::float * 100.0 /
+          NULLIF(COUNT(*)::float, 0), 2
         ) as conversion_rate
       FROM proposals
-      WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '30 days'`,
-      [req.user.userId]
-    );
-
-    // Get recent comments
-    const recentComments = await pool.query(
-      `SELECT
-        cc.comment_text,
-        cc.created_at,
-        p.proposal_name,
-        p.client_name
-      FROM client_comments cc
-      INNER JOIN proposals p ON cc.proposal_id = p.id
-      WHERE p.user_id = $1
-      ORDER BY cc.created_at DESC
-      LIMIT 5`,
+      WHERE user_id = $1`,
       [req.user.userId]
     );
 
     const stats = {
-      proposals: {
-        total: statusStats.rows.reduce((sum, row) => sum + parseInt(row.count), 0),
-        open: statusStats.rows.find(row => row.status === 'open')?.count || 0,
-        closed: statusStats.rows.find(row => row.status === 'closed')?.count || 0,
-        archived: statusStats.rows.find(row => row.status === 'archived')?.count || 0
+      totalProposals: statusStats.rows.reduce((sum, row) => sum + parseInt(row.count), 0),
+      totalClients: parseInt(clientsCount.rows[0]?.count || 0),
+      conversionRate: parseFloat(conversionStats.rows[0]?.conversion_rate || 0),
+      proposalsByStatus: {
+        open: parseInt(statusStats.rows.find(row => row.status === 'open')?.count || 0),
+        closed: parseInt(statusStats.rows.find(row => row.status === 'closed')?.count || 0),
+        rejected: parseInt(statusStats.rows.find(row => row.status === 'rejected')?.count || 0),
+        pending_changes: parseInt(statusStats.rows.find(row => row.status === 'pending_changes')?.count || 0),
+        archived: parseInt(statusStats.rows.find(row => row.status === 'archived')?.count || 0)
       },
       revenue: {
         total: statusStats.rows.reduce((sum, row) => sum + parseFloat(row.total_value || 0), 0),
-        closed: statusStats.rows.find(row => row.status === 'closed')?.total_value || 0
-      },
-      activity: {
-        views: parseInt(recentActivity.rows[0].views) || 0,
-        uniqueVisitors: parseInt(recentActivity.rows[0].unique_visitors) || 0,
-        conversionRate: parseFloat(conversionStats.rows[0].conversion_rate) || 0
-      },
-      recentComments: recentComments.rows
+        closed: parseFloat(statusStats.rows.find(row => row.status === 'closed')?.total_value || 0)
+      }
     };
 
     res.json({
       success: true,
-      data: { stats }
+      data: stats
     });
   } catch (error) {
     logger.error('Error fetching dashboard stats:', error);

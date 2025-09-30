@@ -235,76 +235,8 @@ app.get('/api/v1/health', async (req, res) => {
   }
 });
 
-// Dashboard statistics endpoint
-app.get('/api/v1/dashboard/stats', authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.userId;
-
-    // Get total proposals count
-    const proposalsCount = await pool.query(
-      'SELECT COUNT(*) as count FROM proposals WHERE user_id = $1',
-      [userId]
-    );
-
-    // Get proposals by status
-    const proposalsByStatus = await pool.query(
-      `SELECT status, COUNT(*) as count
-       FROM proposals
-       WHERE user_id = $1
-       GROUP BY status`,
-      [userId]
-    );
-
-    // Get total clients count
-    const clientsCount = await pool.query(
-      'SELECT COUNT(*) as count FROM clients WHERE user_id = $1',
-      [userId]
-    );
-
-    // Calculate conversion rate (closed proposals / total proposals)
-    const conversionRate = await pool.query(
-      `SELECT
-        COUNT(CASE WHEN status = 'closed' THEN 1 END)::float /
-        NULLIF(COUNT(*)::float, 0) * 100 as rate
-       FROM proposals
-       WHERE user_id = $1`,
-      [userId]
-    );
-
-    // Format response with actual status values (open, closed, rejected, pending_changes, archived)
-    const stats = {
-      totalProposals: parseInt(proposalsCount.rows[0].count),
-      totalClients: parseInt(clientsCount.rows[0].count),
-      conversionRate: parseFloat(conversionRate.rows[0].rate || 0).toFixed(2),
-      proposalsByStatus: {
-        open: 0,
-        closed: 0,
-        rejected: 0,
-        pending_changes: 0,
-        archived: 0
-      }
-    };
-
-    // Map status counts
-    proposalsByStatus.rows.forEach(row => {
-      if (stats.proposalsByStatus.hasOwnProperty(row.status)) {
-        stats.proposalsByStatus[row.status] = parseInt(row.count);
-      }
-    });
-
-    res.json({
-      success: true,
-      data: stats
-    });
-  } catch (error) {
-    logger.error('Dashboard stats error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch dashboard statistics',
-      error: error.message
-    });
-  }
-});
+// Note: Dashboard stats endpoint is in proposal-platform router
+// Mounted at /api/v1/dashboard/stats via the router
 
 // Authentication endpoints
 app.post('/api/v1/auth/login', async (req, res) => {
