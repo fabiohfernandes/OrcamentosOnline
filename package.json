@@ -1,7 +1,7 @@
 {
-  "name": "orcamentos-online",
+  "name": "webpropostas",
   "version": "1.0.0",
-  "description": "OrçamentosOnline - AI-driven commercial proposal platform",
+  "description": "WebPropostas - AI-driven commercial proposal platform",
   "private": true,
   "workspaces": [
     "services/frontend",

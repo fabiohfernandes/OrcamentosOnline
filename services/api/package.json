@@ -1,7 +1,7 @@
 {
-  "name": "orcamentos-online-api",
+  "name": "webpropostas-api",
   "version": "1.0.0",
-  "description": "OrçamentosOnline Backend API Service - ORION Agent",
+  "description": "WebPropostas Backend API Service - ORION Agent",
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",

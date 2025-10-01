@@ -85,7 +85,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a documentation and configuration repository for **OrçamentosOnline** - an AI-driven commercial proposal platform that streamlines the entire proposal lifecycle from creation to contract signature. The platform enables businesses to import designs from third-party tools (Canva, Gamma), collaborate with clients in real-time, and automatically generate contracts upon approval.
+This is a documentation and configuration repository for **WebPropostas** - an AI-driven commercial proposal platform that streamlines the entire proposal lifecycle from creation to contract signature. The platform enables businesses to import designs from third-party tools (Canva, Gamma), collaborate with clients in real-time, and automatically generate contracts upon approval.
 
 **Domain:** infigital.net
 **Environment:** Florianópolis - SC - Brazil
@@ -675,7 +675,7 @@ NEXT_PUBLIC_WS_URL=ws://localhost:3000
 ### TESTER System
 - **Dashboard not accessible**: Container not running → Check `docker ps` and `docker-compose logs testsuite-dashboard`
 - **Test failures**: Selector ambiguity → TESTER auto-fixes with intelligent selector generation
-- **Claude can't read logs**: Permissions issue → Verify `OrçamentosOnlineTestSuite/logs/` directory exists and is mounted
+- **Claude can't read logs**: Permissions issue → Verify `WebPropostasTestSuite/logs/` directory exists and is mounted
 
 ## Brazilian Market Compliance
 
@@ -720,7 +720,7 @@ cd TestSuite
 http://localhost:8888
 
 # Claude monitors logs in real-time
-OrçamentosOnlineTestSuite/logs/activity.log
+WebPropostasTestSuite/logs/activity.log
 ```
 
 ## Specialist Agent Usage Examples

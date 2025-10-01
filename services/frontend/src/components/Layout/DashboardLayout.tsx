@@ -103,7 +103,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex h-16 items-center justify-between px-6 bg-primary-600">
             <div className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-lg flex items-center justify-center">
-                <img src="/favicon-16x16.png" alt="OrçamentosOnline" className="h-8 w-8" />
+                <img src="/favicon-16x16.png" alt="WebPropostas" className="h-8 w-8" />
               </div>
               <span className="text-white font-semibold text-lg">
                 {appConfig.appName}
@@ -174,7 +174,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex items-center h-16 px-6 bg-primary-600">
             <div className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-lg flex items-center justify-center">
-                <img src="/favicon-16x16.png" alt="OrçamentosOnline" className="h-8 w-8" />
+                <img src="/favicon-16x16.png" alt="WebPropostas" className="h-8 w-8" />
               </div>
               <span className="text-white font-semibold text-lg">
                 {appConfig.appName}

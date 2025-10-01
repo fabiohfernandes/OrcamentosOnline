@@ -1,12 +1,12 @@
 version: '3.8'
 
-# OrçamentosOnline - Docker Compose Configuration
+# WebPropostas - Docker Compose Configuration
 # Version: 1.0
 # CRONOS Agent - DevOps & Containerization
 # Date: September 25, 2025
 
 networks:
-  orcamentos-network:
+  webpropostas-network:
     driver: bridge
     ipam:
       config:
@@ -28,7 +28,7 @@ services:
   # ============================================================================
   nginx:
     image: nginx:1.25-alpine
-    container_name: orcamentos-nginx
+    container_name: webpropostas-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -44,7 +44,7 @@ services:
       frontend:
         condition: service_healthy
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.10
     healthcheck:
       test: ["CMD", "nginx", "-t"]
@@ -61,7 +61,7 @@ services:
       context: ./services/api
       dockerfile: Dockerfile
       target: development
-    container_name: orcamentos-api
+    container_name: webpropostas-api
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -69,11 +69,11 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=3000
-      - DATABASE_URL=postgresql://orcamentos_user:${POSTGRES_PASSWORD}@postgres:5432/orcamentos
+      - DATABASE_URL=postgresql://webpropostas_user:${POSTGRES_PASSWORD}@postgres:5432/webpropostas
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
-      - POSTGRES_DB=orcamentos
-      - POSTGRES_USER=orcamentos_user
+      - POSTGRES_DB=webpropostas
+      - POSTGRES_USER=webpropostas_user
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET}
@@ -102,7 +102,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.20
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/v1/health"]
@@ -119,7 +119,7 @@ services:
       context: ./services/frontend
       dockerfile: Dockerfile
       target: development
-    container_name: orcamentos-frontend
+    container_name: webpropostas-frontend
     restart: unless-stopped
     ports:
       - "3001:3001"
@@ -128,7 +128,7 @@ services:
       - VITE_API_URL=http://127.0.0.1:3000/api/v1
       - VITE_WS_URL=ws://127.0.0.1:3000
       - VITE_PUBLIC_DOMAIN=localhost:3001
-      - VITE_APP_NAME=OrçamentosOnline
+      - VITE_APP_NAME=WebPropostas
       - VITE_APP_VERSION=1.0.0
       - VITE_MAX_FILE_SIZE=10485760
       - VITE_SUPPORTED_FILE_TYPES=image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
@@ -138,7 +138,7 @@ services:
     depends_on:
       - api
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.21
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001"]
@@ -152,13 +152,13 @@ services:
   # ============================================================================
   postgres:
     image: postgres:15-alpine
-    container_name: orcamentos-postgres
+    container_name: webpropostas-postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=orcamentos
-      - POSTGRES_USER=orcamentos_user
+      - POSTGRES_DB=webpropostas
+      - POSTGRES_USER=webpropostas_user
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=pt_BR.UTF-8 --lc-ctype=pt_BR.UTF-8
     volumes:
@@ -166,10 +166,10 @@ services:
       - ./services/database/init:/docker-entrypoint-initdb.d
       - ./services/database/backups:/backups
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.30
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U orcamentos_user -d orcamentos"]
+      test: ["CMD-SHELL", "pg_isready -U webpropostas_user -d webpropostas"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -197,7 +197,7 @@ services:
   # ============================================================================
   redis:
     image: redis:7-alpine
-    container_name: orcamentos-redis
+    container_name: webpropostas-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -207,7 +207,7 @@ services:
       - redis_data:/data
       - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.40
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
@@ -223,7 +223,7 @@ services:
   # Database Administration Tool (Development Only)
   adminer:
     image: adminer:4.8.1
-    container_name: orcamentos-adminer
+    container_name: webpropostas-adminer
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -233,7 +233,7 @@ services:
     depends_on:
       - postgres
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.50
     profiles:
       - development
@@ -241,7 +241,7 @@ services:
   # Redis Commander (Development Only)
   redis-commander:
     image: rediscommander/redis-commander:latest
-    container_name: orcamentos-redis-commander
+    container_name: webpropostas-redis-commander
     restart: unless-stopped
     ports:
       - "8081:8081"
@@ -252,7 +252,7 @@ services:
     depends_on:
       - redis
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.51
     profiles:
       - development
@@ -264,20 +264,20 @@ services:
     build:
       context: ./tester-dashboard
       dockerfile: Dockerfile
-    container_name: orcamentos-tester-dashboard
+    container_name: webpropostas-tester-dashboard
     restart: unless-stopped
     ports:
       - "8888:8888"
     environment:
       - NODE_ENV=production
       - TESTER_PORT=8888
-      - PROJECT_NAME=OrçamentosOnline
+      - PROJECT_NAME=WebPropostas
     volumes:
       - ./tester-dashboard:/app
       - /app/node_modules
       - /var/run/docker.sock:/var/run/docker.sock:ro  # For Docker monitoring
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.54
     profiles:
       - dashboard
@@ -289,14 +289,14 @@ services:
   # Application Performance Monitoring
   prometheus:
     image: prom/prometheus:latest
-    container_name: orcamentos-prometheus
+    container_name: webpropostas-prometheus
     restart: unless-stopped
     ports:
       - "9090:9090"
     volumes:
       - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.60
     profiles:
       - monitoring
@@ -304,7 +304,7 @@ services:
   # Metrics Visualization
   grafana:
     image: grafana/grafana:latest
-    container_name: orcamentos-grafana
+    container_name: webpropostas-grafana
     restart: unless-stopped
     ports:
       - "3030:3000"
@@ -315,7 +315,7 @@ services:
     depends_on:
       - prometheus
     networks:
-      orcamentos-network:
+      webpropostas-network:
         ipv4_address: 172.20.0.61
     profiles:
       - monitoring

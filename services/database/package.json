@@ -1,7 +1,7 @@
 {
-  "name": "@orcamentos/database",
+  "name": "@webpropostas/database",
   "version": "1.0.0",
-  "description": "OrçamentosOnline Database Management Tools - CASSANDRA Agent",
+  "description": "WebPropostas Database Management Tools - CASSANDRA Agent",
   "private": true,
   "author": "Fabio Hartmann Fernandes <fabio@metamentes.com>",
   "license": "PROPRIETARY",
@@ -21,8 +21,8 @@
     "backup:verify": "bash scripts/backup.sh --verify",
     "backup:cleanup": "bash scripts/backup.sh --cleanup",
     "restore": "bash scripts/backup.sh --restore",
-    "psql": "docker exec -it orcamentos-postgres psql -U $POSTGRES_USER -d $POSTGRES_DB",
-    "logs": "docker logs -f orcamentos-postgres",
+    "psql": "docker exec -it webpropostas-postgres psql -U $POSTGRES_USER -d $POSTGRES_DB",
+    "logs": "docker logs -f webpropostas-postgres",
     "test:connection": "node -e \"require('./scripts/migrate.js').Database; console.log('Database configuration valid')\"",
     "health:check": "node scripts/health-check.js",
     "analyze": "node scripts/analyze-db.js",
@@ -40,8 +40,8 @@
     "database": {
       "host": "localhost",
       "port": 5432,
-      "database": "orcamentos",
-      "user": "orcamentos_user"
+      "database": "webpropostas",
+      "user": "webpropostas_user"
     },
     "backup": {
       "retention_days": 30,
@@ -55,7 +55,7 @@
     "migrations",
     "backup",
     "multi-tenant",
-    "orcamentos"
+    "webpropostas"
   ],
   "repository": {
     "type": "git",

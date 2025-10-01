@@ -15,7 +15,7 @@ export const appConfig: AppConfig = {
   wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3000',
 
   // App Information
-  appName: process.env.NEXT_PUBLIC_APP_NAME || 'OrçamentosOnline',
+  appName: process.env.NEXT_PUBLIC_APP_NAME || 'WebPropostas',
   appVersion: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
 
   // File Upload Settings
@@ -152,9 +152,9 @@ export const constants = {
 
   // Local Storage Keys
   STORAGE_KEYS: {
-    AUTH_TOKENS: 'orcamentos_auth_tokens',
-    USER_PREFERENCES: 'orcamentos_user_preferences',
-    THEME: 'orcamentos_theme',
+    AUTH_TOKENS: 'webpropostas_auth_tokens',
+    USER_PREFERENCES: 'webpropostas_user_preferences',
+    THEME: 'webpropostas_theme',
   },
 
   // Date Formats

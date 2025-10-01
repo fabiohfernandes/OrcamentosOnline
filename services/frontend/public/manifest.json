@@ -1,7 +1,7 @@
 {
-  "name": "OrçamentosOnline",
-  "short_name": "OrçamentosOnline",
-  "description": "Plataforma moderna para criação e gestão de orçamentos online",
+  "name": "WebPropostas",
+  "short_name": "WebPropostas",
+  "description": "Plataforma moderna para criação e gestão de propostas comerciais online",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -1,7 +1,7 @@
 {
-  "name": "orcamentos-frontend",
+  "name": "webpropostas-frontend",
   "version": "1.0.2",
-  "description": "OrçamentosOnline Frontend - Modern React/Next.js Application",
+  "description": "WebPropostas Frontend - Modern React/Next.js Application",
   "private": true,
   "author": "NOVA Agent - Frontend Development Specialist",
   "scripts": {
