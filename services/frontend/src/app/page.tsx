@@ -35,9 +35,13 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-lg bg-primary-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">O</span>
-                </div>
+                <img
+                  src="/favicon-16x16.png"
+                  alt="WebPropostas"
+                  className="h-8 w-8"
+                  width={32}
+                  height={32}
+                />
                 <span className="text-xl font-bold text-gray-900">
                   {appConfig.appName}
                 </span>
