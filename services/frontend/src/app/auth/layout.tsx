@@ -10,7 +10,7 @@ import { appConfig } from '@/config';
 
 export const metadata: Metadata = {
   title: 'Autenticação',
-  description: 'Entre ou cadastre-se no OrçamentosOnline',
+  description: 'Entre ou cadastre-se no WebPropostas',
 };
 
 interface AuthLayoutProps {
@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             <div className="h-12 w-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
               <Image
                 src="/favicon-16x16.png"
-                alt="OrçamentosOnline Logo"
+                alt="WebPropostas Logo"
                 width={48}
                 height={48}
                 className="rounded-sm"
@@ -77,7 +77,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
                 <Image
                   src="/favicon-16x16.png"
-                  alt="OrçamentosOnline Logo"
+                  alt="WebPropostas Logo"
                   width={32}
                   height={32}
                   className="rounded-sm"

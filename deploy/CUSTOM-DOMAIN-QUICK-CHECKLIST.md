@@ -1,6 +1,6 @@
 # Custom Domain Quick Setup Checklist
 
-**Project:** OrçamentosOnline
+**Project:** WebPropostas
 **Estimated Time:** 30-45 minutes (including DNS propagation)
 
 ---
@@ -126,7 +126,7 @@ NEXT_PUBLIC_API_URL=https://api.proposals.infigital.net
 ### Test Frontend
 - [ ] Open browser
 - [ ] Visit: `https://proposals.infigital.net`
-- [ ] Should see OrçamentosOnline login page
+- [ ] Should see WebPropostas login page
 - [ ] No SSL warnings
 - [ ] No mixed content errors
 

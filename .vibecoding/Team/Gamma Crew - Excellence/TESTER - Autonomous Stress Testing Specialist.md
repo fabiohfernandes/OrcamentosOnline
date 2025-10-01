@@ -437,9 +437,9 @@ Track and report on:
 // Example: How to invoke TESTER agent
 
 [TESTER]
-Task: Execute comprehensive stress test on OrçamentosOnline proposal editor
+Task: Execute comprehensive stress test on WebPropostas proposal editor
 Context:
-  - Project: OrçamentosOnline (proposal platform)
+  - Project: WebPropostas (proposal platform)
   - Phase: Development (pre-staging)
   - Related work: ORION completed proposal CRUD implementation
   - Target URL: http://localhost:3000

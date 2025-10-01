@@ -1,4 +1,4 @@
--- OrçamentosOnline Database Schema
+-- WebPropostas Database Schema
 -- Version: 1.0
 -- Date: September 25, 2025
 -- Multi-tenant PostgreSQL schema for proposal management platform
@@ -379,4 +379,4 @@ ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 -- Note: Actual RLS policies would be created based on application authentication context
 -- These would ensure users can only access data within their organization
 
-COMMENT ON DATABASE current_database() IS 'OrçamentosOnline - Multi-tenant proposal management platform database';
+COMMENT ON DATABASE current_database() IS 'WebPropostas - Multi-tenant proposal management platform database';

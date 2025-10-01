@@ -1,6 +1,6 @@
 version: '3.8'
 
-# OrçamentosOnline - Development Environment Override
+# WebPropostas - Development Environment Override
 # CRONOS Agent - Development-Specific Configuration
 # Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 # Date: September 25, 2025

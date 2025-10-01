@@ -1,10 +1,10 @@
-# OrçamentosOnline Frontend
+# WebPropostas Frontend
 
-Modern React/Next.js frontend application for the OrçamentosOnline platform.
+Modern React/Next.js frontend application for the WebPropostas platform.
 
 ## 🚀 Built by NOVA Agent
 
-This frontend application was architected and developed by **NOVA** (Frontend Development Specialist) as part of the OrçamentosOnline platform development process.
+This frontend application was architected and developed by **NOVA** (Frontend Development Specialist) as part of the WebPropostas platform development process.
 
 ## ✨ Features
 
@@ -93,7 +93,7 @@ Create a `.env.local` file with the following variables:
 ```env
 VITE_API_URL=http://localhost:3000/api/v1
 VITE_WS_URL=ws://localhost:3000
-VITE_APP_NAME=OrçamentosOnline
+VITE_APP_NAME=WebPropostas
 VITE_APP_VERSION=1.0.0
 VITE_MAX_FILE_SIZE=10485760
 VITE_SUPPORTED_FILE_TYPES=image/jpeg,image/png,image/gif,application/pdf
@@ -264,8 +264,8 @@ This frontend application was built with the following principles:
 4. **Performance Optimized**: Fast loading and excellent Core Web Vitals
 5. **Developer Experience**: Excellent tooling and development workflow
 
-The application provides a solid foundation for the OrçamentosOnline platform and can be extended with additional features as needed.
+The application provides a solid foundation for the WebPropostas platform and can be extended with additional features as needed.
 
 ## 📝 License
 
-This project is part of the OrçamentosOnline platform developed by the NOVA team.
+This project is part of the WebPropostas platform developed by the NOVA team.

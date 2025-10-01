@@ -46,8 +46,8 @@ export const metadata: Metadata = {
       url: 'https://github.com/orcamentos-online',
     },
   ],
-  creator: 'OrçamentosOnline Team',
-  publisher: 'OrçamentosOnline',
+  creator: 'WebPropostas Team',
+  publisher: 'WebPropostas',
   robots: {
     index: true,
     follow: true,
@@ -139,7 +139,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               url: process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3001',
               author: {
                 '@type': 'Organization',
-                name: 'OrçamentosOnline Team',
+                name: 'WebPropostas Team',
               },
             }),
           }}

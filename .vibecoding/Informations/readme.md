@@ -1,4 +1,4 @@
-# OrçamentosOnline - AI-Driven Commercial Proposal Platform
+# WebPropostas - AI-Driven Commercial Proposal Platform
 
 **Domain:** [infigital.net](https://infigital.net)
 **Status:** Development Phase - Strategic Planning Complete
@@ -9,7 +9,7 @@
 
 ## 🚀 Project Vision
 
-OrçamentosOnline revolutionizes the commercial proposal process through intelligent AI automation, enabling businesses to transform their sales workflows from creation to contract signature. Import designs from Canva or Gamma, collaborate with clients in real-time, and automatically generate legally compliant contracts with digital signatures—all while maintaining complete LGPD compliance.
+WebPropostas revolutionizes the commercial proposal process through intelligent AI automation, enabling businesses to transform their sales workflows from creation to contract signature. Import designs from Canva or Gamma, collaborate with clients in real-time, and automatically generate legally compliant contracts with digital signatures—all while maintaining complete LGPD compliance.
 
 ### Key Value Propositions
 - **90%+ improvement** in proposal-to-signature conversion rates
@@ -251,7 +251,7 @@ Security: LGPD Compliant + SOC 2 Framework
 
 ## 🎉 Join the Revolution
 
-OrçamentosOnline represents the future of commercial proposal management—where AI meets human creativity to deliver unprecedented business outcomes. With our multi-agent development approach, comprehensive Brazilian market focus, and commitment to quality and compliance, we're building not just a platform, but a complete transformation of how businesses engage with clients and close deals.
+WebPropostas represents the future of commercial proposal management—where AI meets human creativity to deliver unprecedented business outcomes. With our multi-agent development approach, comprehensive Brazilian market focus, and commitment to quality and compliance, we're building not just a platform, but a complete transformation of how businesses engage with clients and close deals.
 
 **Ready to transform your proposal process?** Stay tuned for our beta program launch and be among the first to experience the future of AI-driven business automation.
 

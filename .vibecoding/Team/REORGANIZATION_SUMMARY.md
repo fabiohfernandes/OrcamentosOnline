@@ -148,7 +148,7 @@
 - [x] Add specific capabilities matrices to each agent
 - [x] Enhance interaction protocols with concrete examples
 - [x] Update all 68 agents to MAESTRO v2.0 format
-- [x] Change owner field from "Fabio Hartmann Fernandes" to "OrçamentosOnline"
+- [x] Change owner field from "Fabio Hartmann Fernandes" to "WebPropostas"
 - [x] Add agent classification headers (Alpha/Beta/Gamma crew badges)
 - [x] Insert missing sections 4-6 and 11-15 across all agents
 - [x] Clean escaped markdown formatting
@@ -185,7 +185,7 @@
 - ✅ CLAUDE.md updated with new paths
 - ✅ **Phase 1 Complete**: All agents updated to 15-section template (2025-01-03)
 - ✅ Batch conversion script created (convert_agents.js)
-- ✅ All agents now use OrçamentosOnline as owner
+- ✅ All agents now use WebPropostas as owner
 - ✅ Crew classification badges added to all agents
 
 ---

@@ -20,11 +20,13 @@
       "Bash(railway variables:*)",
       "Bash(railway list:*)",
       "Bash(railway logs:*)",
-      "Bash(if [ -f \"D:\\OrçamentosOnline\\DEPLOYMENT-STATUS.md\" ])",
+      "Bash(if [ -f \"D:\\WebPropostas\\DEPLOYMENT-STATUS.md\" ])",
       "Bash(then echo \"exists\")",
       "Bash(else echo \"new\")",
       "Bash(fi)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(gh:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

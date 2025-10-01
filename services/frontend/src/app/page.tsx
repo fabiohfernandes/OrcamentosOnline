@@ -11,7 +11,7 @@ import { appConfig } from '@/config';
 
 export const metadata: Metadata = {
   title: 'Início',
-  description: 'Bem-vindo ao OrçamentosOnline - Plataforma moderna para criação e gestão de orçamentos',
+  description: 'Bem-vindo ao WebPropostas - Plataforma moderna para criação e gestão de orçamentos',
 };
 
 const features = [

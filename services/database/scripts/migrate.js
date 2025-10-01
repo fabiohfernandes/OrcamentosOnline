@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * OrçamentosOnline - Database Migration Script
+ * WebPropostas - Database Migration Script
  * CASSANDRA Agent - Database Engineering
  * Version: 1.0
  * Date: September 25, 2025
@@ -409,7 +409,7 @@ class SeedManager {
 
 function showUsage() {
     console.log(`
-OrçamentosOnline Database Migration Tool
+WebPropostas Database Migration Tool
 
 USAGE:
     node migrate.js <command> [options]

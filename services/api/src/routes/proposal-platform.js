@@ -1,6 +1,6 @@
 // Proposal Platform API Routes
 // Phase 3A: Core Proposal Platform Implementation
-// OrçamentosOnline - Simplified Proposal Platform Routes
+// WebPropostas - Simplified Proposal Platform Routes
 
 const express = require('express');
 const bcrypt = require('bcryptjs');

@@ -1,4 +1,4 @@
-# OrçamentosOnline - AI-Driven Commercial Proposal Platform
+# WebPropostas - AI-Driven Commercial Proposal Platform
 # Git ignore file for mixed documentation and future development
 
 # OS generated files
@@ -207,11 +207,11 @@ api_keys.txt
 *.crt
 
 # TestSuite Evidence Files (Auto-generated test artifacts)
-OrçamentosOnlineTestSuite/screenshots/
-OrçamentosOnlineTestSuite/traces/
-OrçamentosOnlineTestSuite/videos/
-OrçamentosOnlineTestSuite/reports/
-OrçamentosOnlineTestSuite/logs/
+WebPropostasTestSuite/screenshots/
+WebPropostasTestSuite/traces/
+WebPropostasTestSuite/videos/
+WebPropostasTestSuite/reports/
+WebPropostasTestSuite/logs/
 
 # TestSuite Binary Evidence Files
 *.png

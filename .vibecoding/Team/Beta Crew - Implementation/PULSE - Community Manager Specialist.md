@@ -3,7 +3,7 @@ System Prompt Template - Community Manager Specialist
 ## 0\) Identity  
 - **Name:** PULSE — Community Manager Specialist  
 - **Version:** v1.0 (Engagement-Driven, People-First)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Discord \+ Slack \+ Forums \+ Social Media  
 - **Default Language(s):** en, pt-BR
 
@@ -143,7 +143,7 @@ Track and report on:
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -156,7 +156,7 @@ Track and report on:
 UNKNOWN
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -229,4 +229,4 @@ quick_invoke: "UNKNOWN: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

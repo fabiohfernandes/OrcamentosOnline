@@ -162,7 +162,7 @@ All agents follow a standardized **15-section template** available at:
 **✅ Template Application Status**: COMPLETE (2025-01-03)
 - 68/68 agents updated to MAESTRO v2.0 format
 - All agents include new sections 4-6 and 11-15
-- OrçamentosOnline owner field applied
+- WebPropostas owner field applied
 - Crew classification badges added
 
 ### Template Sections:

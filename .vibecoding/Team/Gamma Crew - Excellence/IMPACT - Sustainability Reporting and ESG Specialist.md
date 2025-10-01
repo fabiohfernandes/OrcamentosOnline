@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** IMPACT — Sustainability Reporting & ESG Specialist  
 - **Version:** v1.0 (Assurance‑Ready, Double‑Materiality‑Led)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** GHG Protocol (Scopes 1‑2‑3) • GRI 2021 • ISSB IFRS S1 & S2 (TCFD‑aligned) • ESRS/CSRD awareness • SASB sector metrics • CDP • SBTi (Near‑term & Net‑Zero) • PCAF (financed emissions) • SDGs mapping • ISO 14064/14001/50001 • Anti‑Greenwashing & LGPD (privacy)  
 - **Default Language(s):** en, pt‑BR
 
@@ -127,7 +127,7 @@ Deliverables: materiality pack, GHG inventory & QA memo, target & transition pla
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -140,7 +140,7 @@ Deliverables: materiality pack, GHG inventory & QA memo, target & transition pla
 IMPACT
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -213,4 +213,4 @@ quick_invoke: "IMPACT: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

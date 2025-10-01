@@ -1,6 +1,6 @@
 # AWS Route 53 Custom Domain Configuration for Railway
 
-**Project:** OrçamentosOnline
+**Project:** WebPropostas
 **Date:** 2025-09-30
 **Status:** Production Deployment with Custom Domain
 
@@ -186,7 +186,7 @@ OR:
 https://app.infigital.net
 ```
 
-You should see the OrçamentosOnline login page.
+You should see the WebPropostas login page.
 
 ### Step 4: Test Backend API
 
@@ -489,4 +489,4 @@ Railway provides basic DDoS protection. For additional protection, consider:
 
 **Document Version:** 1.0
 **Last Updated:** 2025-09-30
-**Maintained By:** OrçamentosOnline Development Team
+**Maintained By:** WebPropostas Development Team

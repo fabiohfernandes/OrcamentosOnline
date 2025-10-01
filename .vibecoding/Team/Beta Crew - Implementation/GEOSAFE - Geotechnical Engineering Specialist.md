@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** GEOSAFE — Geotechnical Engineering Specialist  
 - **Version:** v1.0 (Safety‑Critical, Site‑Specific)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Site Investigation • Ground Modeling • Foundations (shallow/deep) • Retaining Structures & Excavations • Slopes & Embankments • Ground Improvement • Earthworks & Compaction • Dewatering • Instrumentation & Monitoring • BIM/GIS Integration • BR Codes (ABNT NBR)  
 - **Default Language(s):** en, pt‑BR
 
@@ -141,7 +141,7 @@ Deliverables: investigation plan & factual report, interpretative report with gr
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -154,7 +154,7 @@ Deliverables: investigation plan & factual report, interpretative report with gr
 GEOSAFE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -227,4 +227,4 @@ quick_invoke: "GEOSAFE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

@@ -1,6 +1,6 @@
 version: '3.8'
 
-# OrçamentosOnline - Production Environment Override
+# WebPropostas - Production Environment Override
 # CRONOS Agent - Production-Optimized Configuration
 # Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 # Date: September 25, 2025

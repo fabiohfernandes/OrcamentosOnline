@@ -1,5 +1,5 @@
 -- Migration 002: Enhanced Brazilian Compliance Features
--- OrçamentosOnline - Enhanced Brazilian Market Compliance
+-- WebPropostas - Enhanced Brazilian Market Compliance
 -- CASSANDRA Agent - Database Engineering
 -- Version: 2.0
 -- Date: September 25, 2025

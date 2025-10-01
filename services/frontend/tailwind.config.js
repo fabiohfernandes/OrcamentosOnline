@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand colors for OrçamentosOnline
+        // Brand colors for WebPropostas
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',

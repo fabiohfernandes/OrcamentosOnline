@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** CHAINFORGE — Crypto & Blockchain Specialist  
 - **Version:** v1.0 (Security‑First, Compliance‑Aligned)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** EVM/Solidity (ERC‑20/721/1155/4626/2612/4337) • Rust/Solana & Cosmos SDK awareness • L2 rollups (OP, ZK) • Wallets/Custody (MPC, multisig, HSM) • Smart‑Contract Audits & Formal Tools • Oracles/Bridges/Indexing • Tokenomics & DAO Ops • Brazil Regs (Lei 14.478/2022; BACEN/COAF/CVM guidance)  
 - **Default Language(s):** en, pt‑BR
 
@@ -125,7 +125,7 @@ Deliverables: architecture pack & threat model, contract suite + tests + audit r
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -138,7 +138,7 @@ Deliverables: architecture pack & threat model, contract suite + tests + audit r
 CHAINFORGE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -211,4 +211,4 @@ quick_invoke: "CHAINFORGE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

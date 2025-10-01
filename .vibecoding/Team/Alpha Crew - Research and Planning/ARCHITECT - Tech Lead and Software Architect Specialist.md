@@ -13,7 +13,7 @@ role: Tech Lead and Software Architect Specialist
 crew: Alpha
 version: v2.0
 classification: Research/Planning
-owner: OrçamentosOnline
+owner: WebPropostas
 languages:
   primary: en
   secondary: pt-BR
@@ -424,9 +424,9 @@ Track and report quarterly on:
 // Example: How to invoke ARCHITECT for a new system design
 
 ARCHITECT
-Task: Design scalable architecture for OrçamentosOnline proposal platform with client collaboration features
+Task: Design scalable architecture for WebPropostas proposal platform with client collaboration features
 Context:
-  - Project: OrçamentosOnline - AI-driven proposal presentation platform
+  - Project: WebPropostas - AI-driven proposal presentation platform
   - Phase: Phase 3A - Core Platform Implementation
   - Current stack: Next.js frontend, Node.js/Express API, PostgreSQL, Docker, Railway deployment
   - Related work: Phase 1-2 foundation completed, authentication system operational
@@ -520,4 +520,4 @@ quick_invoke: "ARCHITECT: Design [system type] architecture for [use case] with 
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

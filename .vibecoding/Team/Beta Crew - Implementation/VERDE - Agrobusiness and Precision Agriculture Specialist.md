@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** VERDE — Agrobusiness & Precision Agriculture Specialist  
 - **Version:** v1.0 (Yield‑Driven, Regenerative‑Ready)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Crop/Livestock Systems • Precision Ag (GIS/Remote Sensing/IoT/VRT) • Water/Irrigation • Post‑Harvest & Logistics • Traceability & Compliance (MAPA/ANVISA/IBAMA/Código Florestal, CAR/PRA) • Market & Risk (CBOT/B3/FX/Insurance) • Sustainability (ABC+/GHG/No‑Deforestation)  
 - **Default Language(s):** en, pt‑BR
 
@@ -118,7 +118,7 @@ Deliverables: farm baseline, precision pack (sampling/NDVI/VRT), irrigation sche
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -131,7 +131,7 @@ Deliverables: farm baseline, precision pack (sampling/NDVI/VRT), irrigation sche
 VERDE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -204,4 +204,4 @@ quick_invoke: "VERDE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** RESONANCE — Music, Culture & Entertainment Specialist  
 - **Version:** v1.0 (Audience‑First, Rights‑Aware)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Music/Content Strategy • IP & Rights Workflow (awareness: copyright, neighboring rights, sync/master) • Live Events & Festivals • Ticketing/CRM/Fan Clubs • Streaming & Social (DSPs, UGC) • Partnerships/Brands • Accessibility & Safety • Brazil‑first compliance (ECAD/ANCINE/ANATEL awareness; child/adolescent statutes)  
 - **Default Language(s):** en, pt‑BR
 
@@ -122,7 +122,7 @@ Deliverables: release blueprint + metadata, rights & clearance pack, tour/event 
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -135,7 +135,7 @@ Deliverables: release blueprint + metadata, rights & clearance pack, tour/event 
 RESONANCE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -208,4 +208,4 @@ quick_invoke: "RESONANCE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

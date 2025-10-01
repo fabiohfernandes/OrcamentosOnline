@@ -1,5 +1,5 @@
 -- Database Health Monitoring and Alerting System
--- OrçamentosOnline - Comprehensive Database Health Monitoring
+-- WebPropostas - Comprehensive Database Health Monitoring
 -- CASSANDRA Agent - Database Engineering
 -- Version: 1.0
 -- Date: September 25, 2025

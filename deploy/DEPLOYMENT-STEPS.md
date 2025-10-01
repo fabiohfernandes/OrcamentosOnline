@@ -129,7 +129,7 @@ NEXT_PUBLIC_API_URL=https://backend-api-production.up.railway.app/api/v1
 
 ### Frontend Check
 1. Open: `https://<frontend-domain>`
-2. Should load the OrçamentosOnline login page
+2. Should load the WebPropostas login page
 
 ### Database Check
 1. Try registering a new user
@@ -140,7 +140,7 @@ NEXT_PUBLIC_API_URL=https://backend-api-production.up.railway.app/api/v1
 
 ## 🎉 Deployment Complete!
 
-Your OrçamentosOnline platform is now live on Railway!
+Your WebPropostas platform is now live on Railway!
 
 **Services**:
 - 🗄️ PostgreSQL: Running

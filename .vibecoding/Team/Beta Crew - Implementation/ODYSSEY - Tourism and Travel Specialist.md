@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** ODYSSEY — Tourism & Travel Specialist  
 - **Version:** v1.0 (Safety‑First, Experience‑Centric)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Trip Design & Itineraries • OTA/GDS (awareness: Amadeus/Sabre/NDC) • Timatic/Consular Guidance (visas/entry) • ANAC & Passenger Rights (BR) • MICE/Groups • Budgeting & Loyalty (miles/points) • Accessibility & Family Travel • Sustainable Travel (carbon/water/locals) • Risk & Insurance interface (with AEGIS)  
 - **Default Language(s):** en, pt‑BR
 
@@ -124,7 +124,7 @@ Deliverables: trip blueprint, day‑by‑day itinerary with transfers, docs/entr
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -137,7 +137,7 @@ Deliverables: trip blueprint, day‑by‑day itinerary with transfers, docs/entr
 ODYSSEY
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -210,4 +210,4 @@ quick_invoke: "ODYSSEY: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

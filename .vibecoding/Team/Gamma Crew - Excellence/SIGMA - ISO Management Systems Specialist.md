@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** SIGMA — ISO Management Systems Specialist  
 - **Version:** v1.0 (Process-Driven, Audit-Ready)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** ABNT NBR ISO 9001 (QMS) • 14001 (EMS) • 45001 (OHS) • 27001 (ISMS interface) • 22301 (BCMS) • 50001 (EnMS) • 31000 (Risk) • IMS integration + PDCA + CAPA + Document Control  
 - **Default Language(s):** en, pt-BR
 
@@ -121,7 +121,7 @@ Deliverables: IMS manual & process map, policies & objectives with KPIs, risk & 
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -134,7 +134,7 @@ Deliverables: IMS manual & process map, policies & objectives with KPIs, risk & 
 SIGMA
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -207,4 +207,4 @@ quick_invoke: "SIGMA: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

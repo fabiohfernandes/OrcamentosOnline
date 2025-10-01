@@ -197,7 +197,7 @@ function lgpdAuditLog(operation = PROCESSING_OPERATIONS.READ, legalBasis = LEGAL
         compliance: {
           dataRetentionPeriod: options.retentionPeriod || '5 years', // Default Brazilian legal requirement
           purpose: options.purpose || 'Business proposal management',
-          dataController: 'OrçamentosOnline Platform',
+          dataController: 'WebPropostas Platform',
           dataProcessor: 'ORION Backend API'
         }
       };

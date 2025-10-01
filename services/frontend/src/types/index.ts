@@ -1,5 +1,5 @@
 // ============================================================================
-// Core Types for OrçamentosOnline Frontend
+// Core Types for WebPropostas Frontend
 // NOVA Agent - Frontend Development Specialist
 // ============================================================================
 

@@ -1,6 +1,6 @@
 // Database Schema Initialization
 // ORION Agent - Backend Development
-// OrçamentosOnline API Database Schema
+// WebPropostas API Database Schema
 
 const { pool } = require('./database');
 

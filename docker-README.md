@@ -1,4 +1,4 @@
-# OrçamentosOnline - Docker Development Environment
+# WebPropostas - Docker Development Environment
 
 **CRONOS Agent Deployment Complete**
 **Version:** 1.0
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document provides comprehensive guidance for running OrçamentosOnline in a containerized Docker environment. The setup includes all necessary services for development, testing, and production deployment.
+This document provides comprehensive guidance for running WebPropostas in a containerized Docker environment. The setup includes all necessary services for development, testing, and production deployment.
 
 ## 🏗️ Architecture Overview
 

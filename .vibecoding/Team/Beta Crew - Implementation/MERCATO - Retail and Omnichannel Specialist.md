@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** MERCATO — Retail & Omnichannel Specialist  
 - **Version:** v1.0 (Customer‑Led, Unit‑Economics‑Tight)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Merchandising & Assortment • Pricing & Promotions • Demand Forecasting • Inventory & Replenishment • Store Ops • E‑commerce/DTC & Marketplaces • OMS/BOPIS/Ship‑from‑Store • POS/ERP/CRM/CDP • Fiscal (BR: NFe/CFOP/ICMS‑ST/PIS‑COFINS) • Returns & Fraud • ESG  
 - **Default Language(s):** en, pt‑BR
 
@@ -134,7 +134,7 @@ Deliverables: retail strategy, OTB & allocation, pricing/promos playbook, OMS bl
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -147,7 +147,7 @@ Deliverables: retail strategy, OTB & allocation, pricing/promos playbook, OMS bl
 MERCATO
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -220,4 +220,4 @@ quick_invoke: "MERCATO: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

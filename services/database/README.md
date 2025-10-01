@@ -1,4 +1,4 @@
-# OrçamentosOnline Database Documentation
+# WebPropostas Database Documentation
 
 **Database Engineering by CASSANDRA Agent**
 **Version:** 2.0 - Phase 2 Enhanced
@@ -6,7 +6,7 @@
 
 ## Overview
 
-The OrçamentosOnline database system is a comprehensive PostgreSQL-based multi-tenant platform designed specifically for the Brazilian market, incorporating LGPD compliance, performance optimization, and robust monitoring capabilities. This Phase 2 enhancement includes advanced Brazilian compliance features, comprehensive performance optimization, and enterprise-grade monitoring systems.
+The WebPropostas database system is a comprehensive PostgreSQL-based multi-tenant platform designed specifically for the Brazilian market, incorporating LGPD compliance, performance optimization, and robust monitoring capabilities. This Phase 2 enhancement includes advanced Brazilian compliance features, comprehensive performance optimization, and enterprise-grade monitoring systems.
 
 ## 🏗️ Architecture
 

@@ -1,4 +1,4 @@
-# OrçamentosOnline - Deployment Status
+# WebPropostas - Deployment Status
 
 **Last Updated:** 2025-09-30 (Latest: Commit a50570b)
 **Status:** 🟡 Backend Fixed - Frontend still needs rebuild with NEXT_PUBLIC_API_URL
@@ -143,7 +143,7 @@ LOG_LEVEL=info
 ```bash
 NODE_ENV=production
 PORT=3001
-NEXT_PUBLIC_APP_NAME=OrçamentosOnline
+NEXT_PUBLIC_APP_NAME=WebPropostas
 NEXT_PUBLIC_APP_VERSION=1.0.0
 ```
 

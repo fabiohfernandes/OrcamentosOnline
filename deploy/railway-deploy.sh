@@ -1,10 +1,10 @@
 #!/bin/bash
-# Railway Deployment Script - OrçamentosOnline
+# Railway Deployment Script - WebPropostas
 # This script helps deploy all services to Railway
 
 set -e  # Exit on error
 
-echo "🚀 OrçamentosOnline - Railway Deployment Script"
+echo "🚀 WebPropostas - Railway Deployment Script"
 echo "=============================================="
 echo ""
 

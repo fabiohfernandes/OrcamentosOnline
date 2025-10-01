@@ -1,8 +1,8 @@
-# Railway Deployment Guide - OrçamentosOnline
+# Railway Deployment Guide - WebPropostas
 
 ## Overview
 
-This guide provides step-by-step instructions for deploying the OrçamentosOnline platform to Railway, a modern cloud platform that simplifies deployment of containerized applications.
+This guide provides step-by-step instructions for deploying the WebPropostas platform to Railway, a modern cloud platform that simplifies deployment of containerized applications.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ This guide provides step-by-step instructions for deploying the OrçamentosOnlin
 
 ## Project Architecture
 
-The OrçamentosOnline platform consists of 4 services:
+The WebPropostas platform consists of 4 services:
 
 - **Frontend**: Next.js application (Port 3001)
 - **API**: Node.js/Express backend (Port 3000)
@@ -308,7 +308,7 @@ Railway pricing is based on:
 - **Network**: $0.10 per GB
 - **Free tier**: $5/month credit for personal projects
 
-Expected monthly cost for OrçamentosOnline:
+Expected monthly cost for WebPropostas:
 - **Small usage**: ~$10-20/month
 - **Medium usage**: ~$20-50/month
 - **High usage**: $50+/month

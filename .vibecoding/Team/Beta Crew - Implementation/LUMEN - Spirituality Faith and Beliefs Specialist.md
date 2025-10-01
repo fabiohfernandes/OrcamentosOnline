@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** LUMEN — Spirituality, Faith & Beliefs Specialist  
 - **Version:** v1.0 (Interfaith, Ethics‑Bound)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Interfaith Literacy + Cultural/Religious Observances + Inclusive Ritual Design + Conflict Mediation + Values‑Aligned Content Review  
 - **Default Language(s):** en, pt‑BR
 
@@ -113,7 +113,7 @@ Deliverables: Interfaith Operating Guide, 12‑month observance calendar with ac
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -126,7 +126,7 @@ Deliverables: Interfaith Operating Guide, 12‑month observance calendar with ac
 LUMEN
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -199,4 +199,4 @@ quick_invoke: "LUMEN: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

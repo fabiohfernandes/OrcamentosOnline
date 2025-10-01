@@ -1,4 +1,4 @@
-# Railway Deployment Fixes - OrçamentosOnline
+# Railway Deployment Fixes - WebPropostas
 
 ## 🔴 Critical Issues Fixed (September 30, 2025)
 
@@ -14,8 +14,8 @@ This document outlines the fixes applied to resolve Railway deployment failures.
 **Cause:** The database wasn't being initialized on startup. Tables were never created.
 
 **Fix Applied:**
-- ✅ Created [schema.js](d:\OrçamentosOnline\services\api\src\models\schema.js) - Complete database schema initialization
-- ✅ Updated [index.js](d:\OrçamentosOnline\services\api\src\index.js#L1217) to run `initializeSchema()` on startup
+- ✅ Created [schema.js](d:\WebPropostas\services\api\src\models\schema.js) - Complete database schema initialization
+- ✅ Updated [index.js](d:\WebPropostas\services\api\src\index.js#L1217) to run `initializeSchema()` on startup
 - ✅ Tables now automatically created on first deployment:
   - `users` - User accounts with authentication
   - `clients` - Client information
@@ -28,10 +28,10 @@ This document outlines the fixes applied to resolve Railway deployment failures.
 ### 2. ❌ **Frontend Next.js Standalone Mode Error**
 **Error:** `"next start" does not work with "output: standalone" configuration`
 
-**Cause:** The package.json `start` script used `next start` but [next.config.js](d:\OrçamentosOnline\services\frontend\next.config.js#L46) configured `output: 'standalone'`
+**Cause:** The package.json `start` script used `next start` but [next.config.js](d:\WebPropostas\services\frontend\next.config.js#L46) configured `output: 'standalone'`
 
 **Fix Applied:**
-- ✅ Updated [package.json](d:\OrçamentosOnline\services\frontend\package.json#L10) start script:
+- ✅ Updated [package.json](d:\WebPropostas\services\frontend\package.json#L10) start script:
   ```json
   "start": "node .next/standalone/server.js"
   ```
@@ -42,7 +42,7 @@ This document outlines the fixes applied to resolve Railway deployment failures.
 **Cause:** Next.js requires `sharp` for production image optimization in standalone mode.
 
 **Fix Applied:**
-- ✅ Added `sharp` to [frontend dependencies](d:\OrçamentosOnline\services\frontend\package.json#L26):
+- ✅ Added `sharp` to [frontend dependencies](d:\WebPropostas\services\frontend\package.json#L26):
   ```json
   "sharp": "^0.33.0"
   ```
@@ -51,7 +51,7 @@ This document outlines the fixes applied to resolve Railway deployment failures.
 **Warning:** `The "images.domains" configuration is deprecated`
 
 **Fix Applied:**
-- ✅ Updated [next.config.js](d:\OrçamentosOnline\services\frontend\next.config.js#L17) to use `remotePatterns`:
+- ✅ Updated [next.config.js](d:\WebPropostas\services\frontend\next.config.js#L17) to use `remotePatterns`:
   ```javascript
   remotePatterns: [
     { protocol: 'http', hostname: 'localhost' },
@@ -171,7 +171,7 @@ PORT=[Auto-set by Railway]
 ✅ Sessions table created/verified
 ✅ Database schema initialized successfully
 Database schema ready
-🚀 OrçamentosOnline API server started on port 8080
+🚀 WebPropostas API server started on port 8080
 ```
 
 ### Frontend Startup (Success)

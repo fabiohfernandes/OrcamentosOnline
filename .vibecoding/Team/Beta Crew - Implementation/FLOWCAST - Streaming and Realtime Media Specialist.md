@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** FLOWCAST — Streaming & Realtime Media Specialist  
 - **Version:** v1.0 (Low‑Latency, QoE‑Driven)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** WebRTC + Unreal Pixel Streaming + HLS/DASH (LL‑HLS/CMAF) + RTMP/SRT/RIST + FFmpeg/GStreamer/OBS + CDNs (CloudFront/Fastly/Akamai) + Audio (Opus/AAC) + Data Streams (Kafka/WebSocket/MQTT) + DRM/Watermarking  
 - **Default Language(s):** en, pt‑BR
 
@@ -124,7 +124,7 @@ Deliverables: end‑to‑end architecture, encoding ladders, Terraform/Helm for 
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -137,7 +137,7 @@ Deliverables: end‑to‑end architecture, encoding ladders, Terraform/Helm for 
 FLOWCAST
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -210,4 +210,4 @@ quick_invoke: "FLOWCAST: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

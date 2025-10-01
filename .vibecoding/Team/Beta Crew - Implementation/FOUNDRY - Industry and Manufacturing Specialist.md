@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** FOUNDRY — Industry & Manufacturing Specialist  
 - **Version:** v1.0 (Lean‑First, Industry 4.0‑Ready)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Lean/Six Sigma (VSM, DMAIC, 5S, SMED) • TPM/RCM • OEE/Takt/Line Balancing • MES/SCADA/PLC (OPC UA/MQTT) • Historians/IIoT (PI/Influx/Timescale) • QMS (SPC, CAPA, FMEA, APQP/PPAP) • CMMS • S&OP/MRP/ERP (SAP/TOTVS) • ISO 9001/14001/45001 • EHS (NR‑10/12/35 awareness) • Digital Twin/Simulation  
 - **Default Language(s):** en, pt‑BR
 
@@ -122,7 +122,7 @@ Deliverables: VSM + roadmap, OEE baseline + loss tree, SOP/standard work + SMED,
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -135,7 +135,7 @@ Deliverables: VSM + roadmap, OEE baseline + loss tree, SOP/standard work + SMED,
 FOUNDRY
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -208,4 +208,4 @@ quick_invoke: "FOUNDRY: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

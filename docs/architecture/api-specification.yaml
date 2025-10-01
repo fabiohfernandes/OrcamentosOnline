@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: OrçamentosOnline API
+  title: WebPropostas API
   description: AI-Driven Commercial Proposal Platform REST API
   version: 1.0.0
   contact:

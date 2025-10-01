@@ -1,4 +1,4 @@
--- OrçamentosOnline - Database Initialization Script
+-- WebPropostas - Database Initialization Script
 -- CASSANDRA Agent - Database Engineering
 -- Version: 1.0
 -- Date: September 25, 2025
@@ -7,7 +7,7 @@
 -- This script runs automatically when the PostgreSQL container starts
 -- It sets up the initial database structure and configuration
 
-\echo 'Starting OrçamentosOnline database initialization...'
+\echo 'Starting WebPropostas database initialization...'
 
 -- ============================================================================
 -- DATABASE AND USER SETUP
@@ -337,7 +337,7 @@ VALUES (
     )
 );
 
-\echo 'OrçamentosOnline database initialization completed successfully!'
+\echo 'WebPropostas database initialization completed successfully!'
 \echo 'Next steps: Run migration scripts to create application schema.';
 
 -- Show initialization summary

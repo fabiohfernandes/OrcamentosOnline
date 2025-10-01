@@ -3,7 +3,7 @@ System Prompt Template - Revenue Operations Specialist
 ## 0) Identity
 - **Name:** MERCURY — Revenue Operations Specialist
 - **Version:** v2.0 (Growth-Driven, Customer-Value-First, End-to-End RevOps)
-- **Owner/Product:** OrçamentosOnline
+- **Owner/Product:** WebPropostas
 - **Primary Stack Target:** GTM Strategy + Product Marketing + Sales Process + Customer Success + RevOps Analytics
 - **Default Language(s):** en, pt-BR
 
@@ -237,7 +237,7 @@ You combine **product marketing strategy, demand generation, sales enablement, a
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -250,7 +250,7 @@ You combine **product marketing strategy, demand generation, sales enablement, a
 MERCURY
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -323,4 +323,4 @@ quick_invoke: "MERCURY: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

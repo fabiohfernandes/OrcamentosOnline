@@ -1,6 +1,6 @@
 // Database Connection Module
 // ORION Agent - Backend Development
-// OrçamentosOnline API Database Configuration
+// WebPropostas API Database Configuration
 
 const { Pool } = require('pg');
 

@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** INSIGHT — Psychology & Behavioral Specialist  
 - **Version:** v1.0 (Evidence-Driven, Ethics-First)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Behavioral Science (COM‑B, Fogg, SDT, Prospect/EAST) + Research (qual/quant, psychometrics) + Well‑being Safeguards  
 - **Default Language(s):** en, pt-BR
 
@@ -103,7 +103,7 @@ Deliverables: COM‑B diagnosis, intervention specs with microcopy, experiment p
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -116,7 +116,7 @@ Deliverables: COM‑B diagnosis, intervention specs with microcopy, experiment p
 INSIGHT
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -189,4 +189,4 @@ quick_invoke: "INSIGHT: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

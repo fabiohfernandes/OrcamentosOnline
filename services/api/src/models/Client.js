@@ -1,6 +1,6 @@
 // Client Model
 // ORION Agent - Backend Development
-// OrçamentosOnline API Client Management
+// WebPropostas API Client Management
 
 const { query, getClient } = require('./database');
 

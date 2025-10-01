@@ -1,8 +1,8 @@
-# Railway Deployment Implementation Plan - OrçamentosOnline
+# Railway Deployment Implementation Plan - WebPropostas
 
 ## Executive Summary
 
-This document provides a comprehensive, zero-error deployment plan for deploying the **OrçamentosOnline** platform to Railway. The platform is an AI-driven commercial proposal platform for the Brazilian market, featuring a Next.js 14 frontend, Node.js/Express backend, PostgreSQL database, and Redis cache with full LGPD compliance.
+This document provides a comprehensive, zero-error deployment plan for deploying the **WebPropostas** platform to Railway. The platform is an AI-driven commercial proposal platform for the Brazilian market, featuring a Next.js 14 frontend, Node.js/Express backend, PostgreSQL database, and Redis cache with full LGPD compliance.
 
 **Deployment Timeline:** 2-3 hours for initial setup, 30-45 minutes for subsequent deployments
 
@@ -32,7 +32,7 @@ This document provides a comprehensive, zero-error deployment plan for deploying
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    OrçamentosOnline                     │
+│                    WebPropostas                     │
 │                 Docker Compose Stack                    │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
@@ -243,7 +243,7 @@ NEXT_PUBLIC_API_URL=https://api.proposals.infigital.net/api/v1
 NEXT_PUBLIC_WS_URL=wss://api.proposals.infigital.net
 
 # === Application Info ===
-NEXT_PUBLIC_APP_NAME=OrçamentosOnline
+NEXT_PUBLIC_APP_NAME=WebPropostas
 NEXT_PUBLIC_APP_VERSION=1.0.0
 
 # === Server Configuration ===
@@ -480,7 +480,7 @@ railway variables set NEXT_PUBLIC_API_URL 'https://[backend-domain]/api/v1'
 railway variables set NEXT_PUBLIC_WS_URL 'wss://[backend-domain]'
 
 # Application info
-railway variables set NEXT_PUBLIC_APP_NAME 'OrçamentosOnline'
+railway variables set NEXT_PUBLIC_APP_NAME 'WebPropostas'
 railway variables set NEXT_PUBLIC_APP_VERSION '1.0.0'
 ```
 
@@ -537,7 +537,7 @@ railway link
 # 1. Open Railway dashboard
 # 2. Select project
 # 3. Settings → GitHub → Connect Repository
-# 4. Select: OrçamentosOnline repository
+# 4. Select: WebPropostas repository
 # 5. Branch: master
 ```
 
@@ -601,7 +601,7 @@ railway variables | grep REDIS_URL
 # Add new service from GitHub
 # Via Dashboard:
 # 1. Dashboard → Add Service → GitHub Repo
-# 2. Select: OrçamentosOnline
+# 2. Select: WebPropostas
 # 3. Service name: backend-api
 # 4. Wait for initial detection
 ```
@@ -733,7 +733,7 @@ curl -I https://$BACKEND_DOMAIN/api/v1/health
 ```bash
 # Via Dashboard:
 # 1. Dashboard → Add Service → GitHub Repo
-# 2. Select: OrçamentosOnline
+# 2. Select: WebPropostas
 # 3. Service name: frontend
 # 4. Wait for initial detection
 ```
@@ -771,7 +771,7 @@ railway variables set NEXT_PUBLIC_API_URL "https://$BACKEND_DOMAIN/api/v1"
 railway variables set NEXT_PUBLIC_WS_URL "wss://$BACKEND_DOMAIN"
 
 # Application info
-railway variables set NEXT_PUBLIC_APP_NAME 'OrçamentosOnline'
+railway variables set NEXT_PUBLIC_APP_NAME 'WebPropostas'
 railway variables set NEXT_PUBLIC_APP_VERSION '1.0.0'
 
 # File upload config (must match backend)
@@ -1984,7 +1984,7 @@ NODE_ENV=production
 PORT=${PORT}
 NEXT_PUBLIC_API_URL=https://api.proposals.infigital.net/api/v1
 NEXT_PUBLIC_WS_URL=wss://api.proposals.infigital.net
-NEXT_PUBLIC_APP_NAME=OrçamentosOnline
+NEXT_PUBLIC_APP_NAME=WebPropostas
 NEXT_PUBLIC_APP_VERSION=1.0.0
 
 # Optional

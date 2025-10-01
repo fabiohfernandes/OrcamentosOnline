@@ -1,4 +1,4 @@
-# OrçamentosOnline - System Architecture Overview
+# WebPropostas - System Architecture Overview
 
 **Version:** 1.0
 **Date:** September 25, 2025
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-OrçamentosOnline implements a cloud-native, microservices architecture designed for scalability, security, and multi-tenant operations. The system leverages Docker containers, AWS services, and modern JavaScript/TypeScript technologies to deliver a comprehensive proposal management platform.
+WebPropostas implements a cloud-native, microservices architecture designed for scalability, security, and multi-tenant operations. The system leverages Docker containers, AWS services, and modern JavaScript/TypeScript technologies to deliver a comprehensive proposal management platform.
 
 ## Architecture Principles
 

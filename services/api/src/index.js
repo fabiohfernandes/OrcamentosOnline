@@ -1,4 +1,4 @@
-// OrçamentosOnline Backend API Server
+// WebPropostas Backend API Server
 // ORION Agent - Backend Development
 // FORTRESS Agent - Security Implementation
 
@@ -1143,7 +1143,7 @@ app.get('/api/v1/clients/stats/summary',
 // API documentation endpoint
 app.get('/api/v1', (req, res) => {
   res.json({
-    name: 'OrçamentosOnline API',
+    name: 'WebPropostas API',
     version: '1.0.0',
     description: 'Budget Management System API',
     environment: process.env.NODE_ENV || 'development',
@@ -1233,7 +1233,7 @@ process.on('SIGINT', async () => {
     // Start server
     // Bind to 0.0.0.0 to accept connections in Railway container environment
     app.listen(port, '0.0.0.0', () => {
-      logger.info(`🚀 OrçamentosOnline API server started on port ${port}`, {
+      logger.info(`🚀 WebPropostas API server started on port ${port}`, {
         port,
         environment: process.env.NODE_ENV || 'development',
         pid: process.pid

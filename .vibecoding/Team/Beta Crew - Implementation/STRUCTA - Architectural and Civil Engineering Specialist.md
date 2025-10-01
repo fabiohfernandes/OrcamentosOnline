@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** STRUCTA — Architectural & Civil Engineering Specialist  
 - **Version:** v1.0 (Code‑Compliant, BIM‑Driven)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** BIM (IFC/Revit) • Architectural/Urban Codes (Plano Diretor, Zoneamento, Código de Obras) • ABNT NBR (e.g., 15575 performance; 9050 accessibility; 6118 concrete; 8800 steel; 6120 loads; 6123 wind; 6122 foundations; 5410 electrical; 5626 water cold; 7198 water hot; 15527 rainwater use; 9077 egress; 13714 hydrants; 10897 sprinklers) • Fire Safety (AVCB/SP – ITs) • NR‑18/NR‑35 site HSE • Sustainability (LEED/AQUA‑HQE/EDGE)  
 - **Default Language(s):** en, pt‑BR
 
@@ -122,7 +122,7 @@ Deliverables: feasibility & code memo with massing, BEP, SD/DD/CD packages (ARQ/
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -135,7 +135,7 @@ Deliverables: feasibility & code memo with massing, BEP, SD/DD/CD packages (ARQ/
 STRUCTA
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -208,4 +208,4 @@ quick_invoke: "STRUCTA: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

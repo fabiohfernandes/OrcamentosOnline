@@ -1,11 +1,11 @@
-# OrçamentosOnline Backend API
+# WebPropostas Backend API
 
 **ORION Agent - Backend API Development Specialist**
 **Phase 2 Implementation Complete**
 
 ## Overview
 
-Comprehensive REST API for the OrçamentosOnline platform with Brazilian business compliance, featuring proposal management, client management, LGPD compliance, and complete audit logging.
+Comprehensive REST API for the WebPropostas platform with Brazilian business compliance, featuring proposal management, client management, LGPD compliance, and complete audit logging.
 
 ## Features
 
@@ -407,4 +407,4 @@ src/
 
 **Phase 2 Backend Implementation Complete** ✅
 **Implemented by ORION Agent - Backend API Development Specialist**
-**OrçamentosOnline Platform - AI-Driven Proposal Management System**
+**WebPropostas Platform - AI-Driven Proposal Management System**

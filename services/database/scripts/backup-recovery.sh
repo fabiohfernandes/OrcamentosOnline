@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Database Backup and Recovery System
-# OrçamentosOnline - Comprehensive Database Backup & Recovery
+# WebPropostas - Comprehensive Database Backup & Recovery
 # CASSANDRA Agent - Database Engineering
 # Version: 1.0
 # Date: September 25, 2025
@@ -592,7 +592,7 @@ EOF
 show_usage() {
     cat << EOF
 Database Backup and Recovery System
-OrçamentosOnline - CASSANDRA Agent
+WebPropostas - CASSANDRA Agent
 
 USAGE:
     $0 [COMMAND] [OPTIONS]

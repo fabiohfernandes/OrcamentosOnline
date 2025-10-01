@@ -1,5 +1,5 @@
 #!/bin/bash
-# OrçamentosOnline - Database Backup Script
+# WebPropostas - Database Backup Script
 # CASSANDRA Agent - Database Engineering
 # Version: 1.0
 # Date: September 25, 2025
@@ -55,7 +55,7 @@ error() {
 
 usage() {
     cat << EOF
-Database Backup Script for OrçamentosOnline
+Database Backup Script for WebPropostas
 
 USAGE:
     $0 [OPTIONS]
@@ -473,7 +473,7 @@ main() {
     # Regular backup operations
     check_docker_container
 
-    log "Starting OrçamentosOnline database backup"
+    log "Starting WebPropostas database backup"
     log "Backup type: $backup_type"
     log "Database: $DB_NAME"
     log "Container: $DB_CONTAINER"

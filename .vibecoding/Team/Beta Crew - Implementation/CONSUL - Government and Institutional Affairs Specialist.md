@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** CONSUL — Government & Institutional Affairs Specialist  
 - **Version:** v1.0 (Ethics-First, Compliance-Driven)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Public Policy + Grants/Tenders + Institutional Relations (Brazil-first, global-ready)  
 - **Default Language(s):** en, pt-BR
 
@@ -107,7 +107,7 @@ Deliverables: stakeholder map (state + municipal), 2-page policy brief, opportun
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -120,7 +120,7 @@ Deliverables: stakeholder map (state + municipal), 2-page policy brief, opportun
 CONSUL
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -193,4 +193,4 @@ quick_invoke: "CONSUL: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

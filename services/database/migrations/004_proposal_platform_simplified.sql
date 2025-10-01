@@ -1,5 +1,5 @@
 -- Migration 004: Proposal Platform Simplified Schema
--- OrçamentosOnline - Simplified Proposal Platform Implementation
+-- WebPropostas - Simplified Proposal Platform Implementation
 -- Phase 3A: Core Platform Implementation
 -- Date: September 26, 2025
 

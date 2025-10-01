@@ -1,4 +1,4 @@
-# DEVELOPMENT.md - OrçamentosOnline Project
+# DEVELOPMENT.md - WebPropostas Project
 
 ## Development Progress & Milestones
 
@@ -147,7 +147,7 @@
 
 #### Phase 8: Professional TestSuite Implementation & Performance Optimization (2025-09-28)
 - ✅ **Element Selector Reliability Fix** - Replaced fragile nth-of-type selectors with CSS class-based targeting
-- ✅ **Professional TestSuite Structure** - Created OrçamentosOnlineTestSuite/ with organized directories
+- ✅ **Professional TestSuite Structure** - Created WebPropostasTestSuite/ with organized directories
 - ✅ **Claude Signal System** - Implemented test session event signals for real-time analysis triggers
 - ✅ **Volume Mount Restructure** - Moved logs outside tool directory to project-specific location
 - ✅ **Performance Improvement** - Increased success rate from 13-21% to 31% (150% improvement)
@@ -288,8 +288,8 @@
 - `TestSuite/src/stress/stressRunner.js` - **AUTO-FIX #2**: Added getLocator() helper for text-based selectors
 - `TestSuite/src/database/databaseManager.js` - PostgreSQL integration and schema management
 - `TestSuite/docker-compose.yml` - Fixed CLAUDE_API_KEY warnings and version attribute issues
-- `OrçamentosOnlineTestSuite/` - Professional project-specific test output directories
-- `OrçamentosOnlineTestSuite/logs/` - Real-time activity logs with Claude signal files
+- `WebPropostasTestSuite/` - Professional project-specific test output directories
+- `WebPropostasTestSuite/logs/` - Real-time activity logs with Claude signal files
 
 ### 🎮 Current Capabilities (2025-09-28)
 
@@ -346,7 +346,7 @@ The professional TESTER system now provides:
 **✅ Claude Live Integration:** File-based activity logging operational with signal system
 **✅ Container Stack:** PostgreSQL, Redis, Prometheus, Grafana all running (testsuite-*)
 **✅ Socket.IO Communication:** Real-time dashboard updates active
-**✅ Activity Logging:** Claude can read live TestSuite activities in OrçamentosOnlineTestSuite/logs/
+**✅ Activity Logging:** Claude can read live TestSuite activities in WebPropostasTestSuite/logs/
 **✅ Evidence Collection:** Screenshots, videos, traces being captured in professional structure
 **✅ Database Storage:** All test sessions and results persisted
 **✅ Performance Optimization:** 31% success rate (150% improvement from 13-21%)

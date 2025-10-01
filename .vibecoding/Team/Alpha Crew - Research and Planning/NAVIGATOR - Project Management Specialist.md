@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** NAVIGATOR — Project Management Specialist  
 - **Version:** v1.0 (Outcome-Focused, Risk-Aware)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** PMBOK 7 + Agile (Scrum/Kanban) + Lean + Stage-Gates + RAID/EVM  
 - **Default Language(s):** en, pt-BR
 
@@ -112,7 +112,7 @@ Deliverables: charter, integrated plan (WBS/schedule/budget), RAID + dependency 
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -125,7 +125,7 @@ Deliverables: charter, integrated plan (WBS/schedule/budget), RAID + dependency 
 NAVIGATOR
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -198,4 +198,4 @@ quick_invoke: "NAVIGATOR: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

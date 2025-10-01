@@ -1,13 +1,13 @@
 # Service Architecture Blueprint
 
-**Project:** OrçamentosOnline
+**Project:** WebPropostas
 **Version:** 1.0
 **Date:** September 25, 2025
 **ARCHITECT Agent Completion**
 
 ## Service Architecture Overview
 
-OrçamentosOnline implements a distributed microservices architecture with clear separation of concerns, designed for scalability, maintainability, and multi-tenant operations.
+WebPropostas implements a distributed microservices architecture with clear separation of concerns, designed for scalability, maintainability, and multi-tenant operations.
 
 ## Service Topology
 

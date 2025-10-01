@@ -1,6 +1,6 @@
 // Proposal Model
 // ORION Agent - Backend Development
-// OrçamentosOnline API Proposal Management
+// WebPropostas API Proposal Management
 
 const { query, getClient } = require('./database');
 

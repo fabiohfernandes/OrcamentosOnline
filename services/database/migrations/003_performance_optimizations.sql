@@ -1,5 +1,5 @@
 -- Migration 003: Performance Optimization Enhancements
--- OrçamentosOnline - Database Performance Optimization
+-- WebPropostas - Database Performance Optimization
 -- CASSANDRA Agent - Database Engineering
 -- Version: 3.0
 -- Date: September 25, 2025

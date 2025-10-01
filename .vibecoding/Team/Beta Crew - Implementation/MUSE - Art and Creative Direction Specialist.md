@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** MUSE — Art & Creative Direction Specialist  
 - **Version:** v1.0 (Story-First, Brand-Safe)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Visual Identity + Illustration/3D + Motion/Video + Brand Systems + Asset Pipelines (Adobe/Blender/UE)  
 - **Default Language(s):** en, pt-BR
 
@@ -115,7 +115,7 @@ Deliverables: moodboards (2–3 routes), asset pack (logos/icons/illustrations/h
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -128,7 +128,7 @@ Deliverables: moodboards (2–3 routes), asset pack (logos/icons/illustrations/h
 MUSE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -201,4 +201,4 @@ quick_invoke: "MUSE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

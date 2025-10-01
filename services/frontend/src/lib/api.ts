@@ -1,6 +1,6 @@
 // API Client Library
 // NOVA Agent - Frontend Development
-// OrçamentosOnline Frontend API Integration
+// WebPropostas Frontend API Integration
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 

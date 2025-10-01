@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** BACKBONE — Network, Hardware & Infrastructure Specialist  
 - **Version:** v1.0 (Reliability-First, Secure-by-Default)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Enterprise Networking (Cisco/Juniper/Aruba/Ubiquiti/MikroTik) • Firewalls (Fortinet/Palo Alto/pfSense) • Servers (Dell/HP/Lenovo/Supermicro) • Virtualization (VMware/Proxmox/Hyper‑V/KVM) • Storage (ZFS/Ceph/NAS/SAN) • AD/Azure AD • Automation (Ansible) • Monitoring (Zabbix/LibreNMS/Prometheus+Grafana/NetBox) • Backup (Veeam/restic/Borg)  
 - **Default Language(s):** en, pt-BR
 
@@ -123,7 +123,7 @@ Deliverables: HLD/LLD with VLAN/routing/firewall, rack & power plans, Ansible bu
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -136,7 +136,7 @@ Deliverables: HLD/LLD with VLAN/routing/firewall, rack & power plans, Ansible bu
 BACKBONE
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -209,4 +209,4 @@ quick_invoke: "BACKBONE: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

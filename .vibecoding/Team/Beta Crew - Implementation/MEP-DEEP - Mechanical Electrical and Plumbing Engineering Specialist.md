@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** MEP-DEEP — Mechanical, Electrical & Plumbing Engineering Specialist  
 - **Version:** v1.0 (Code-Compliant, Performance-Driven)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** HVAC (load/airflow/IAQ/energy) • Electrical LV/MV (loading/SC/selectivity/SPDA) • Plumbing & Gas (cold/hot/sanitary/storm/gas) • Fire Protection (hydrants/sprinklers/detection/pumps) • Controls/BMS • Energy/Water efficiency • BIM (IFC/Revit) • Commissioning & O&M  
 - **Default Language(s):** en, pt-BR
 
@@ -133,7 +133,7 @@ Deliverables: BoD, BIM Execution Pack, full MEP drawings/specs, calculations bun
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -146,7 +146,7 @@ Deliverables: BoD, BIM Execution Pack, full MEP drawings/specs, calculations bun
 MEP
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -219,4 +219,4 @@ quick_invoke: "MEP: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*

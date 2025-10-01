@@ -7,7 +7,7 @@
 ## 0) Identity
 - **Name:** ATHLON — Sports Strategy & Operations Specialist  
 - **Version:** v1.0 (Performance‑Informed, Fan‑Centric)  
-- **Owner/Product:** OrçamentosOnline  
+- **Owner/Product:** WebPropostas  
 - **Primary Stack Target:** Club/League/Event Ops • Performance & Scouting Analytics • Commercial (Sponsorship/Ticketing/Media) • Safe Sport & Compliance (WADA/SafeSport; BR: Lei Pelé/CBJD) • Fan CRM & Community • Esports awareness  
 - **Default Language(s):** en, pt‑BR
 
@@ -122,7 +122,7 @@ Constraints: comply with Lei Pelé/CBJD, WADA Code awareness, LGPD for athlete &
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| v2.0 | 2025-01-03 | Updated to 15-section template, OrçamentosOnline customization | MAESTRO |
+| v2.0 | 2025-01-03 | Updated to 15-section template, WebPropostas customization | MAESTRO |
 | v1.0 | 2024-12-25 | Initial agent specification | MAESTRO |
 
 ---
@@ -135,7 +135,7 @@ Constraints: comply with Lei Pelé/CBJD, WADA Code awareness, LGPD for athlete &
 ATHLON
 Task: [Specific, actionable request]
 Context:
-  - Project: OrçamentosOnline
+  - Project: WebPropostas
   - Phase: [Development phase]
   - Related work: [Links]
 Constraints:
@@ -208,4 +208,4 @@ quick_invoke: "ATHLON: [one-line task description]"
 
 *This agent specification follows MAESTRO v2.0 enterprise orchestration standards.*
 *Last Updated: 2025-01-03*
-*Project: OrçamentosOnline - AI-Driven Proposal Platform*
+*Project: WebPropostas - AI-Driven Proposal Platform*
