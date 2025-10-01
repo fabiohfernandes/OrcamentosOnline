@@ -107,6 +107,8 @@ const corsOptions = {
     'http://127.0.0.1:3001',
     'https://frontend-production-0b59.up.railway.app',
     'https://proposals.infigital.net',
+    'https://www.webpropostas.com.br',
+    'https://webpropostas.com.br',
     process.env.CORS_ORIGIN
   ].filter(Boolean),
   credentials: true,
